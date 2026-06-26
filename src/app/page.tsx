@@ -98,7 +98,7 @@ export default function HomePage() {
           Vous avez un bien à vendre ou louer ?
         </h2>
         <p style={{ color: '#6b7280', marginBottom: '28px', fontSize: '1.1rem' }}>
-          Publiez votre annonce gratuitement et touchez des milliers d'acheteurs au Bénin
+          Publiez votre annonce gratuitement et touchez des milliers d&apos;acheteurs au Bénin
         </p>
         <a href="/contact" style={{
           background: '#1a3c5e',
