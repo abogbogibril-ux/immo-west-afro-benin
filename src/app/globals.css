@@ -3,25 +3,125 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bleu-principal: #0099CC;
+  --bleu-fonce: #007AA3;
+  --bleu-clair: #00BFEA;
+  --fond-sombre: #0D1117;
+  --fond-carte: #161B22;
+  --fond-carte2: #1C2128;
+  --texte-principal: #FFFFFF;
+  --texte-secondaire: #8B949E;
+  --bordure: #30363D;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--fond-sombre);
+  color: var(--texte-principal);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  min-height: 100vh;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.btn-principal {
+  background-color: var(--bleu-principal);
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-principal:hover {
+  background-color: var(--bleu-fonce);
+}
+
+.btn-secondaire {
+  background-color: transparent;
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  border: 1px solid rgba(255,255,255,0.3);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.btn-secondaire:hover {
+  border-color: white;
+  background-color: rgba(255,255,255,0.05);
+}
+
+.carte-bien {
+  background-color: var(--fond-carte);
+  border: 1px solid var(--bordure);
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.carte-bien:hover {
+  transform: translateY(-4px);
+  border-color: var(--bleu-principal);
+}
+
+.badge-publie {
+  background-color: rgba(0, 153, 204, 0.2);
+  color: var(--bleu-clair);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.prix-bien {
+  color: var(--bleu-principal);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+input, select, textarea {
+  background-color: var(--fond-carte2);
+  border: 1px solid var(--bordure);
+  color: white;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--bleu-principal);
+}
+
+input::placeholder {
+  color: var(--texte-secondaire);
+}
+
+select option {
+  background-color: var(--fond-carte2);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--fond-sombre);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bordure);
+  border-radius: 3px;
 }
