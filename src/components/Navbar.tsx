@@ -1,203 +1,158 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import Image from 'next/image'
+import { supabase } from '@/lib/supabase'
 
 export default function Navbar() {
+  const pathname = usePathname()
+  const router = useRouter()
+  const [langue, setLangue] = useState<'FR' | 'EN'>('FR')
   const [menuOuvert, setMenuOuvert] = useState(false)
+  const [user, setUser] = useState<any>(null)
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => setUser(user))
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+      setUser(session?.user ?? null)
+    })
+    return () => subscription.unsubscribe()
+  }, [])
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    router.push('/')
+  }
+
+  const isActive = (href: string) => pathname === href
+
+  const navLinks = [
+    { href: '/', label: langue === 'FR' ? 'Accueil' : 'Home' },
+    { href: '/recherche', label: langue === 'FR' ? 'Recherche' : 'Search' },
+    { href: '/a-propos', label: langue === 'FR' ? 'À propos' : 'About' },
+    { href: '/contact', label: 'Contact' },
+  ]
 
   return (
-    <nav style={{ backgroundColor: '#0099CC' }} className="sticky top-0 z-50 shadow-lg">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+    <nav style={{
+      backgroundColor: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+      position: 'sticky', top: 0, zIndex: 1000,
+    }}>
+      <div style={{
+        maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '70px',
+      }}>
 
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 no-underline">
-            <div
-              style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
-              className="w-10 h-10 rounded-lg flex items-center justify-center text-xl font-bold text-white"
-            >
-              🏗️
-            </div>
-            <span className="text-white font-bold text-lg leading-tight">
-              Immo West<br />
-              <span className="text-xs font-normal opacity-90">Afro Bénin</span>
-            </span>
-          </Link>
+        {/* LOGO */}
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
+          <Image src="/favicon.ico" alt="Logo" width={40} height={40} style={{ borderRadius: '8px' }} />
+          <span style={{ color: '#0f172a', fontWeight: '800', fontSize: '0.95rem', lineHeight: '1.2' }}>
+            Immo West Afro<br />
+            <span style={{ color: '#00bcd4', fontSize: '0.75rem', fontWeight: '600' }}>Bénin</span>
+          </span>
+        </Link>
 
-          {/* Navigation desktop */}
-          <div className="hidden md:flex items-center gap-1">
-            <NavLink href="/" icone="🏠" label="Accueil" />
-            <NavLink href="/search" icone="🔍" label="Recherche" />
-            <NavLink href="/about" icone="ℹ️" label="À propos" />
-            <NavLink href="/contact" icone="✉️" label="Contact" />
-          </div>
-
-          {/* Actions droite */}
-          <div className="hidden md:flex items-center gap-3">
-            {/* Sélecteur langue */}
-            <button
-              style={{
-                backgroundColor: 'rgba(255,255,255,0.15)',
-                color: 'white',
-                border: 'none',
-                borderRadius: '0.5rem',
-                padding: '0.35rem 0.75rem',
-                fontSize: '0.85rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-              }}
-            >
-              🌐 FR
-            </button>
-
-            <Link
-              href="/login"
-              style={{
-                color: 'white',
-                textDecoration: 'none',
-                padding: '0.4rem 1rem',
-                borderRadius: '0.5rem',
-                fontWeight: 500,
-                fontSize: '0.9rem',
-                border: '1px solid rgba(255,255,255,0.4)',
-                transition: 'all 0.2s',
-              }}
-              className="hover:bg-white hover:bg-opacity-10"
-            >
-              Connexion
+        {/* LIENS — Desktop */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+          {navLinks.map((link) => (
+            <Link key={link.href} href={link.href} style={{
+              padding: '0.5rem 0.85rem', borderRadius: '6px', textDecoration: 'none',
+              fontSize: '0.92rem', fontWeight: '500',
+              color: isActive(link.href) ? '#00bcd4' : '#4a5568',
+              backgroundColor: isActive(link.href) ? '#e0f7fa' : 'transparent',
+              borderBottom: isActive(link.href) ? '2px solid #00bcd4' : '2px solid transparent',
+            }}>
+              {link.label}
             </Link>
+          ))}
+        </div>
 
-            <Link
-              href="/register"
-              style={{
-                backgroundColor: 'white',
-                color: '#0099CC',
-                textDecoration: 'none',
-                padding: '0.4rem 1.1rem',
-                borderRadius: '0.5rem',
-                fontWeight: 700,
-                fontSize: '0.9rem',
-                transition: 'opacity 0.2s',
-              }}
-              className="hover:opacity-90"
-            >
-              Inscription
-            </Link>
-          </div>
+        {/* DROITE */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          {/* LANGUE */}
+          <button onClick={() => setLangue(langue === 'FR' ? 'EN' : 'FR')} style={{
+            display: 'flex', alignItems: 'center', gap: '0.3rem',
+            padding: '0.4rem 0.75rem', backgroundColor: 'transparent',
+            border: '1px solid #e2e8f0', borderRadius: '6px',
+            cursor: 'pointer', fontSize: '0.85rem', color: '#4a5568', fontWeight: '500',
+          }}>
+            🌐 {langue}
+          </button>
 
-          {/* Bouton menu mobile */}
-          <button
-            className="md:hidden text-white p-2 rounded"
-            onClick={() => setMenuOuvert(!menuOuvert)}
-            aria-label="Menu"
-          >
+          {user ? (
+            <>
+              <Link href="/publier" style={{
+                padding: '0.4rem 1rem', backgroundColor: '#00bcd4',
+                borderRadius: '6px', color: '#fff', textDecoration: 'none',
+                fontSize: '0.85rem', fontWeight: '600',
+              }}>
+                + {langue === 'FR' ? 'Publier' : 'Post'}
+              </Link>
+              <button onClick={handleLogout} style={{
+                padding: '0.4rem 1rem', backgroundColor: 'transparent',
+                border: '1px solid #e2e8f0', borderRadius: '6px',
+                color: '#ef4444', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '500',
+              }}>
+                {langue === 'FR' ? 'Déconnexion' : 'Logout'}
+              </button>
+            </>
+          ) : (
+            <>
+              <Link href="/connexion" style={{
+                padding: '0.4rem 1rem', backgroundColor: 'transparent',
+                border: '1px solid #00bcd4', borderRadius: '6px',
+                color: '#00bcd4', textDecoration: 'none', fontSize: '0.85rem', fontWeight: '500',
+              }}>
+                {langue === 'FR' ? 'Connexion' : 'Login'}
+              </Link>
+              <Link href="/inscription" style={{
+                padding: '0.4rem 1rem', backgroundColor: '#00bcd4',
+                borderRadius: '6px', color: '#fff', textDecoration: 'none',
+                fontSize: '0.85rem', fontWeight: '600',
+              }}>
+                {langue === 'FR' ? 'Inscription' : 'Sign up'}
+              </Link>
+            </>
+          )}
+
+          {/* MENU MOBILE */}
+          <button onClick={() => setMenuOuvert(!menuOuvert)} style={{
+            display: 'none', backgroundColor: 'transparent', border: 'none',
+            fontSize: '1.5rem', cursor: 'pointer', color: '#0f172a',
+          }} className="menu-mobile">
             {menuOuvert ? '✕' : '☰'}
           </button>
         </div>
-
-        {/* Menu mobile */}
-        {menuOuvert && (
-          <div
-            style={{ borderTop: '1px solid rgba(255,255,255,0.2)' }}
-            className="md:hidden py-3 pb-4 flex flex-col gap-2"
-          >
-            <MobileNavLink href="/" label="🏠 Accueil" onClick={() => setMenuOuvert(false)} />
-            <MobileNavLink href="/search" label="🔍 Recherche" onClick={() => setMenuOuvert(false)} />
-            <MobileNavLink href="/about" label="ℹ️ À propos" onClick={() => setMenuOuvert(false)} />
-            <MobileNavLink href="/contact" label="✉️ Contact" onClick={() => setMenuOuvert(false)} />
-            <div className="flex gap-2 mt-2 px-2">
-              <Link
-                href="/login"
-                onClick={() => setMenuOuvert(false)}
-                style={{
-                  flex: 1,
-                  textAlign: 'center',
-                  color: 'white',
-                  textDecoration: 'none',
-                  padding: '0.5rem',
-                  borderRadius: '0.5rem',
-                  border: '1px solid rgba(255,255,255,0.4)',
-                  fontSize: '0.9rem',
-                }}
-              >
-                Connexion
-              </Link>
-              <Link
-                href="/register"
-                onClick={() => setMenuOuvert(false)}
-                style={{
-                  flex: 1,
-                  textAlign: 'center',
-                  backgroundColor: 'white',
-                  color: '#0099CC',
-                  textDecoration: 'none',
-                  padding: '0.5rem',
-                  borderRadius: '0.5rem',
-                  fontWeight: 700,
-                  fontSize: '0.9rem',
-                }}
-              >
-                Inscription
-              </Link>
-            </div>
-          </div>
-        )}
       </div>
+
+      {/* MENU MOBILE OUVERT */}
+      {menuOuvert && (
+        <div style={{
+          backgroundColor: '#fff', borderTop: '1px solid #e2e8f0',
+          padding: '1rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem',
+        }}>
+          {navLinks.map((link) => (
+            <Link key={link.href} href={link.href}
+              onClick={() => setMenuOuvert(false)}
+              style={{
+                padding: '0.75rem', borderRadius: '8px', textDecoration: 'none',
+                color: isActive(link.href) ? '#00bcd4' : '#374151',
+                backgroundColor: isActive(link.href) ? '#e0f7fa' : 'transparent',
+                fontWeight: '500',
+              }}>
+              {link.label}
+            </Link>
+          ))}
+          <Link href="/publier" onClick={() => setMenuOuvert(false)} style={{
+            padding: '0.75rem', backgroundColor: '#00bcd4', borderRadius: '8px',
+            color: '#fff', textDecoration: 'none', fontWeight: '600', textAlign: 'center',
+          }}>
+            + Publier un bien
+          </Link>
+        </div>
+      )}
     </nav>
-  )
-}
-
-function NavLink({ href, icone, label }: { href: string; icone: string; label: string }) {
-  return (
-    <Link
-      href={href}
-      style={{
-        color: 'white',
-        textDecoration: 'none',
-        padding: '0.4rem 0.85rem',
-        borderRadius: '0.5rem',
-        fontSize: '0.9rem',
-        fontWeight: 500,
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-        transition: 'background-color 0.2s',
-      }}
-      className="hover:bg-white hover:bg-opacity-20"
-    >
-      <span>{icone}</span>
-      {label}
-    </Link>
-  )
-}
-
-function MobileNavLink({
-  href,
-  label,
-  onClick,
-}: {
-  href: string
-  label: string
-  onClick: () => void
-}) {
-  return (
-    <Link
-      href={href}
-      onClick={onClick}
-      style={{
-        color: 'white',
-        textDecoration: 'none',
-        padding: '0.6rem 1rem',
-        borderRadius: '0.5rem',
-        fontSize: '0.95rem',
-        display: 'block',
-      }}
-      className="hover:bg-white hover:bg-opacity-10"
-    >
-      {label}
-    </Link>
   )
 }
