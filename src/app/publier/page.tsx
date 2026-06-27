@@ -1,21 +1,29 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 
 const VILLES = ['Cotonou','Abomey-Calavi','Porto-Novo','Sèmè-Kpodji','Parakou','Bohicon','Ouidah','Lokossa','Abomey','Djougou','Comè','Azovè','Natitingou']
 const TYPES = ['Maison','Appartement','Villa','Terrain','Bureau','Studio','Chambre']
+const MAX_PHOTOS = 8
 
 export default function PublierPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [userId, setUserId] = useState<string | null>(null)
+  const [cguAccepted, setCguAccepted] = useState(false)
+  const [photos, setPhotos] = useState<File[]>([])
+  const [previews, setPreviews] = useState<string[]>([])
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [form, setForm] = useState({
     titre: '', description: '', type_bien: '', prix: '',
     ville: '', arrondissement: '', quartier: '', surface: '',
     nb_pieces: '', nb_chambres: '', nb_salles_bain: '',
+    video_url: '',
     meuble: false, parking: false, terrasse: false,
     securite: false, eau: false, electricite: false, disponible_immediat: true,
   })
@@ -27,20 +35,65 @@ export default function PublierPage() {
     })
   }, [])
 
+  useEffect(() => {
+    return () => previews.forEach(url => URL.revokeObjectURL(url))
+  }, [previews])
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const target = e.target as HTMLInputElement
     const value = target.type === 'checkbox' ? target.checked : target.value
     setForm({ ...form, [target.name]: value })
   }
 
+  const handlePhotos = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    const remaining = MAX_PHOTOS - photos.length
+    const newFiles = files.slice(0, remaining)
+    const valid = newFiles.filter(f => f.type.startsWith('image/') && f.size <= 5 * 1024 * 1024)
+    const newPreviews = valid.map(f => URL.createObjectURL(f))
+    setPhotos(prev => [...prev, ...valid])
+    setPreviews(prev => [...prev, ...newPreviews])
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  const removePhoto = (index: number) => {
+    URL.revokeObjectURL(previews[index])
+    setPhotos(prev => prev.filter((_, i) => i !== index))
+    setPreviews(prev => prev.filter((_, i) => i !== index))
+  }
+
+  const uploadPhotos = async (bienId: string): Promise<string[]> => {
+    const urls: string[] = []
+    for (let i = 0; i < photos.length; i++) {
+      const file = photos[i]
+      const ext = file.name.split('.').pop()
+      const path = `${userId}/${bienId}/${Date.now()}_${i}.${ext}`
+      const { error } = await supabase.storage
+        .from('biens-images')
+        .upload(path, file, { cacheControl: '3600', upsert: false })
+      if (!error) {
+        const { data } = supabase.storage.from('biens-images').getPublicUrl(path)
+        urls.push(data.publicUrl)
+      }
+      setUploadProgress(Math.round(((i + 1) / photos.length) * 100))
+    }
+    return urls
+  }
+
   const handleSubmit = async () => {
     if (!userId) return
+    if (!cguAccepted) {
+      setMessage('Erreur : Vous devez accepter les CGU avant de publier un bien.')
+      return
+    }
     if (!form.titre || !form.prix || !form.ville || !form.type_bien) {
       setMessage('Veuillez remplir les champs obligatoires (titre, type, ville, prix).')
       return
     }
     setLoading(true)
-    const { error } = await supabase.from('biens').insert({
+    setMessage('')
+
+    const { data: bien, error } = await supabase.from('biens').insert({
       agent_id: userId,
       titre: form.titre,
       description: form.description,
@@ -53,17 +106,37 @@ export default function PublierPage() {
       nb_pieces: form.nb_pieces ? parseInt(form.nb_pieces) : null,
       nb_chambres: form.nb_chambres ? parseInt(form.nb_chambres) : null,
       nb_salles_bain: form.nb_salles_bain ? parseInt(form.nb_salles_bain) : null,
-      meuble: form.meuble,
-      parking: form.parking,
-      terrasse: form.terrasse,
-      securite: form.securite,
-      eau: form.eau,
-      electricite: form.electricite,
+      meuble: form.meuble, parking: form.parking, terrasse: form.terrasse,
+      securite: form.securite, eau: form.eau, electricite: form.electricite,
       disponible_immediat: form.disponible_immediat,
-    })
+      video_url: form.video_url || null,
+      statut: 'publié',
+    }).select().single()
+
+    if (error) {
+      setLoading(false)
+      setMessage('Erreur : ' + error.message)
+      return
+    }
+
+    if (photos.length > 0) {
+      setMessage('Upload des photos en cours...')
+      const urls = await uploadPhotos(bien.id)
+      if (urls.length > 0) {
+        await supabase.from('images').insert(
+          urls.map((url, i) => ({
+            bien_id: bien.id,
+            url,
+            ordre: i,
+            is_principale: i === 0,
+          }))
+        )
+      }
+    }
+
     setLoading(false)
-    if (error) setMessage('Erreur : ' + error.message)
-    else { setMessage('Bien publié avec succès !'); setTimeout(() => router.push('/dashboard'), 2000) }
+    setMessage('Bien publié avec succès !')
+    setTimeout(() => router.push('/dashboard'), 2000)
   }
 
   return (
@@ -101,6 +174,98 @@ export default function PublierPage() {
               <textarea name="description" placeholder="Décrivez votre bien en détail..."
                 onChange={handleChange} style={{ ...inputStyle, height: '100px', resize: 'vertical' }} />
             </div>
+          </div>
+
+          {/* PHOTOS */}
+          <h2 style={sectionTitle}>📸 Photos du bien</h2>
+          <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '1rem' }}>
+            Maximum {MAX_PHOTOS} photos · 5 MB par photo · La 1ère photo sera la photo principale
+          </p>
+          <div
+            onClick={() => fileInputRef.current?.click()}
+            style={{
+              border: '2px dashed #cbd5e1', borderRadius: '12px', padding: '2rem',
+              textAlign: 'center', cursor: photos.length >= MAX_PHOTOS ? 'not-allowed' : 'pointer',
+              backgroundColor: photos.length >= MAX_PHOTOS ? '#f1f5f9' : '#f8fafc',
+              marginBottom: '1rem', transition: 'all 0.2s',
+            }}
+          >
+            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📷</div>
+            <p style={{ color: '#475569', fontWeight: '600', marginBottom: '0.25rem' }}>
+              {photos.length >= MAX_PHOTOS ? `Maximum atteint (${MAX_PHOTOS} photos)` : 'Cliquez pour ajouter des photos'}
+            </p>
+            <p style={{ color: '#94a3b8', fontSize: '0.8rem' }}>
+              JPG, PNG, WEBP · {photos.length}/{MAX_PHOTOS} photo{photos.length > 1 ? 's' : ''} sélectionnée{photos.length > 1 ? 's' : ''}
+            </p>
+            <input ref={fileInputRef} type="file" accept="image/*" multiple
+              onChange={handlePhotos} disabled={photos.length >= MAX_PHOTOS}
+              style={{ display: 'none' }} />
+          </div>
+
+          {previews.length > 0 && (
+            <div style={{
+              display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
+              gap: '0.75rem', marginBottom: '1.5rem',
+            }}>
+              {previews.map((src, i) => (
+                <div key={i} style={{ position: 'relative', borderRadius: '8px', overflow: 'hidden', aspectRatio: '1' }}>
+                  <img src={src} alt={`Photo ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  {i === 0 && (
+                    <div style={{
+                      position: 'absolute', top: '4px', left: '4px',
+                      backgroundColor: '#00bcd4', color: '#fff',
+                      fontSize: '0.65rem', fontWeight: '700', padding: '2px 6px', borderRadius: '4px',
+                    }}>PRINCIPALE</div>
+                  )}
+                  <button onClick={() => removePhoto(i)} style={{
+                    position: 'absolute', top: '4px', right: '4px',
+                    width: '22px', height: '22px', backgroundColor: 'rgba(0,0,0,0.6)',
+                    color: '#fff', border: 'none', borderRadius: '50%',
+                    cursor: 'pointer', fontSize: '0.7rem',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>✕</button>
+                  <div style={{
+                    position: 'absolute', bottom: '4px', right: '4px',
+                    backgroundColor: 'rgba(0,0,0,0.5)', color: '#fff',
+                    fontSize: '0.65rem', padding: '1px 5px', borderRadius: '4px',
+                  }}>{i + 1}</div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {loading && uploadProgress > 0 && uploadProgress < 100 && (
+            <div style={{ marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Upload photos...</span>
+                <span style={{ fontSize: '0.8rem', color: '#00bcd4', fontWeight: '600' }}>{uploadProgress}%</span>
+              </div>
+              <div style={{ height: '6px', backgroundColor: '#e2e8f0', borderRadius: '99px', overflow: 'hidden' }}>
+                <div style={{
+                  height: '100%', backgroundColor: '#00bcd4', borderRadius: '99px',
+                  width: `${uploadProgress}%`, transition: 'width 0.3s ease',
+                }} />
+              </div>
+            </div>
+          )}
+
+          {/* VISITE VIDÉO */}
+          <h2 style={sectionTitle}>🎥 Visite vidéo (optionnel)</h2>
+          <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '1rem' }}>
+            Collez un lien YouTube ou Vimeo pour offrir une visite virtuelle de votre bien.
+          </p>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={labelStyle}>Lien de la vidéo</label>
+            <input
+              name="video_url"
+              type="url"
+              placeholder="https://www.youtube.com/watch?v=..."
+              onChange={handleChange}
+              style={inputStyle}
+            />
+            <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.4rem' }}>
+              Exemple : https://www.youtube.com/watch?v=XXXXXXXXX
+            </p>
           </div>
 
           {/* LOCALISATION */}
@@ -175,6 +340,47 @@ export default function PublierPage() {
             ))}
           </div>
 
+          {/* CASE CGU */}
+          <div style={{
+            marginBottom: '1.25rem', padding: '1rem',
+            backgroundColor: cguAccepted ? '#f0fdf4' : '#f8fafc',
+            border: `1px solid ${cguAccepted ? '#86efac' : '#e2e8f0'}`,
+            borderRadius: '8px', transition: 'all 0.2s',
+          }}>
+            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', cursor: 'pointer' }}>
+              <div style={{ position: 'relative', flexShrink: 0, marginTop: '2px' }}>
+                <input type="checkbox" checked={cguAccepted}
+                  onChange={e => { setCguAccepted(e.target.checked); if (message.includes('CGU')) setMessage('') }}
+                  style={{ position: 'absolute', opacity: 0, width: 0, height: 0 }} />
+                <div style={{
+                  width: '18px', height: '18px', borderRadius: '4px',
+                  border: `2px solid ${cguAccepted ? '#16a34a' : '#cbd5e1'}`,
+                  backgroundColor: cguAccepted ? '#16a34a' : '#fff',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  transition: 'all 0.15s',
+                }}>
+                  {cguAccepted && (
+                    <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+                      <path d="M1 4L4 7.5L10 1" stroke="white" strokeWidth="2"
+                        strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  )}
+                </div>
+              </div>
+              <span style={{ fontSize: '0.875rem', color: '#374151', lineHeight: '1.6' }}>
+                En publiant cette annonce, je certifie être propriétaire ou mandaté pour ce bien
+                et j'accepte les{' '}
+                <Link href="/cgu" target="_blank"
+                  style={{ color: '#00bcd4', textDecoration: 'underline', fontWeight: '500' }}
+                  onClick={e => e.stopPropagation()}>
+                  Conditions Générales d'Utilisation
+                </Link>
+                {' '}d'Immo West Afro.{' '}
+                <span style={{ color: '#ef4444' }}>*</span>
+              </span>
+            </label>
+          </div>
+
           {/* MESSAGE */}
           {message && (
             <div style={{
@@ -185,13 +391,22 @@ export default function PublierPage() {
             }}>{message}</div>
           )}
 
-          <button onClick={handleSubmit} disabled={loading} style={{
-            width: '100%', padding: '1rem', backgroundColor: loading ? '#94a3b8' : '#00bcd4',
-            color: '#fff', border: 'none', borderRadius: '8px',
-            fontSize: '1rem', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer',
-          }}>
-            {loading ? 'Publication...' : '🚀 Publier mon bien'}
+          {/* BOUTON */}
+          <button onClick={handleSubmit} disabled={loading || !cguAccepted}
+            style={{
+              width: '100%', padding: '1rem',
+              backgroundColor: loading || !cguAccepted ? '#e2e8f0' : '#00bcd4',
+              color: !cguAccepted ? '#94a3b8' : '#fff',
+              border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: '700',
+              cursor: loading || !cguAccepted ? 'not-allowed' : 'pointer', transition: 'all 0.2s',
+            }}>
+            {loading ? '⏳ Publication en cours...' : '🚀 Publier mon bien'}
           </button>
+
+          <p style={{ textAlign: 'center', color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.75rem' }}>
+            <span style={{ color: '#ef4444' }}>*</span> Champ obligatoire
+          </p>
+
         </div>
       </div>
     </div>
