@@ -1,108 +1,282 @@
-export default function HomePage() {
-  return (
-    <main>
-      {/* HERO SECTION */}
-      <section
-        style={{
-          backgroundImage: 'linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url("/hero-bg.jpg")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          minHeight: '85vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          padding: '0 2rem',
-        }}
-      >
-        <div style={{ maxWidth: '900px', margin: '0 auto', width: '100%' }}>
-          <h1 style={{
-            color: '#fff',
-            fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-            fontWeight: '800',
-            lineHeight: '1.2',
-            marginBottom: '1rem',
-          }}>
-            Trouvez votre bien<br />immobilier id&eacute;al au B&eacute;nin
-          </h1>
-          <p style={{
-            color: '#e2e8f0',
-            fontSize: 'clamp(1rem, 2vw, 1.2rem)',
-            marginBottom: '2rem',
-            maxWidth: '600px',
-          }}>
-            Maisons, terrains, appartements et villas &agrave; vendre ou &agrave; louer &agrave;
-            Cotonou, Abomey-Calavi, Porto-Novo et partout au B&eacute;nin.
-          </p>
+import { supabase } from '@/lib/supabase'
+import Link from 'next/link'
+import HeroSearch from '@/components/HeroSearch'
+import BienCard from '@/components/BienCard'
+import type { Metadata } from 'next'
 
-          {/* BARRE DE RECHERCHE */}
-          <div style={{
-            display: 'flex',
-            gap: '0',
-            maxWidth: '750px',
-            borderRadius: '8px',
-            overflow: 'hidden',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
-          }}>
-            <input
-              type="text"
-              placeholder="Rechercher par ville, quartier..."
-              style={{
-                flex: 1,
-                padding: '1rem 1.5rem',
-                fontSize: '1rem',
-                border: 'none',
-                outline: 'none',
-                backgroundColor: '#fff',
-                color: '#1a202c',
-              }}
-            />
-            <button style={{
-              padding: '1rem 2rem',
-              backgroundColor: '#00bcd4',
-              color: '#fff',
-              border: 'none',
-              fontSize: '1rem',
-              fontWeight: '600',
-              cursor: 'pointer',
-            }}>
-              Rechercher
-            </button>
+export const metadata: Metadata = {
+  title: 'Immo West Afro Bénin — Vente et location immobilière',
+  description: 'Trouvez votre bien immobilier au Bénin. Appartements, villas, terrains et bureaux à vendre ou à louer à Cotonou, Abomey-Calavi, Porto-Novo et partout au Bénin.',
+}
+
+const VILLES_POPULAIRES = [
+  { nom: 'Cotonou', emoji: '🏙️', description: 'Capitale économique' },
+  { nom: 'Abomey-Calavi', emoji: '🌿', description: 'Ville en plein essor' },
+  { nom: 'Porto-Novo', emoji: '🏛️', description: 'Capitale politique' },
+  { nom: 'Parakou', emoji: '🌄', description: 'Capital du Nord' },
+  { nom: 'Bohicon', emoji: '🏘️', description: 'Carrefour du Bénin' },
+  { nom: 'Ouidah', emoji: '🌊', description: 'Ville historique' },
+]
+
+const TYPES_BIENS = [
+  { type: 'villa', label: 'Villas', icon: '🏡', color: 'bg-green-50 text-green-700 border-green-100' },
+  { type: 'appartement', label: 'Appartements', icon: '🏢', color: 'bg-blue-50 text-blue-700 border-blue-100' },
+  { type: 'terrain', label: 'Terrains', icon: '🌍', color: 'bg-amber-50 text-amber-700 border-amber-100' },
+  { type: 'maison', label: 'Maisons', icon: '🏠', color: 'bg-purple-50 text-purple-700 border-purple-100' },
+  { type: 'bureau', label: 'Bureaux', icon: '🏗️', color: 'bg-red-50 text-red-700 border-red-100' },
+  { type: 'studio', label: 'Studios', icon: '🛋️', color: 'bg-teal-50 text-teal-700 border-teal-100' },
+]
+
+export default async function HomePage() {
+
+  // Biens vedettes — 6 plus récents
+  const { data: bienVedettes } = await supabase
+    .from('biens')
+    .select(`
+      id, titre, prix, transaction, type_bien, surface, nb_chambres, created_at,
+      localites (nom, ville),
+      images (url, is_principale)
+    `)
+    .eq('statut', 'publié')
+    .order('created_at', { ascending: false })
+    .limit(6)
+
+  // Biens à louer — 3 plus récents
+  const { data: biensLocation } = await supabase
+    .from('biens')
+    .select(`
+      id, titre, prix, transaction, type_bien, surface, nb_chambres, created_at,
+      localites (nom, ville),
+      images (url, is_principale)
+    `)
+    .eq('statut', 'publié')
+    .eq('transaction', 'location')
+    .order('created_at', { ascending: false })
+    .limit(3)
+
+  // Stats
+  const [{ count: totalBiens }, { count: totalAgents }] = await Promise.all([
+    supabase.from('biens').select('id', { count: 'exact', head: true }).eq('statut', 'publié'),
+    supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('role', 'agent'),
+  ])
+
+  // Comptage par ville
+  const villesAvecCount = await Promise.all(
+    VILLES_POPULAIRES.map(async v => {
+      const { count } = await supabase
+        .from('biens')
+        .select('id', { count: 'exact', head: true })
+        .eq('statut', 'publié')
+        .ilike('ville', `%${v.nom}%`)
+      return { ...v, count: count ?? 0 }
+    })
+  )
+
+  return (
+    <div className="min-h-screen">
+
+      {/* ── HERO ── */}
+      <section className="relative bg-gradient-to-br from-green-700 via-green-600 to-emerald-800 overflow-hidden">
+        {/* Motif de fond */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-10 w-64 h-64 bg-white rounded-full blur-3xl"/>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-emerald-300 rounded-full blur-3xl"/>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 md:pt-24 md:pb-28">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 bg-white/15 text-white text-xs font-semibold px-4 py-2 rounded-full mb-6 border border-white/20">
+              🇧🇯 La référence immobilière au Bénin
+            </div>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
+              Trouvez votre bien<br/>
+              <span className="text-green-200">immobilier au Bénin</span>
+            </h1>
+            <p className="text-green-100 text-base md:text-lg max-w-2xl mx-auto mb-8">
+              Villas, appartements, terrains et bureaux à vendre ou à louer à Cotonou, Porto-Novo,
+              Abomey-Calavi et partout au Bénin.
+            </p>
+            <HeroSearch />
           </div>
 
-          {/* VILLES PRINCIPALES */}
-          <div style={{ marginTop: '2rem' }}>
-            <p style={{
-              color: '#cbd5e0',
-              fontSize: '0.85rem',
-              fontWeight: '600',
-              letterSpacing: '0.1em',
-              marginBottom: '0.75rem',
-              textTransform: 'uppercase',
-            }}>
-              Villes principales
-            </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {['Cotonou', 'Abomey-Calavi', 'Porto-Novo', 'Parakou', 'Abomey', 'Ouidah'].map((ville) => (
-                <button
-                  key={ville}
-                  style={{
-                    padding: '0.4rem 1rem',
-                    backgroundColor: 'rgba(255,255,255,0.15)',
-                    color: '#fff',
-                    border: '1px solid rgba(255,255,255,0.3)',
-                    borderRadius: '999px',
-                    fontSize: '0.9rem',
-                    cursor: 'pointer',
-                    backdropFilter: 'blur(4px)',
-                  }}
-                >
-                  📍 {ville}
-                </button>
-              ))}
-            </div>
+          {/* Stats */}
+          <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10 mt-10">
+            {[
+              { value: totalBiens ?? 0, label: 'Annonces actives' },
+              { value: totalAgents ?? 0, label: 'Agents certifiés' },
+              { value: 6, label: 'Villes couvertes' },
+            ].map(s => (
+              <div key={s.label} className="text-center">
+                <p className="text-2xl md:text-3xl font-bold text-white">
+                  {s.value > 0 ? `${s.value}+` : '—'}
+                </p>
+                <p className="text-green-200 text-xs md:text-sm font-medium">{s.label}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
-    </main>
+
+      {/* ── TYPES DE BIENS ── */}
+      <section className="bg-white py-12 md:py-16 border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+            {TYPES_BIENS.map(t => (
+              <Link key={t.type}
+                href={`/recherche?type=${t.type}`}
+                className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 ${t.color} hover:scale-105 transition-all duration-200 cursor-pointer`}>
+                <span className="text-2xl">{t.icon}</span>
+                <span className="text-xs font-semibold text-center leading-tight">{t.label}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── BIENS VEDETTES ── */}
+      <section className="bg-gray-50 py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Annonces récentes</h2>
+              <p className="text-gray-500 mt-1 text-sm">Les derniers biens disponibles sur la plateforme</p>
+            </div>
+            <Link href="/recherche"
+              className="hidden sm:flex items-center gap-1.5 text-green-600 font-semibold text-sm hover:text-green-700">
+              Voir toutes les annonces
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7"/>
+              </svg>
+            </Link>
+          </div>
+
+          {bienVedettes && bienVedettes.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+              {bienVedettes.map((bien, i) => (
+                <BienCard key={bien.id} bien={bien as any} priority={i < 3} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16 text-gray-400">
+              <p className="text-4xl mb-3">🏠</p>
+              <p className="font-medium">Aucune annonce disponible pour le moment</p>
+              <Link href="/publier" className="mt-4 inline-block text-green-600 font-semibold hover:underline">
+                Publier la première annonce →
+              </Link>
+            </div>
+          )}
+
+          <div className="text-center mt-8 sm:hidden">
+            <Link href="/recherche"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 text-white font-semibold text-sm rounded-xl hover:bg-green-700 transition-colors">
+              Voir toutes les annonces
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7"/>
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── BIENS À LOUER ── */}
+      {biensLocation && biensLocation.length > 0 && (
+        <section className="bg-white py-12 md:py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900">À louer</h2>
+                <p className="text-gray-500 mt-1 text-sm">Appartements, villas et studios disponibles à la location</p>
+              </div>
+              <Link href="/recherche?transaction=location"
+                className="hidden sm:flex items-center gap-1.5 text-green-600 font-semibold text-sm hover:text-green-700">
+                Voir tout
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7"/>
+                </svg>
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+              {biensLocation.map(bien => (
+                <BienCard key={bien.id} bien={bien as any} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── VILLES POPULAIRES ── */}
+      <section className="bg-gray-50 py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Chercher par ville</h2>
+            <p className="text-gray-500 text-sm">Trouvez le bien idéal dans votre ville</p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            {villesAvecCount.map(v => (
+              <Link key={v.nom}
+                href={`/recherche?ville=${v.nom}`}
+                className="group bg-white rounded-2xl border border-gray-100 p-4 text-center hover:border-green-200 hover:shadow-md transition-all">
+                <span className="text-3xl mb-2 block">{v.emoji}</span>
+                <p className="font-bold text-gray-900 text-sm group-hover:text-green-600 transition-colors">{v.nom}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{v.description}</p>
+                <p className="text-xs font-semibold text-green-600 mt-2">
+                  {v.count > 0 ? `${v.count} annonce${v.count > 1 ? 's' : ''}` : 'Bientôt'}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── POURQUOI NOUS ── */}
+      <section className="bg-white py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Pourquoi Immo West Afro ?</h2>
+            <p className="text-gray-500 text-sm">La plateforme immobilière pensée pour le Bénin</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: '🔒', titre: 'Annonces vérifiées', desc: 'Chaque annonce est contrôlée par notre équipe avant publication.' },
+              { icon: '💬', titre: 'Contact direct', desc: 'Échangez directement avec l\'agent via message ou WhatsApp.' },
+              { icon: '🗺️', titre: 'Couverture nationale', desc: 'Cotonou, Porto-Novo, Calavi et toutes les villes du Bénin.' },
+              { icon: '📱', titre: 'Disponible partout', desc: 'Accessible sur mobile, tablette et ordinateur, même en 3G.' },
+            ].map(f => (
+              <div key={f.titre} className="text-center p-6 rounded-2xl bg-gray-50 border border-gray-100 hover:border-green-200 hover:bg-green-50 transition-all">
+                <span className="text-4xl mb-4 block">{f.icon}</span>
+                <h3 className="font-bold text-gray-900 mb-2">{f.titre}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA PUBLIER ── */}
+      <section className="bg-gradient-to-br from-green-600 to-emerald-700 py-14 md:py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+            Vous avez un bien à vendre ou à louer ?
+          </h2>
+          <p className="text-green-100 text-sm md:text-base mb-8 max-w-xl mx-auto">
+            Publiez votre annonce gratuitement et touchez des milliers d'acheteurs et locataires potentiels au Bénin.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link href="/publier"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-green-700 font-bold text-sm rounded-xl hover:bg-green-50 transition-colors shadow-lg">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
+              </svg>
+              Publier une annonce
+            </Link>
+            <Link href="/recherche"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/20 text-white font-bold text-sm rounded-xl hover:bg-white/30 transition-colors border border-white/30">
+              Parcourir les annonces
+            </Link>
+          </div>
+        </div>
+      </section>
+
+    </div>
   )
 }
