@@ -1,265 +1,351 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import BienCard from '@/components/BienCard'
 import Link from 'next/link'
 
-const VILLES = ['Cotonou','Abomey-Calavi','Porto-Novo','Sèmè-Kpodji','Parakou','Bohicon','Ouidah','Lokossa','Abomey','Djougou','Comè','Azovè','Klouékanmey','Agbangnizoun','Natitingou']
-const TYPES = ['Maison','Appartement','Villa','Terrain','Bureau','Studio','Chambre']
-const TRIS = [
-  { value: 'created_at', label: 'Date (récent d\'abord)' },
-  { value: 'prix_asc', label: 'Prix croissant' },
-  { value: 'prix_desc', label: 'Prix décroissant' },
-  { value: 'vues', label: 'Popularité' },
+const TYPES   = ['Maison', 'Appartement', 'Villa', 'Terrain', 'Bureau', 'Studio']
+const VILLES  = ['Cotonou', 'Abomey-Calavi', 'Porto-Novo', 'Parakou', 'Bohicon', 'Ouidah']
+const TRIS    = [
+  { val: 'recent',     label: 'Plus récent' },
+  { val: 'prix_asc',   label: 'Prix croissant' },
+  { val: 'prix_desc',  label: 'Prix décroissant' },
+  { val: 'vues',       label: 'Plus vus' },
 ]
+const PAGE_SIZE = 12
 
 export default function RecherchePage() {
-  const [biens, setBiens] = useState<any[]>([])
-  const [loading, setLoading] = useState(false)
-  const [vue, setVue] = useState<'grille' | 'liste'>('grille')
-  const [filtresVisibles, setFiltresVisibles] = useState(true)
-  const [filtres, setFiltres] = useState({
-    ville: '', arrondissement: '', quartier: '',
-    type_bien: '', prix_min: '', prix_max: '',
-    nb_pieces: '', nb_chambres: '', nb_salles_bain: '',
-    meuble: '', parking: '', terrasse: '',
-    securite: '', eau: '', electricite: '',
-    disponible_immediat: '', surface_min: '',
-    tri: 'created_at',
-  })
+  const searchParams = useSearchParams()
+  const router = useRouter()
 
-  useEffect(() => { rechercher() }, [])
+  // ── Filtres depuis URL ──────────────────────────────────────────────────
+  const [transaction, setTransaction] = useState(searchParams.get('transaction') ?? 'tous')
+  const [type,        setType]        = useState(searchParams.get('type') ?? '')
+  const [ville,       setVille]       = useState(searchParams.get('ville') ?? '')
+  const [prixMin,     setPrixMin]     = useState(searchParams.get('prix_min') ?? '')
+  const [prixMax,     setPrixMax]     = useState(searchParams.get('prix_max') ?? '')
+  const [tri,         setTri]         = useState('recent')
+  const [page,        setPage]        = useState(1)
+  const [drawerOpen,  setDrawerOpen]  = useState(false)
 
-  const rechercher = async () => {
+  // ── Résultats ────────────────────────────────────────────────────────────
+  const [biens,   setBiens]   = useState<any[]>([])
+  const [total,   setTotal]   = useState(0)
+  const [loading, setLoading] = useState(true)
+
+  const fetchBiens = useCallback(async () => {
     setLoading(true)
-    let query = supabase.from('biens').select('*, images_biens(url)').eq('statut', 'disponible')
-    if (filtres.ville) query = query.eq('ville', filtres.ville)
-    if (filtres.arrondissement) query = query.ilike('arrondissement', `%${filtres.arrondissement}%`)
-    if (filtres.quartier) query = query.ilike('quartier', `%${filtres.quartier}%`)
-    if (filtres.type_bien) query = query.eq('type_bien', filtres.type_bien)
-    if (filtres.prix_min) query = query.gte('prix', parseInt(filtres.prix_min))
-    if (filtres.prix_max) query = query.lte('prix', parseInt(filtres.prix_max))
-    if (filtres.nb_pieces) query = query.gte('nb_pieces', parseInt(filtres.nb_pieces))
-    if (filtres.nb_chambres) query = query.gte('nb_chambres', parseInt(filtres.nb_chambres))
-    if (filtres.nb_salles_bain) query = query.gte('nb_salles_bain', parseInt(filtres.nb_salles_bain))
-    if (filtres.surface_min) query = query.gte('surface', parseFloat(filtres.surface_min))
-    if (filtres.meuble === 'oui') query = query.eq('meuble', true)
-    if (filtres.parking === 'oui') query = query.eq('parking', true)
-    if (filtres.terrasse === 'oui') query = query.eq('terrasse', true)
-    if (filtres.securite === 'oui') query = query.eq('securite', true)
-    if (filtres.eau === 'oui') query = query.eq('eau', true)
-    if (filtres.electricite === 'oui') query = query.eq('electricite', true)
-    if (filtres.disponible_immediat === 'oui') query = query.eq('disponible_immediat', true)
-    if (filtres.tri === 'prix_asc') query = query.order('prix', { ascending: true })
-    else if (filtres.tri === 'prix_desc') query = query.order('prix', { ascending: false })
-    else if (filtres.tri === 'vues') query = query.order('vues', { ascending: false })
-    else query = query.order('created_at', { ascending: false })
-    const { data } = await query.limit(50)
-    setBiens(data || [])
+
+    let query = supabase
+      .from('biens')
+      .select(`
+        id, titre, prix, transaction, type_bien, surface, nb_chambres, created_at, vues,
+        localites (nom, ville),
+        images (url, is_principale)
+      `, { count: 'exact' })
+      .eq('statut', 'publié')
+
+    if (transaction !== 'tous') query = query.eq('transaction', transaction)
+    if (type)    query = query.ilike('type_bien', `%${type}%`)
+    if (ville)   query = query.ilike('ville', `%${ville}%`)
+    if (prixMin) query = query.gte('prix', parseInt(prixMin))
+    if (prixMax) query = query.lte('prix', parseInt(prixMax))
+
+    if (tri === 'recent')    query = query.order('created_at', { ascending: false })
+    if (tri === 'prix_asc')  query = query.order('prix', { ascending: true })
+    if (tri === 'prix_desc') query = query.order('prix', { ascending: false })
+    if (tri === 'vues')      query = query.order('vues', { ascending: false })
+
+    query = query.range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1)
+
+    const { data, count } = await query
+    setBiens(data ?? [])
+    setTotal(count ?? 0)
     setLoading(false)
+  }, [transaction, type, ville, prixMin, prixMax, tri, page])
+
+  useEffect(() => { fetchBiens() }, [fetchBiens])
+
+  // Sync URL
+  useEffect(() => {
+    const p = new URLSearchParams()
+    if (transaction !== 'tous') p.set('transaction', transaction)
+    if (type)    p.set('type', type)
+    if (ville)   p.set('ville', ville)
+    if (prixMin) p.set('prix_min', prixMin)
+    if (prixMax) p.set('prix_max', prixMax)
+    router.replace(`/recherche?${p.toString()}`, { scroll: false })
+    setPage(1)
+  }, [transaction, type, ville, prixMin, prixMax])
+
+  const totalPages = Math.ceil(total / PAGE_SIZE)
+  const hasFilters = transaction !== 'tous' || type || ville || prixMin || prixMax
+
+  const resetFilters = () => {
+    setTransaction('tous')
+    setType('')
+    setVille('')
+    setPrixMin('')
+    setPrixMax('')
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
-    setFiltres({ ...filtres, [e.target.name]: e.target.value })
-  }
+  // ── Panneau filtres ───────────────────────────────────────────────────────
+  const FiltersPanel = () => (
+    <div className="space-y-6">
 
-  const reinitialiser = () => {
-    setFiltres({ ville: '', arrondissement: '', quartier: '', type_bien: '', prix_min: '', prix_max: '', nb_pieces: '', nb_chambres: '', nb_salles_bain: '', meuble: '', parking: '', terrasse: '', securite: '', eau: '', electricite: '', disponible_immediat: '', surface_min: '', tri: 'created_at' })
-  }
-
-  return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc' }}>
-      {/* HEADER */}
-      <div style={{ backgroundColor: '#0f172a', padding: '1.5rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div>
-          <h1 style={{ color: '#fff', fontSize: '1.4rem', fontWeight: '700', margin: 0 }}>Recherche de biens</h1>
-          <p style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '0.25rem 0 0' }}>
-            {loading ? 'Recherche...' : `${biens.length} bien(s) trouvé(s)`}
-          </p>
-        </div>
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          <select name="tri" value={filtres.tri} onChange={handleChange} style={selectTopStyle}>
-            {TRIS.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
-          </select>
-          <button onClick={() => setVue(vue === 'grille' ? 'liste' : 'grille')} style={btnTopStyle}>
-            {vue === 'grille' ? '☰ Liste' : '⊞ Grille'}
-          </button>
-          <button onClick={() => setFiltresVisibles(!filtresVisibles)} style={btnTopStyle}>
-            {filtresVisibles ? '✕ Masquer filtres' : '⊞ Afficher filtres'}
-          </button>
+      {/* Transaction */}
+      <div>
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Type de transaction</p>
+        <div className="flex gap-2">
+          {[['tous', 'Tous'], ['vente', 'Vente'], ['location', 'Location']].map(([val, label]) => (
+            <button key={val} onClick={() => setTransaction(val)}
+              className={`flex-1 py-2 text-xs font-semibold rounded-lg border transition-all ${
+                transaction === val
+                  ? 'bg-green-600 border-green-600 text-white'
+                  : 'border-gray-200 text-gray-500 hover:border-green-300'
+              }`}>
+              {label}
+            </button>
+          ))}
         </div>
       </div>
 
-      <div style={{ display: 'flex', maxWidth: '1400px', margin: '0 auto', padding: '1.5rem', gap: '1.5rem' }}>
+      {/* Type de bien */}
+      <div>
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Type de bien</p>
+        <div className="grid grid-cols-2 gap-1.5">
+          {TYPES.map(t => (
+            <button key={t} onClick={() => setType(type === t.toLowerCase() ? '' : t.toLowerCase())}
+              className={`py-2 text-xs font-medium rounded-lg border transition-all ${
+                type === t.toLowerCase()
+                  ? 'bg-green-600 border-green-600 text-white'
+                  : 'border-gray-200 text-gray-500 hover:border-green-300'
+              }`}>
+              {t}
+            </button>
+          ))}
+        </div>
+      </div>
 
-        {/* SIDEBAR FILTRES */}
-        {filtresVisibles && (
-          <aside style={{ width: '280px', flexShrink: 0 }}>
-            <div style={{ backgroundColor: '#fff', borderRadius: '12px', padding: '1.5rem', boxShadow: '0 2px 10px rgba(0,0,0,0.06)', position: 'sticky', top: '80px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                <h2 style={{ color: '#0f172a', fontSize: '1rem', fontWeight: '700', margin: 0 }}>Filtres</h2>
-                <button onClick={reinitialiser} style={{ color: '#00bcd4', fontSize: '0.8rem', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '600' }}>
-                  Effacer tout
-                </button>
-              </div>
+      {/* Ville */}
+      <div>
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Ville</p>
+        <select value={ville} onChange={e => setVille(e.target.value)}
+          className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50">
+          <option value="">Toutes les villes</option>
+          {VILLES.map(v => <option key={v} value={v}>{v}</option>)}
+        </select>
+      </div>
 
-              {/* LOCALISATION */}
-              <div style={sectionStyle}>
-                <h3 style={sectionTitleStyle}>📍 Localisation</h3>
-                <select name="ville" value={filtres.ville} onChange={handleChange} style={filterInputStyle}>
-                  <option value="">Toutes les villes</option>
-                  {VILLES.map(v => <option key={v} value={v}>{v}</option>)}
-                </select>
-                <input name="arrondissement" value={filtres.arrondissement} onChange={handleChange} placeholder="Arrondissement" style={filterInputStyle} />
-                <input name="quartier" value={filtres.quartier} onChange={handleChange} placeholder="Quartier / Zone" style={filterInputStyle} />
-              </div>
+      {/* Budget */}
+      <div>
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Budget (FCFA)</p>
+        <div className="flex gap-2 items-center">
+          <input type="number" placeholder="Min" value={prixMin}
+            onChange={e => setPrixMin(e.target.value)}
+            className="flex-1 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50"/>
+          <span className="text-gray-400 text-sm">—</span>
+          <input type="number" placeholder="Max" value={prixMax}
+            onChange={e => setPrixMax(e.target.value)}
+            className="flex-1 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50"/>
+        </div>
+      </div>
 
-              {/* TYPE */}
-              <div style={sectionStyle}>
-                <h3 style={sectionTitleStyle}>🏠 Type de bien</h3>
-                <select name="type_bien" value={filtres.type_bien} onChange={handleChange} style={filterInputStyle}>
-                  <option value="">Tous les types</option>
-                  {TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-                </select>
-              </div>
+      {/* Reset */}
+      {hasFilters && (
+        <button onClick={resetFilters}
+          className="w-full py-2.5 border border-red-200 text-red-500 text-sm font-semibold rounded-xl hover:bg-red-50 transition-colors">
+          Réinitialiser les filtres
+        </button>
+      )}
+    </div>
+  )
 
-              {/* PRIX */}
-              <div style={sectionStyle}>
-                <h3 style={sectionTitleStyle}>💰 Prix (FCFA/mois)</h3>
-                <input name="prix_min" value={filtres.prix_min} onChange={handleChange} type="number" placeholder="Prix min" style={filterInputStyle} />
-                <input name="prix_max" value={filtres.prix_max} onChange={handleChange} type="number" placeholder="Prix max" style={filterInputStyle} />
-              </div>
+  return (
+    <div className="min-h-screen bg-gray-50">
 
-              {/* CARACTÉRISTIQUES */}
-              <div style={sectionStyle}>
-                <h3 style={sectionTitleStyle}>🛏 Caractéristiques</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
-                  <input name="nb_pieces" value={filtres.nb_pieces} onChange={handleChange} type="number" placeholder="Pièces min" style={filterInputStyle} />
-                  <input name="nb_chambres" value={filtres.nb_chambres} onChange={handleChange} type="number" placeholder="Chambres min" style={filterInputStyle} />
-                  <input name="nb_salles_bain" value={filtres.nb_salles_bain} onChange={handleChange} type="number" placeholder="SDB min" style={filterInputStyle} />
-                  <input name="surface_min" value={filtres.surface_min} onChange={handleChange} type="number" placeholder="Surface m²" style={filterInputStyle} />
-                </div>
-              </div>
-
-              {/* ÉQUIPEMENTS */}
-              <div style={sectionStyle}>
-                <h3 style={sectionTitleStyle}>✅ Équipements</h3>
-                {[
-                  { name: 'meuble', label: '🛋️ Meublé' },
-                  { name: 'parking', label: '🚗 Parking' },
-                  { name: 'terrasse', label: '🌿 Terrasse' },
-                  { name: 'securite', label: '🔒 Sécurité' },
-                  { name: 'eau', label: '💧 Eau' },
-                  { name: 'electricite', label: '⚡ Électricité' },
-                  { name: 'disponible_immediat', label: '✅ Dispo. immédiat' },
-                ].map(eq => (
-                  <label key={eq.name} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', cursor: 'pointer', color: '#374151', fontSize: '0.875rem' }}>
-                    <input type="checkbox" checked={filtres[eq.name as keyof typeof filtres] === 'oui'}
-                      onChange={(e) => setFiltres({ ...filtres, [eq.name]: e.target.checked ? 'oui' : '' })} />
-                    {eq.label}
-                  </label>
-                ))}
-              </div>
-
-              <button onClick={rechercher} style={{
-                width: '100%', padding: '0.875rem', backgroundColor: '#00bcd4',
-                color: '#fff', border: 'none', borderRadius: '8px',
-                fontSize: '1rem', fontWeight: '700', cursor: 'pointer',
-              }}>
-                🔍 Rechercher
+      {/* Drawer mobile */}
+      {drawerOpen && (
+        <>
+          <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setDrawerOpen(false)}/>
+          <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 p-5 max-h-[85vh] overflow-y-auto lg:hidden">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="font-bold text-gray-900">Filtres</h2>
+              <button onClick={() => setDrawerOpen(false)}
+                className="p-1.5 rounded-lg text-gray-400 hover:bg-gray-100">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
+                </svg>
               </button>
             </div>
+            <FiltersPanel />
+            <button onClick={() => setDrawerOpen(false)}
+              className="w-full mt-4 py-3 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-colors">
+              Voir {total} résultat{total > 1 ? 's' : ''}
+            </button>
+          </div>
+        </>
+      )}
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="flex gap-6">
+
+          {/* ── Sidebar filtres desktop ── */}
+          <aside className="hidden lg:block w-64 flex-shrink-0">
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sticky top-4">
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="font-bold text-gray-900">Filtres</h2>
+                {hasFilters && (
+                  <button onClick={resetFilters}
+                    className="text-xs text-red-500 hover:underline font-medium">
+                    Réinitialiser
+                  </button>
+                )}
+              </div>
+              <FiltersPanel />
+            </div>
           </aside>
-        )}
 
-        {/* RÉSULTATS */}
-        <main style={{ flex: 1 }}>
-          {loading ? (
-            <div style={{ textAlign: 'center', padding: '4rem', color: '#94a3b8' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⏳</div>
-              <p>Recherche en cours...</p>
-            </div>
-          ) : biens.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '4rem', color: '#94a3b8', backgroundColor: '#fff', borderRadius: '12px' }}>
-              <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🔍</div>
-              <p style={{ fontSize: '1.1rem', fontWeight: '600' }}>Aucun bien trouvé</p>
-              <p style={{ fontSize: '0.9rem' }}>Essayez d&apos;élargir vos critères de recherche.</p>
-            </div>
-          ) : (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: vue === 'grille' ? 'repeat(auto-fill, minmax(280px, 1fr))' : '1fr',
-              gap: '1.25rem',
-            }}>
-              {biens.map((bien) => (
-                <Link key={bien.id} href={`/bien/${bien.id}`} style={{ textDecoration: 'none' }}>
-                  <div style={{
-                    backgroundColor: '#fff', borderRadius: '12px', overflow: 'hidden',
-                    boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
-                    display: vue === 'liste' ? 'flex' : 'block',
-                  }}>
-                    {/* IMAGE */}
-                    <div style={{
-                      height: vue === 'liste' ? '160px' : '200px',
-                      width: vue === 'liste' ? '240px' : '100%',
-                      flexShrink: 0,
-                      backgroundColor: '#e2e8f0',
-                      backgroundImage: bien.images_biens?.[0]?.url ? `url(${bien.images_biens[0].url})` : 'none',
-                      backgroundSize: 'cover', backgroundPosition: 'center',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      position: 'relative',
-                    }}>
-                      {!bien.images_biens?.[0]?.url && <span style={{ fontSize: '3rem' }}>🏠</span>}
-                      {bien.premium && (
-                        <span style={{
-                          position: 'absolute', top: '0.75rem', left: '0.75rem',
-                          backgroundColor: '#f59e0b', color: '#fff',
-                          padding: '0.2rem 0.6rem', borderRadius: '999px',
-                          fontSize: '0.7rem', fontWeight: '700',
-                        }}>⭐ PREMIUM</span>
-                      )}
-                      <span style={{
-                        position: 'absolute', top: '0.75rem', right: '0.75rem',
-                        backgroundColor: '#10b981', color: '#fff',
-                        padding: '0.2rem 0.6rem', borderRadius: '999px',
-                        fontSize: '0.7rem', fontWeight: '600',
-                      }}>Disponible</span>
-                    </div>
+          {/* ── Zone résultats ── */}
+          <main className="flex-1 min-w-0">
 
-                    {/* INFOS */}
-                    <div style={{ padding: '1.25rem', flex: 1 }}>
-                      <h3 style={{ color: '#0f172a', fontWeight: '700', marginBottom: '0.4rem', fontSize: '1rem', lineHeight: '1.3' }}>
-                        {bien.titre}
-                      </h3>
-                      <p style={{ color: '#00bcd4', fontWeight: '800', fontSize: '1.15rem', marginBottom: '0.4rem' }}>
-                        {bien.prix?.toLocaleString()} FCFA<span style={{ color: '#94a3b8', fontWeight: '400', fontSize: '0.8rem' }}>/mois</span>
-                      </p>
-                      <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '0.75rem' }}>
-                        📍 {[bien.quartier, bien.arrondissement, bien.ville].filter(Boolean).join(', ')}
-                      </p>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', color: '#64748b', fontSize: '0.8rem' }}>
-                        {bien.type_bien && <span style={badgeStyle}>🏠 {bien.type_bien}</span>}
-                        {bien.nb_chambres && <span style={badgeStyle}>🛏 {bien.nb_chambres} ch.</span>}
-                        {bien.nb_salles_bain && <span style={badgeStyle}>🚿 {bien.nb_salles_bain} sdb</span>}
-                        {bien.surface && <span style={badgeStyle}>📐 {bien.surface}m²</span>}
-                        {bien.meuble && <span style={badgeStyle}>🛋️ Meublé</span>}
-                        {bien.parking && <span style={badgeStyle}>🚗 Parking</span>}
-                      </div>
+            {/* Header résultats */}
+            <div className="flex items-center justify-between gap-3 mb-5">
+              <div>
+                <h1 className="text-lg font-bold text-gray-900">
+                  {loading ? '...' : `${total} bien${total > 1 ? 's' : ''} trouvé${total > 1 ? 's' : ''}`}
+                </h1>
+                {hasFilters && (
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {transaction !== 'tous' && (
+                      <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                        {transaction}
+                      </span>
+                    )}
+                    {type && (
+                      <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs font-medium capitalize">
+                        {type}
+                      </span>
+                    )}
+                    {ville && (
+                      <span className="px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">
+                        {ville}
+                      </span>
+                    )}
+                    {(prixMin || prixMax) && (
+                      <span className="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-xs font-medium">
+                        {prixMin ? `${new Intl.NumberFormat('fr-FR').format(parseInt(prixMin))}` : '0'}
+                        {' — '}
+                        {prixMax ? `${new Intl.NumberFormat('fr-FR').format(parseInt(prixMax))} FCFA` : '∞'}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center gap-2 flex-shrink-0">
+                {/* Tri */}
+                <select value={tri} onChange={e => setTri(e.target.value)}
+                  className="hidden sm:block px-3 py-2 border border-gray-200 rounded-xl text-sm text-gray-600 focus:outline-none bg-white">
+                  {TRIS.map(t => <option key={t.val} value={t.val}>{t.label}</option>)}
+                </select>
+
+                {/* Bouton filtres mobile */}
+                <button onClick={() => setDrawerOpen(true)}
+                  className="lg:hidden flex items-center gap-2 px-3 py-2 border border-gray-200 rounded-xl text-sm text-gray-600 bg-white hover:border-green-300 transition-colors">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/>
+                  </svg>
+                  Filtres
+                  {hasFilters && <span className="w-2 h-2 bg-green-500 rounded-full"/>}
+                </button>
+              </div>
+            </div>
+
+            {/* Grille résultats */}
+            {loading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="bg-white rounded-2xl border border-gray-100 overflow-hidden animate-pulse">
+                    <div className="h-52 bg-gray-200"/>
+                    <div className="p-4 space-y-2.5">
+                      <div className="h-5 bg-gray-200 rounded w-1/3"/>
+                      <div className="h-4 bg-gray-100 rounded w-3/4"/>
+                      <div className="h-3 bg-gray-100 rounded w-1/2"/>
                     </div>
                   </div>
-                </Link>
-              ))}
-            </div>
-          )}
-        </main>
+                ))}
+              </div>
+            ) : biens.length === 0 ? (
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center">
+                <p className="text-5xl mb-4">🔍</p>
+                <p className="font-bold text-gray-700 text-lg mb-2">Aucun résultat</p>
+                <p className="text-gray-400 text-sm mb-6">
+                  Aucun bien ne correspond à vos critères. Essayez d'élargir votre recherche.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <button onClick={resetFilters}
+                    className="px-5 py-2.5 bg-green-600 text-white text-sm font-semibold rounded-xl hover:bg-green-700 transition-colors">
+                    Voir toutes les annonces
+                  </button>
+                  <Link href="/publier"
+                    className="px-5 py-2.5 border border-gray-200 text-gray-600 text-sm font-semibold rounded-xl hover:border-green-300 hover:text-green-600 transition-all">
+                    Publier une annonce
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                  {biens.map((bien, i) => (
+                    <BienCard key={bien.id} bien={bien} priority={i < 3} />
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-2 mt-8">
+                    <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+                      className="px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium text-gray-500 hover:border-green-300 hover:text-green-600 disabled:opacity-40 disabled:cursor-not-allowed transition-all bg-white">
+                      ← Précédent
+                    </button>
+
+                    <div className="flex gap-1">
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        const p = page <= 3 ? i + 1
+                          : page >= totalPages - 2 ? totalPages - 4 + i
+                          : page - 2 + i
+                        return p > 0 && p <= totalPages ? (
+                          <button key={p} onClick={() => setPage(p)}
+                            className={`w-9 h-9 rounded-xl text-sm font-semibold transition-all ${
+                              p === page
+                                ? 'bg-green-600 text-white'
+                                : 'bg-white border border-gray-200 text-gray-500 hover:border-green-300 hover:text-green-600'
+                            }`}>
+                            {p}
+                          </button>
+                        ) : null
+                      })}
+                    </div>
+
+                    <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
+                      className="px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium text-gray-500 hover:border-green-300 hover:text-green-600 disabled:opacity-40 disabled:cursor-not-allowed transition-all bg-white">
+                      Suivant →
+                    </button>
+                  </div>
+                )}
+
+                {/* Info pagination */}
+                <p className="text-center text-xs text-gray-400 mt-3">
+                  Page {page} sur {totalPages} · {total} résultat{total > 1 ? 's' : ''}
+                </p>
+              </>
+            )}
+          </main>
+        </div>
       </div>
     </div>
   )
 }
-
-const sectionStyle: React.CSSProperties = { marginBottom: '1.25rem', paddingBottom: '1.25rem', borderBottom: '1px solid #f1f5f9' }
-const sectionTitleStyle: React.CSSProperties = { color: '#0f172a', fontSize: '0.85rem', fontWeight: '700', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }
-const filterInputStyle: React.CSSProperties = { width: '100%', padding: '0.6rem 0.75rem', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', color: '#0f172a', fontSize: '0.875rem', outline: 'none', boxSizing: 'border-box', marginBottom: '0.5rem' }
-const selectTopStyle: React.CSSProperties = { padding: '0.5rem 0.75rem', backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '6px', color: '#fff', fontSize: '0.85rem', outline: 'none' }
-const btnTopStyle: React.CSSProperties = { padding: '0.5rem 1rem', backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '6px', color: '#fff', fontSize: '0.85rem', cursor: 'pointer' }
-const badgeStyle: React.CSSProperties = { backgroundColor: '#f1f5f9', padding: '0.25rem 0.6rem', borderRadius: '6px', fontSize: '0.78rem' }
