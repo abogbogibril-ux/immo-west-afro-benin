@@ -27,6 +27,10 @@ const nextConfig = {
 
   compress: true,
 
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
+
   async headers() {
     return [
       {
