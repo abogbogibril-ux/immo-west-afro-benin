@@ -20,7 +20,7 @@ export default function PublierPage() {
   const [uploadProgress, setUploadProgress] = useState(0)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [form, setForm] = useState({
-    titre: '', description: '', type_bien: '', prix: '',
+    titre: '', description: '', type_bien: '', transaction: 'vente', prix: '',
     ville: '', arrondissement: '', quartier: '', surface: '',
     nb_pieces: '', nb_chambres: '', nb_salles_bain: '',
     video_url: '',
@@ -98,6 +98,7 @@ export default function PublierPage() {
       titre: form.titre,
       description: form.description,
       type_bien: form.type_bien,
+      transaction: form.transaction,
       prix: parseInt(form.prix),
       ville: form.ville,
       arrondissement: form.arrondissement,
@@ -158,6 +159,13 @@ export default function PublierPage() {
                 onChange={handleChange} style={inputStyle} />
             </div>
             <div>
+              <label style={labelStyle}>Transaction *</label>
+              <select name="transaction" onChange={handleChange} style={inputStyle} value={form.transaction}>
+                <option value="vente">Vente</option>
+                <option value="location">Location</option>
+              </select>
+            </div>
+            <div>
               <label style={labelStyle}>Type de bien *</label>
               <select name="type_bien" onChange={handleChange} style={inputStyle}>
                 <option value="">Sélectionner...</option>
@@ -165,7 +173,7 @@ export default function PublierPage() {
               </select>
             </div>
             <div>
-              <label style={labelStyle}>Prix mensuel (FCFA) *</label>
+              <label style={labelStyle}>Prix (FCFA) *</label>
               <input name="prix" type="number" placeholder="150000"
                 onChange={handleChange} style={inputStyle} />
             </div>
@@ -432,3 +440,4 @@ const inputStyle: React.CSSProperties = {
   borderRadius: '8px', color: '#0f172a', fontSize: '0.95rem',
   outline: 'none', boxSizing: 'border-box',
 }
+
