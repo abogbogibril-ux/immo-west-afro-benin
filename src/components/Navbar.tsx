@@ -3,156 +3,240 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
 
 export default function Navbar() {
   const pathname = usePathname()
   const router = useRouter()
-  const [langue, setLangue] = useState<'FR' | 'EN'>('FR')
-  const [menuOuvert, setMenuOuvert] = useState(false)
   const [user, setUser] = useState<any>(null)
+  const [role, setRole] = useState<string | null>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  // Masquer la Navbar dans les dashboards
+  if (pathname.startsWith('/dashboard') || pathname.startsWith('/admin')) return null
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => setUser(user))
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
-      setUser(session?.user ?? null)
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      setUser(user)
+      if (user) {
+        const { data } = await supabase
+          .from('profiles').select('role').eq('id', user.id).single()
+        setRole(data?.role ?? null)
+      }
     })
-    return () => subscription.unsubscribe()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_, session) => {
+      setUser(session?.user ?? null)
+      if (session?.user) {
+        const { data } = await supabase
+          .from('profiles').select('role').eq('id', session.user.id).single()
+        setRole(data?.role ?? null)
+      } else {
+        setRole(null)
+      }
+    })
+
+    const handleScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      subscription.unsubscribe()
+      window.removeEventListener('scroll', handleScroll)
+    }
   }, [])
 
-  const handleLogout = async () => {
+  const handleSignOut = async () => {
     await supabase.auth.signOut()
+    setUser(null)
+    setRole(null)
     router.push('/')
   }
 
-  const isActive = (href: string) => pathname === href
+  const getDashboardLink = () => {
+    if (role === 'admin') return '/dashboard/admin'
+    if (role === 'agent') return '/dashboard/agent'
+    return '/dashboard/client'
+  }
 
-  const navLinks = [
-    { href: '/', label: langue === 'FR' ? 'Accueil' : 'Home' },
-    { href: '/recherche', label: langue === 'FR' ? 'Recherche' : 'Search' },
-    { href: '/a-propos', label: langue === 'FR' ? 'À propos' : 'About' },
+  const isActive = (href: string) =>
+    href === '/' ? pathname === '/' : pathname.startsWith(href)
+
+  const NAV_LINKS = [
+    { href: '/', label: 'Accueil' },
+    { href: '/recherche', label: 'Annonces' },
+    { href: '/a-propos', label: 'À propos' },
     { href: '/contact', label: 'Contact' },
   ]
 
+  const isHero = pathname === '/'
+  const navBg = scrolled || !isHero
+    ? 'bg-white shadow-sm border-b border-gray-100'
+    : 'bg-transparent'
+  const textColor = scrolled || !isHero ? 'text-gray-700' : 'text-white'
+  const logoColor = scrolled || !isHero ? 'text-green-700' : 'text-white'
+  const activeBg  = scrolled || !isHero ? 'text-green-600' : 'text-green-200'
+
   return (
-    <nav style={{
-      backgroundColor: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-      position: 'sticky', top: 0, zIndex: 1000,
-    }}>
-      <div style={{
-        maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '70px',
-      }}>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
 
-        {/* LOGO */}
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
-          <Image src="/favicon.ico" alt="Logo" width={40} height={40} style={{ borderRadius: '8px' }} />
-          <span style={{ color: '#0f172a', fontWeight: '800', fontSize: '0.95rem', lineHeight: '1.2' }}>
-            Immo West Afro<br />
-            <span style={{ color: '#00bcd4', fontSize: '0.75rem', fontWeight: '600' }}>Bénin</span>
-          </span>
-        </Link>
-
-        {/* LIENS — Desktop */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-          {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} style={{
-              padding: '0.5rem 0.85rem', borderRadius: '6px', textDecoration: 'none',
-              fontSize: '0.92rem', fontWeight: '500',
-              color: isActive(link.href) ? '#00bcd4' : '#4a5568',
-              backgroundColor: isActive(link.href) ? '#e0f7fa' : 'transparent',
-              borderBottom: isActive(link.href) ? '2px solid #00bcd4' : '2px solid transparent',
-            }}>
-              {link.label}
-            </Link>
-          ))}
-        </div>
-
-        {/* DROITE */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-          {/* LANGUE */}
-          <button onClick={() => setLangue(langue === 'FR' ? 'EN' : 'FR')} style={{
-            display: 'flex', alignItems: 'center', gap: '0.3rem',
-            padding: '0.4rem 0.75rem', backgroundColor: 'transparent',
-            border: '1px solid #e2e8f0', borderRadius: '6px',
-            cursor: 'pointer', fontSize: '0.85rem', color: '#4a5568', fontWeight: '500',
-          }}>
-            🌐 {langue}
-          </button>
-
-          {user ? (
-            <>
-              <Link href="/publier" style={{
-                padding: '0.4rem 1rem', backgroundColor: '#00bcd4',
-                borderRadius: '6px', color: '#fff', textDecoration: 'none',
-                fontSize: '0.85rem', fontWeight: '600',
-              }}>
-                + {langue === 'FR' ? 'Publier' : 'Post'}
-              </Link>
-              <button onClick={handleLogout} style={{
-                padding: '0.4rem 1rem', backgroundColor: 'transparent',
-                border: '1px solid #e2e8f0', borderRadius: '6px',
-                color: '#ef4444', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '500',
-              }}>
-                {langue === 'FR' ? 'Déconnexion' : 'Logout'}
-              </button>
-            </>
-          ) : (
-            <>
-              <Link href="/connexion" style={{
-                padding: '0.4rem 1rem', backgroundColor: 'transparent',
-                border: '1px solid #00bcd4', borderRadius: '6px',
-                color: '#00bcd4', textDecoration: 'none', fontSize: '0.85rem', fontWeight: '500',
-              }}>
-                {langue === 'FR' ? 'Connexion' : 'Login'}
-              </Link>
-              <Link href="/inscription" style={{
-                padding: '0.4rem 1rem', backgroundColor: '#00bcd4',
-                borderRadius: '6px', color: '#fff', textDecoration: 'none',
-                fontSize: '0.85rem', fontWeight: '600',
-              }}>
-                {langue === 'FR' ? 'Inscription' : 'Sign up'}
-              </Link>
-            </>
-          )}
-
-          {/* MENU MOBILE */}
-          <button onClick={() => setMenuOuvert(!menuOuvert)} style={{
-            display: 'none', backgroundColor: 'transparent', border: 'none',
-            fontSize: '1.5rem', cursor: 'pointer', color: '#0f172a',
-          }} className="menu-mobile">
-            {menuOuvert ? '✕' : '☰'}
-          </button>
-        </div>
-      </div>
-
-      {/* MENU MOBILE OUVERT */}
-      {menuOuvert && (
-        <div style={{
-          backgroundColor: '#fff', borderTop: '1px solid #e2e8f0',
-          padding: '1rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem',
-        }}>
-          {navLinks.map((link) => (
-            <Link key={link.href} href={link.href}
-              onClick={() => setMenuOuvert(false)}
-              style={{
-                padding: '0.75rem', borderRadius: '8px', textDecoration: 'none',
-                color: isActive(link.href) ? '#00bcd4' : '#374151',
-                backgroundColor: isActive(link.href) ? '#e0f7fa' : 'transparent',
-                fontWeight: '500',
-              }}>
-              {link.label}
-            </Link>
-          ))}
-          <Link href="/publier" onClick={() => setMenuOuvert(false)} style={{
-            padding: '0.75rem', backgroundColor: '#00bcd4', borderRadius: '8px',
-            color: '#fff', textDecoration: 'none', fontWeight: '600', textAlign: 'center',
-          }}>
-            + Publier un bien
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
+            <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+              </svg>
+            </div>
+            <div className="hidden sm:block">
+              <p className={`font-bold text-sm leading-tight ${logoColor}`}>Immo West Afro</p>
+              <p className={`text-[10px] font-medium ${scrolled || !isHero ? 'text-green-500' : 'text-green-200'}`}>
+                Bénin
+              </p>
+            </div>
           </Link>
+
+          {/* Nav desktop */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {NAV_LINKS.map(link => (
+              <Link key={link.href} href={link.href}
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                  isActive(link.href)
+                    ? `${activeBg} font-semibold`
+                    : `${textColor} hover:bg-white/10`
+                }`}>
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Actions */}
+          <div className="flex items-center gap-2">
+
+            {/* Publier */}
+            <Link href="/publier"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-green-600 text-white text-sm font-semibold rounded-xl hover:bg-green-700 transition-colors">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
+              </svg>
+              Publier
+            </Link>
+
+            {user ? (
+              <div className="relative group">
+                <button className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
+                  scrolled || !isHero
+                    ? 'text-gray-700 hover:bg-gray-100'
+                    : 'text-white hover:bg-white/10'
+                }`}>
+                  <div className="w-7 h-7 rounded-full bg-green-600 flex items-center justify-center text-white text-xs font-bold">
+                    {user.email?.[0].toUpperCase()}
+                  </div>
+                  <svg className="w-4 h-4 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/>
+                  </svg>
+                </button>
+
+                {/* Dropdown */}
+                <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-2xl shadow-lg border border-gray-100 py-1.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
+                  <Link href={getDashboardLink()}
+                    className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600 transition-colors">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                    Mon espace
+                  </Link>
+                  <Link href="/publier"
+                    className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600 transition-colors">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Publier un bien
+                  </Link>
+                  <div className="border-t border-gray-100 my-1"/>
+                  <button onClick={handleSignOut}
+                    className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                    </svg>
+                    Déconnexion
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <Link href="/connexion"
+                className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium border transition-all ${
+                  scrolled || !isHero
+                    ? 'border-gray-200 text-gray-700 hover:border-green-300 hover:text-green-600'
+                    : 'border-white/30 text-white hover:bg-white/10'
+                }`}>
+                Se connecter
+              </Link>
+            )}
+
+            {/* Hamburger mobile */}
+            <button onClick={() => setMenuOpen(!menuOpen)}
+              className={`lg:hidden p-2 rounded-xl transition-colors ${
+                scrolled || !isHero ? 'text-gray-600 hover:bg-gray-100' : 'text-white hover:bg-white/10'
+              }`}>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {menuOpen
+                  ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
+                  : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>
+                }
+              </svg>
+            </button>
+          </div>
         </div>
-      )}
-    </nav>
+
+        {/* Menu mobile */}
+        {menuOpen && (
+          <div className="lg:hidden bg-white rounded-2xl shadow-lg border border-gray-100 mb-3 overflow-hidden">
+            <nav className="p-3 space-y-1">
+              {NAV_LINKS.map(link => (
+                <Link key={link.href} href={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                    isActive(link.href)
+                      ? 'bg-green-50 text-green-600 font-semibold'
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}>
+                  {link.label}
+                </Link>
+              ))}
+              <div className="border-t border-gray-100 my-2"/>
+              <Link href="/publier" onClick={() => setMenuOpen(false)}
+                className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-green-600 hover:bg-green-50 transition-colors">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
+                </svg>
+                Publier une annonce
+              </Link>
+              {user ? (
+                <>
+                  <Link href={getDashboardLink()} onClick={() => setMenuOpen(false)}
+                    className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                    Mon espace
+                  </Link>
+                  <button onClick={() => { handleSignOut(); setMenuOpen(false) }}
+                    className="w-full flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-colors">
+                    Déconnexion
+                  </button>
+                </>
+              ) : (
+                <Link href="/connexion" onClick={() => setMenuOpen(false)}
+                  className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                  Se connecter
+                </Link>
+              )}
+            </nav>
+          </div>
+        )}
+      </div>
+    </header>
   )
 }

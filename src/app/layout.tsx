@@ -22,11 +22,7 @@ export const metadata: Metadata = {
   authors: [{ name: 'Immo West Afro' }],
   creator: 'Immo West Afro',
   publisher: 'Immo West Afro',
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true },
-  },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   openGraph: {
     type: 'website',
     locale: 'fr_BJ',
@@ -68,7 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={inter.className}>
         <Navbar />
-        <main>
+        <main className="pt-16">
           {children}
         </main>
         <Footer />
