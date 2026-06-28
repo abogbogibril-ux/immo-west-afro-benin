@@ -29,7 +29,6 @@ const TYPES_BIENS = [
 
 export default async function HomePage() {
 
-  // Biens vedettes — 6 plus récents
   const { data: bienVedettes } = await supabase
     .from('biens')
     .select(`
@@ -41,7 +40,6 @@ export default async function HomePage() {
     .order('created_at', { ascending: false })
     .limit(6)
 
-  // Biens à louer — 3 plus récents
   const { data: biensLocation } = await supabase
     .from('biens')
     .select(`
@@ -54,13 +52,11 @@ export default async function HomePage() {
     .order('created_at', { ascending: false })
     .limit(3)
 
-  // Stats
   const [{ count: totalBiens }, { count: totalAgents }] = await Promise.all([
     supabase.from('biens').select('id', { count: 'exact', head: true }).eq('statut', 'publié'),
     supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('role', 'agent'),
   ])
 
-  // Comptage par ville
   const villesAvecCount = await Promise.all(
     VILLES_POPULAIRES.map(async v => {
       const { count } = await supabase
@@ -76,23 +72,40 @@ export default async function HomePage() {
     <div className="min-h-screen">
 
       {/* ── HERO ── */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-600 to-emerald-800 overflow-hidden">
-        {/* Motif de fond */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-64 h-64 bg-white rounded-full blur-3xl"/>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-emerald-300 rounded-full blur-3xl"/>
+      <section className="relative overflow-hidden">
+
+        {/* Image de fond — Cité Ouèdo */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/hero-bg.jpg"
+            alt="Immobilier Bénin"
+            className="w-full h-full object-cover object-center scale-105"
+            style={{ filter: 'brightness(0.45) saturate(0.8)' }}
+          />
+          {/* Overlay dégradé bleu-vert harmonisé avec le logo */}
+          <div className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(135deg, rgba(0,80,160,0.72) 0%, rgba(16,100,60,0.68) 60%, rgba(0,40,80,0.80) 100%)'
+            }}
+          />
+          {/* Reflets lumineux subtils */}
+          <div className="absolute inset-0 opacity-20"
+            style={{
+              backgroundImage: 'radial-gradient(circle at 20% 80%, rgba(0,170,255,0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(0,200,100,0.2) 0%, transparent 50%)'
+            }}
+          />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 md:pt-24 md:pb-28">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 md:pt-24 md:pb-28">
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-2 bg-white/15 text-white text-xs font-semibold px-4 py-2 rounded-full mb-6 border border-white/20">
               🇧🇯 La référence immobilière au Bénin
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
               Trouvez votre bien<br/>
-              <span className="text-green-200">immobilier au Bénin</span>
+              <span className="text-blue-200">immobilier au Bénin</span>
             </h1>
-            <p className="text-green-100 text-base md:text-lg max-w-2xl mx-auto mb-8">
+            <p className="text-blue-100 text-base md:text-lg max-w-2xl mx-auto mb-8">
               Villas, appartements, terrains et bureaux à vendre ou à louer à Cotonou, Porto-Novo,
               Abomey-Calavi et partout au Bénin.
             </p>
@@ -110,7 +123,7 @@ export default async function HomePage() {
                 <p className="text-2xl md:text-3xl font-bold text-white">
                   {s.value > 0 ? `${s.value}+` : '—'}
                 </p>
-                <p className="text-green-200 text-xs md:text-sm font-medium">{s.label}</p>
+                <p className="text-blue-200 text-xs md:text-sm font-medium">{s.label}</p>
               </div>
             ))}
           </div>
@@ -253,17 +266,17 @@ export default async function HomePage() {
       </section>
 
       {/* ── CTA PUBLIER ── */}
-      <section className="bg-gradient-to-br from-green-600 to-emerald-700 py-14 md:py-20">
+      <section className="bg-gradient-to-br from-blue-800 to-green-700 py-14 md:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
             Vous avez un bien à vendre ou à louer ?
           </h2>
-          <p className="text-green-100 text-sm md:text-base mb-8 max-w-xl mx-auto">
+          <p className="text-blue-100 text-sm md:text-base mb-8 max-w-xl mx-auto">
             Publiez votre annonce gratuitement et touchez des milliers d'acheteurs et locataires potentiels au Bénin.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/publier"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-green-700 font-bold text-sm rounded-xl hover:bg-green-50 transition-colors shadow-lg">
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-blue-700 font-bold text-sm rounded-xl hover:bg-blue-50 transition-colors shadow-lg">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
               </svg>

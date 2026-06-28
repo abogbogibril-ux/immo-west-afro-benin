@@ -13,7 +13,6 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
-  // Masquer la Navbar dans les dashboards
   if (pathname.startsWith('/dashboard') || pathname.startsWith('/admin')) return null
 
   useEffect(() => {
@@ -72,10 +71,10 @@ export default function Navbar() {
   const isHero = pathname === '/'
   const navBg = scrolled || !isHero
     ? 'bg-white shadow-sm border-b border-gray-100'
-    : 'bg-transparent'
+    : 'bg-gradient-to-r from-blue-900/60 to-green-900/40 backdrop-blur-sm'
   const textColor = scrolled || !isHero ? 'text-gray-700' : 'text-white'
-  const logoColor = scrolled || !isHero ? 'text-green-700' : 'text-white'
-  const activeBg  = scrolled || !isHero ? 'text-green-600' : 'text-green-200'
+  const logoColor = scrolled || !isHero ? 'text-blue-800' : 'text-white'
+  const activeBg  = scrolled || !isHero ? 'text-blue-600' : 'text-blue-200'
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg}`}>
@@ -84,16 +83,19 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
-            <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center flex-shrink-0">
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-              </svg>
-            </div>
+            <img
+              src="/logo.png"
+              alt="Immo West Afro"
+              className="w-10 h-10 object-contain drop-shadow-sm"
+            />
             <div className="hidden sm:block">
-              <p className={`font-bold text-sm leading-tight ${logoColor}`}>Immo West Afro</p>
-              <p className={`text-[10px] font-medium ${scrolled || !isHero ? 'text-green-500' : 'text-green-200'}`}>
-                Bénin
+              <p className={`font-bold text-sm leading-tight ${logoColor}`}>
+                Immo West Afro
+              </p>
+              <p className={`text-[10px] font-medium ${
+                scrolled || !isHero ? 'text-blue-500' : 'text-blue-200'
+              }`}>
+                Bénin • 2026
               </p>
             </div>
           </Link>
@@ -117,7 +119,7 @@ export default function Navbar() {
 
             {/* Publier */}
             <Link href="/publier"
-              className="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-green-600 text-white text-sm font-semibold rounded-xl hover:bg-green-700 transition-colors">
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
               </svg>
@@ -131,7 +133,7 @@ export default function Navbar() {
                     ? 'text-gray-700 hover:bg-gray-100'
                     : 'text-white hover:bg-white/10'
                 }`}>
-                  <div className="w-7 h-7 rounded-full bg-green-600 flex items-center justify-center text-white text-xs font-bold">
+                  <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold">
                     {user.email?.[0].toUpperCase()}
                   </div>
                   <svg className="w-4 h-4 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -142,7 +144,7 @@ export default function Navbar() {
                 {/* Dropdown */}
                 <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-2xl shadow-lg border border-gray-100 py-1.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
                   <Link href={getDashboardLink()}
-                    className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600 transition-colors">
+                    className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                         d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
@@ -150,7 +152,7 @@ export default function Navbar() {
                     Mon espace
                   </Link>
                   <Link href="/publier"
-                    className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600 transition-colors">
+                    className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
                     </svg>
@@ -171,7 +173,7 @@ export default function Navbar() {
               <Link href="/connexion"
                 className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium border transition-all ${
                   scrolled || !isHero
-                    ? 'border-gray-200 text-gray-700 hover:border-green-300 hover:text-green-600'
+                    ? 'border-gray-200 text-gray-700 hover:border-blue-300 hover:text-blue-600'
                     : 'border-white/30 text-white hover:bg-white/10'
                 }`}>
                 Se connecter
@@ -202,7 +204,7 @@ export default function Navbar() {
                   onClick={() => setMenuOpen(false)}
                   className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                     isActive(link.href)
-                      ? 'bg-green-50 text-green-600 font-semibold'
+                      ? 'bg-blue-50 text-blue-600 font-semibold'
                       : 'text-gray-700 hover:bg-gray-50'
                   }`}>
                   {link.label}
@@ -210,7 +212,7 @@ export default function Navbar() {
               ))}
               <div className="border-t border-gray-100 my-2"/>
               <Link href="/publier" onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-green-600 hover:bg-green-50 transition-colors">
+                className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-blue-600 hover:bg-blue-50 transition-colors">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
                 </svg>
