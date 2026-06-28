@@ -125,3 +125,23 @@ select option {
   background: var(--bordure);
   border-radius: 3px;
 }
+
+/* Inputs visibles sur tous les fonds */
+input,
+textarea,
+select {
+  color: #111827 !important;
+  background-color: #ffffff !important;
+  border-color: #d1d5db !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af !important;
+}
+
+select option {
+  color: #111827 !important;
+  background-color: #ffffff !important;
+}
+
