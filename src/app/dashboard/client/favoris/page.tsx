@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
+import OptimizedImage from '@/components/OptimizedImage'
 
 interface BienFavori {
   id: string
@@ -40,7 +41,6 @@ export default function FavorisPage() {
     const load = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
-
       const { data } = await supabase
         .from('favoris')
         .select(`
@@ -50,7 +50,6 @@ export default function FavorisPage() {
         `)
         .eq('user_id', user.id)
         .order('id', { ascending: false })
-
       const valid = (data ?? []).filter((f: any) => f.biens)
       setFavoris(valid as unknown as Favori[])
       setLoading(false)
@@ -153,15 +152,17 @@ export default function FavorisPage() {
                 }`}>
 
                 {/* Photo */}
-                <div className="relative h-48 bg-gray-100 overflow-hidden">
-                  {photo ? (
-                    <img src={photo} alt={bien.titre}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-300 text-4xl">🏠</div>
-                  )}
+                <div className="relative h-48 overflow-hidden">
+                  <OptimizedImage
+                    src={photo}
+                    alt={bien.titre}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="group-hover:scale-105 transition-transform duration-500"
+                  />
 
-                  <div className="absolute top-3 left-3 flex gap-2">
+                  {/* Badges */}
+                  <div className="absolute top-3 left-3 z-10 flex gap-2">
                     <span className={`px-2 py-0.5 rounded-lg text-xs font-bold ${
                       bien.transaction === 'vente' ? 'bg-blue-600 text-white' : 'bg-green-600 text-white'
                     }`}>
@@ -174,10 +175,11 @@ export default function FavorisPage() {
                     )}
                   </div>
 
+                  {/* Bouton retirer */}
                   <button
                     onClick={() => handleRemove(favori.id, bien.id)}
                     disabled={removing === bien.id}
-                    className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm hover:bg-red-50 transition-colors"
+                    className="absolute top-3 right-3 z-10 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm hover:bg-red-50 transition-colors"
                     title="Retirer des favoris">
                     {removing === bien.id ? (
                       <svg className="w-4 h-4 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
@@ -198,7 +200,8 @@ export default function FavorisPage() {
                   <h3 className="font-semibold text-gray-900 text-sm leading-snug mb-1 line-clamp-2">{bien.titre}</h3>
                   <p className="text-xs text-gray-400 mb-3 flex items-center gap-1">
                     <svg className="w-3 h-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                        d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                     </svg>
                     {bien.ville}
                   </p>

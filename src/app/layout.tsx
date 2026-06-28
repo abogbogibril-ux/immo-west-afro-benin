@@ -1,49 +1,76 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
+import { Inter } from 'next/font/google'
 import './globals.css'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://benin.immowestafro.com'),
   title: {
-    default: 'Immo West Afro - Bénin | Achat, Vente et Location Immobilière',
+    default: 'Immo West Afro Bénin — Vente et location immobilière',
     template: '%s | Immo West Afro Bénin',
   },
   description:
-    "La plateforme de référence pour l'immobilier au Bénin. Trouvez maisons, appartements, terrains et villas à Cotonou, Porto-Novo, Parakou et partout au Bénin.",
+    'Trouvez votre bien immobilier au Bénin. Appartements, villas, terrains et bureaux à vendre ou à louer à Cotonou, Abomey-Calavi, Porto-Novo et partout au Bénin.',
   keywords: [
-    'immobilier Bénin',
-    'maison à vendre Cotonou',
-    'appartement Bénin',
-    'terrain à vendre Bénin',
-    'villa Porto-Novo',
-    'location immobilier Bénin',
+    'immobilier Bénin', 'maison à vendre Cotonou', 'appartement à louer Bénin',
+    'terrain Cotonou', 'villa Bénin', 'agence immobilière Bénin',
+    'Immo West Afro', 'immobilier Abomey-Calavi', 'immobilier Porto-Novo',
   ],
+  authors: [{ name: 'Immo West Afro' }],
+  creator: 'Immo West Afro',
+  publisher: 'Immo West Afro',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
   openGraph: {
-    title: 'Immo West Afro - Bénin',
-    description: 'Trouvez votre bien immobilier idéal au Bénin',
+    type: 'website',
+    locale: 'fr_BJ',
     url: 'https://benin.immowestafro.com',
     siteName: 'Immo West Afro Bénin',
-    locale: 'fr_BJ',
-    type: 'website',
+    title: 'Immo West Afro Bénin — Vente et location immobilière',
+    description: 'Trouvez votre bien immobilier au Bénin.',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Immo West Afro Bénin' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Immo West Afro - Bénin',
-    description: 'La plateforme immobilière de référence au Bénin',
+    title: 'Immo West Afro Bénin',
+    description: 'Trouvez votre bien immobilier au Bénin.',
   },
-  metadataBase: new URL('https://benin.immowestafro.com'),
+  manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Immo West Afro',
+  },
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export const viewport: Viewport = {
+  themeColor: '#16a34a',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
-      <body>
+      <head>
+        <link rel="apple-touch-icon" href="/favicon.ico" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="format-detection" content="telephone=yes" />
+      </head>
+      <body className={inter.className}>
         <Navbar />
-        <main>{children}</main>
+        <main>
+          {children}
+        </main>
         <Footer />
       </body>
     </html>

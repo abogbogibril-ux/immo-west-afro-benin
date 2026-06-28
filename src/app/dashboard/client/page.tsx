@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
+import OptimizedImage from '@/components/OptimizedImage'
 
 export default function ClientDashboardPage() {
   const [client, setClient] = useState<any>(null)
@@ -21,15 +22,11 @@ export default function ClientDashboardPage() {
         .from('profiles').select('*').eq('id', user.id).single()
       setClient(profile)
 
-      // Stats
       const [msgs, favs] = await Promise.all([
-        supabase.from('messages').select('id', { count: 'exact', head: true })
-          .eq('expediteur_id', user.id),
-        supabase.from('favoris').select('id', { count: 'exact', head: true })
-          .eq('user_id', user.id),
+        supabase.from('messages').select('id', { count: 'exact', head: true }).eq('expediteur_id', user.id),
+        supabase.from('favoris').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
       ])
 
-      // Activité récente — derniers messages envoyés
       const { data: recentMsgs } = await supabase
         .from('messages')
         .select('id, sujet, created_at, biens(titre)')
@@ -39,7 +36,6 @@ export default function ClientDashboardPage() {
 
       setActivite(recentMsgs ?? [])
 
-      // Biens suggérés
       const { data: biens } = await supabase
         .from('biens')
         .select('id, titre, prix, ville, transaction, images(url, is_principale)')
@@ -174,7 +170,7 @@ export default function ClientDashboardPage() {
                 <p className="text-sm">Aucune activité récente</p>
               </div>
             ) : (
-              activite.map((a, i) => (
+              activite.map(a => (
                 <div key={a.id} className="flex items-start gap-3 px-5 py-3.5">
                   <div className="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-sm flex-shrink-0">
                     💬
@@ -225,11 +221,14 @@ export default function ClientDashboardPage() {
                 return (
                   <Link key={bien.id} href={`/bien/${bien.id}`}
                     className="flex items-center gap-3 px-5 py-3.5 hover:bg-gray-50 transition-colors">
-                    <div className="w-16 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
-                      {photo
-                        ? <img src={photo} alt={bien.titre} className="w-full h-full object-cover"/>
-                        : <div className="w-full h-full flex items-center justify-center text-gray-300 text-lg">🏠</div>
-                      }
+                    <div className="relative w-16 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                      <OptimizedImage
+                        src={photo}
+                        alt={bien.titre}
+                        fill
+                        sizes="64px"
+                        priority={false}
+                      />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-800 truncate">{bien.titre}</p>

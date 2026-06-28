@@ -3,17 +3,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
-
-// ── Types ─────────────────────────────────────────────────────────────────────
-interface KPI {
-  label: string
-  value: string | number
-  sub: string
-  trend: 'up' | 'down' | 'neutral'
-  trendVal: string
-  icon: string
-  color: string
-}
+import OptimizedImage from '@/components/OptimizedImage'
 
 interface Annonce {
   id: string
@@ -25,7 +15,6 @@ interface Annonce {
   prix: number
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
 const STATUT_COLORS: Record<string, string> = {
   'publié':  'bg-green-100 text-green-700',
   'archivé': 'bg-gray-100 text-gray-600',
@@ -37,7 +26,6 @@ function formatPrice(p: number) {
   return new Intl.NumberFormat('fr-FR').format(p) + ' FCFA'
 }
 
-// ── Page ──────────────────────────────────────────────────────────────────────
 export default function AgentDashboardPage() {
   const [agent, setAgent] = useState<any>(null)
   const [annonces, setAnnonces] = useState<Annonce[]>([])
@@ -45,7 +33,7 @@ export default function AgentDashboardPage() {
   const [loading, setLoading] = useState(true)
   const [tasks, setTasks] = useState([
     { id: 1, label: 'Répondre aux demandes en attente', done: false },
-    { id: 2, label: 'Mettre à jour les photos de l\'annonce IWA-045', done: false },
+    { id: 2, label: 'Mettre à jour les photos de l\'annonce', done: false },
     { id: 3, label: 'Vérifier la disponibilité du bien loué', done: true },
   ])
 
@@ -58,7 +46,6 @@ export default function AgentDashboardPage() {
         .from('profiles').select('*').eq('id', user.id).single()
       setAgent(profile)
 
-      // Annonces de l'agent
       const { data: biens } = await supabase
         .from('biens')
         .select('id, titre, ville, vues, statut, created_at, prix')
@@ -68,7 +55,6 @@ export default function AgentDashboardPage() {
 
       setAnnonces(biens ?? [])
 
-      // KPIs
       const { count: total } = await supabase
         .from('biens').select('id', { count: 'exact', head: true })
         .eq('agent_id', user.id).eq('statut', 'publié')
@@ -79,30 +65,28 @@ export default function AgentDashboardPage() {
 
       const totalVues = (biens ?? []).reduce((sum, b) => sum + (b.vues ?? 0), 0)
 
-      setKpis({
-        total: total ?? 0,
-        vues: totalVues,
-        messages: msgs ?? 0,
-        favoris: 0,
-      })
+      setKpis({ total: total ?? 0, vues: totalVues, messages: msgs ?? 0, favoris: 0 })
       setLoading(false)
     }
     load()
   }, [])
 
-  const KPI_CARDS: KPI[] = [
-    { label: 'Annonces actives', value: kpis.total, sub: 'Publiées',          trend: 'up',   trendVal: '+2 cette sem.', icon: '📊', color: 'bg-green-50 text-green-600' },
-    { label: 'Vues totales',     value: kpis.vues,  sub: 'Sur toutes annonces', trend: 'up',   trendVal: '+12%',          icon: '👁️', color: 'bg-blue-50 text-blue-600'  },
-    { label: 'Messages reçus',   value: kpis.messages, sub: 'Demandes clients', trend: 'up',   trendVal: '+5%',           icon: '💬', color: 'bg-purple-50 text-purple-600' },
-    { label: 'Taux de contact',  value: kpis.vues > 0 ? `${Math.round((kpis.messages / kpis.vues) * 100)}%` : '0%', sub: 'Messages / Vues', trend: 'neutral', trendVal: 'Ce mois', icon: '✉️', color: 'bg-orange-50 text-orange-600' },
+  const KPI_CARDS = [
+    { label: 'Annonces actives', value: kpis.total,    icon: '📊', trend: '↑', trendVal: '+2 cette sem.', color: 'bg-green-50 text-green-600' },
+    { label: 'Vues totales',     value: kpis.vues,     icon: '👁️', trend: '↑', trendVal: '+12%',          color: 'bg-blue-50 text-blue-600'  },
+    { label: 'Messages reçus',   value: kpis.messages, icon: '💬', trend: '↑', trendVal: '+5%',           color: 'bg-purple-50 text-purple-600' },
+    { label: 'Taux de contact',  value: kpis.vues > 0 ? `${Math.round((kpis.messages / kpis.vues) * 100)}%` : '0%',
+      icon: '✉️', trend: '→', trendVal: 'Ce mois', color: 'bg-orange-50 text-orange-600' },
   ]
 
-  const today = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+  const today = new Date().toLocaleDateString('fr-FR', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+  })
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-6">
 
-      {/* ── En-tête ── */}
+      {/* En-tête */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 className="text-xl md:text-2xl font-bold text-gray-900">
@@ -113,13 +97,13 @@ export default function AgentDashboardPage() {
         <Link href="/publier"
           className="flex items-center gap-2 px-4 py-2.5 bg-[#FF6B35] text-white text-sm font-semibold rounded-xl hover:bg-[#e55c2a] transition-colors self-start">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
           </svg>
           Nouvelle annonce
         </Link>
       </div>
 
-      {/* ── KPI Cards ── */}
+      {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {KPI_CARDS.map(kpi => (
           <div key={kpi.label} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-5">
@@ -128,25 +112,24 @@ export default function AgentDashboardPage() {
                 {kpi.icon}
               </div>
               <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                kpi.trend === 'up' ? 'bg-green-100 text-green-600' :
-                kpi.trend === 'down' ? 'bg-red-100 text-red-600' :
+                kpi.trend === '↑' ? 'bg-green-100 text-green-600' :
+                kpi.trend === '↓' ? 'bg-red-100 text-red-600' :
                 'bg-gray-100 text-gray-500'
               }`}>
-                {kpi.trend === 'up' ? '↑' : kpi.trend === 'down' ? '↓' : '→'} {kpi.trendVal}
+                {kpi.trend} {kpi.trendVal}
               </span>
             </div>
             <div className="text-2xl md:text-3xl font-bold text-gray-900 mb-0.5">
-              {loading ? <span className="animate-pulse bg-gray-200 rounded h-8 w-16 inline-block" /> : kpi.value}
+              {loading ? <span className="animate-pulse bg-gray-200 rounded h-8 w-16 inline-block"/> : kpi.value}
             </div>
             <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">{kpi.label}</p>
           </div>
         ))}
       </div>
 
-      {/* ── Graphique placeholder + Répartition ── */}
+      {/* Graphique + Répartition */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
-        {/* Tendance vues */}
         <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold text-gray-900">Tendance des vues</h2>
@@ -156,7 +139,6 @@ export default function AgentDashboardPage() {
               <option>Cette année</option>
             </select>
           </div>
-          {/* Graphique simplifié avec barres CSS */}
           <div className="flex items-end gap-2 h-32 mt-2">
             {[40, 65, 45, 80, 60, 90, 75, 55, 85, 70, 95, 88].map((h, i) => (
               <div key={i} className="flex-1 flex flex-col items-center gap-1">
@@ -175,7 +157,6 @@ export default function AgentDashboardPage() {
           </div>
         </div>
 
-        {/* Répartition par type */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
           <h2 className="font-semibold text-gray-900 mb-4">Répartition par type</h2>
           <div className="space-y-3">
@@ -191,7 +172,7 @@ export default function AgentDashboardPage() {
                   <span className="font-semibold text-gray-900">{item.pct}%</span>
                 </div>
                 <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div className={`h-full ${item.color} rounded-full`} style={{ width: `${item.pct}%` }} />
+                  <div className={`h-full ${item.color} rounded-full`} style={{ width: `${item.pct}%` }}/>
                 </div>
               </div>
             ))}
@@ -199,10 +180,9 @@ export default function AgentDashboardPage() {
         </div>
       </div>
 
-      {/* ── Annonces récentes + Tâches ── */}
+      {/* Annonces récentes + Tâches */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
-        {/* Annonces récentes */}
         <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
             <h2 className="font-semibold text-gray-900">Annonces récentes</h2>
@@ -216,8 +196,8 @@ export default function AgentDashboardPage() {
             <div className="p-5 space-y-3">
               {[1,2,3].map(i => (
                 <div key={i} className="animate-pulse flex gap-3">
-                  <div className="h-4 bg-gray-200 rounded flex-1" />
-                  <div className="h-4 bg-gray-200 rounded w-16" />
+                  <div className="h-4 bg-gray-200 rounded flex-1"/>
+                  <div className="h-4 bg-gray-200 rounded w-16"/>
                 </div>
               ))}
             </div>
@@ -264,16 +244,14 @@ export default function AgentDashboardPage() {
                       <td className="px-3 py-3.5">
                         <div className="flex items-center gap-1">
                           <Link href={`/bien/${a.id}`}
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
-                            title="Voir">
+                            className="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors">
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                             </svg>
                           </Link>
                           <Link href={`/dashboard/agent/annonces?edit=${a.id}`}
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-[#FF6B35] hover:bg-orange-50 transition-colors"
-                            title="Modifier">
+                            className="p-1.5 rounded-lg text-gray-400 hover:text-[#FF6B35] hover:bg-orange-50 transition-colors">
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                             </svg>
@@ -288,7 +266,7 @@ export default function AgentDashboardPage() {
           )}
         </div>
 
-        {/* Tâches du jour */}
+        {/* Tâches */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold text-gray-900">À faire</h2>
@@ -296,15 +274,13 @@ export default function AgentDashboardPage() {
               {tasks.filter(t => !t.done).length} restantes
             </span>
           </div>
-
           <div className="space-y-2.5">
             {tasks.map(task => (
               <div key={task.id}
                 className={`flex items-start gap-3 p-3 rounded-xl border transition-all cursor-pointer ${
                   task.done ? 'bg-gray-50 border-gray-100 opacity-60' : 'bg-white border-gray-200 hover:border-[#FF6B35]/30'
                 }`}
-                onClick={() => setTasks(prev => prev.map(t => t.id === task.id ? { ...t, done: !t.done } : t))}
-              >
+                onClick={() => setTasks(prev => prev.map(t => t.id === task.id ? { ...t, done: !t.done } : t))}>
                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
                   task.done ? 'bg-green-500 border-green-500' : 'border-gray-300'
                 }`}>
@@ -320,7 +296,6 @@ export default function AgentDashboardPage() {
               </div>
             ))}
           </div>
-
           <Link href="/dashboard/agent/messages"
             className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 border border-dashed border-gray-200 rounded-xl text-sm text-gray-400 hover:border-[#FF6B35] hover:text-[#FF6B35] transition-colors">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
