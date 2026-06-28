@@ -1,127 +1,157 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 
 export default function ConnexionPage() {
   const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState('')
-  const [form, setForm] = useState({ email: '', mot_de_passe: '' })
+  const searchParams = useSearchParams()
+  const redirect = searchParams.get('redirect') ?? '/'
+
+  const [form, setForm] = useState({ email: '', password: '' })
+  const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
+  const [errorMsg, setErrorMsg] = useState('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
+    setForm(p => ({ ...p, [e.target.name]: e.target.value }))
   }
 
-  const handleSubmit = async () => {
-    setLoading(true)
-    setMessage('')
-    const { data, error } = await supabase.auth.signInWithPassword({
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setStatus('loading')
+    setErrorMsg('')
+
+    const { error } = await supabase.auth.signInWithPassword({
       email: form.email,
-      password: form.mot_de_passe,
+      password: form.password,
     })
+
     if (error) {
-      setLoading(false)
-      setMessage('Erreur : ' + error.message)
+      setStatus('error')
+      setErrorMsg(
+        error.message.includes('Invalid login')
+          ? 'Email ou mot de passe incorrect.'
+          : error.message.includes('Email not confirmed')
+          ? 'Veuillez confirmer votre email avant de vous connecter.'
+          : 'Une erreur est survenue. Réessayez.'
+      )
       return
     }
-    // Vérifier le rôle
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', data.user.id)
-      .single()
 
-    setLoading(false)
-    if (profile?.role === 'admin') router.push('/admin')
-    else if (profile?.role === 'agent') router.push('/dashboard')
-    else router.push('/')
+    // Redirection selon le rôle
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) {
+      const { data: profile } = await supabase
+        .from('profiles').select('role').eq('id', user.id).single()
+      const role = profile?.role
+
+      if (redirect !== '/') {
+        router.push(redirect)
+      } else if (role === 'admin') {
+        router.push('/dashboard/admin')
+      } else if (role === 'agent') {
+        router.push('/dashboard/agent')
+      } else {
+        router.push('/dashboard/client')
+      }
+    }
   }
 
   return (
-    <div style={{
-      minHeight: '100vh', backgroundColor: '#0f172a',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '2rem',
-    }}>
-      <div style={{
-        backgroundColor: '#1e293b', borderRadius: '16px',
-        padding: '2.5rem', width: '100%', maxWidth: '420px',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
-      }}>
-        {/* ICÔNE */}
-        <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-          <div style={{
-            width: '64px', height: '64px', backgroundColor: '#00bcd4',
-            borderRadius: '16px', display: 'inline-flex',
-            alignItems: 'center', justifyContent: 'center', fontSize: '2rem',
-          }}>🔐</div>
-          <h1 style={{ color: '#fff', fontSize: '1.5rem', fontWeight: '700', marginTop: '0.75rem' }}>
-            Connexion
-          </h1>
-          <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
-            Pas de compte ?{' '}
-            <Link href="/inscription" style={{ color: '#00bcd4', textDecoration: 'none' }}>
-              S&apos;inscrire
-            </Link>
-          </p>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md">
+
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <Link href="/" className="inline-flex flex-col items-center gap-2">
+            <div className="w-14 h-14 bg-green-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+              </svg>
+            </div>
+            <div>
+              <p className="font-bold text-gray-900">Immo West Afro</p>
+              <p className="text-xs text-green-600 font-medium">Bénin</p>
+            </div>
+          </Link>
+          <h1 className="text-2xl font-bold text-gray-900 mt-6 mb-1">Connexion</h1>
+          <p className="text-gray-500 text-sm">Accédez à votre espace personnel</p>
         </div>
 
-        {/* EMAIL */}
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={labelStyle}>Email</label>
-          <input name="email" type="email" placeholder="email@exemple.com"
-            onChange={handleChange} style={inputStyle} />
+        {/* Formulaire */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
+          <form onSubmit={handleSubmit} className="space-y-4">
+
+            <div>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                Adresse email
+              </label>
+              <input name="email" type="email" required
+                placeholder="votre@email.com"
+                value={form.email} onChange={handleChange}
+                className="w-full px-3.5 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50 transition-all"/>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                  Mot de passe
+                </label>
+                <Link href="/mot-de-passe-oublie"
+                  className="text-xs text-green-600 hover:underline font-medium">
+                  Mot de passe oublié ?
+                </Link>
+              </div>
+              <input name="password" type="password" required
+                placeholder="••••••••"
+                value={form.password} onChange={handleChange}
+                className="w-full px-3.5 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50 transition-all"/>
+            </div>
+
+            {status === 'error' && (
+              <div className="flex items-start gap-2.5 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
+                <svg className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <p className="text-sm text-red-600">{errorMsg}</p>
+              </div>
+            )}
+
+            <button type="submit" disabled={status === 'loading'}
+              className="w-full py-3.5 bg-green-600 text-white font-bold text-sm rounded-xl hover:bg-green-700 transition-colors disabled:opacity-60 flex items-center justify-center gap-2 mt-2">
+              {status === 'loading' ? (
+                <>
+                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                  </svg>
+                  Connexion...
+                </>
+              ) : 'Se connecter'}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-500">
+              Pas encore de compte ?{' '}
+              <Link href="/inscription" className="text-green-600 font-semibold hover:underline">
+                Créer un compte
+              </Link>
+            </p>
+          </div>
         </div>
 
-        {/* MOT DE PASSE */}
-        <div style={{ marginBottom: '0.5rem' }}>
-          <label style={labelStyle}>Mot de passe</label>
-          <input name="mot_de_passe" type="password" placeholder="••••••••"
-            onChange={handleChange} style={inputStyle} />
-        </div>
-
-        {/* MOT DE PASSE OUBLIÉ */}
-        <div style={{ textAlign: 'right', marginBottom: '1.5rem' }}>
-          <Link href="/mot-de-passe-oublie" style={{
-            color: '#00bcd4', fontSize: '0.85rem', textDecoration: 'none',
-          }}>
-            Mot de passe oubli&eacute; ?
+        {/* Retour accueil */}
+        <div className="text-center mt-6">
+          <Link href="/" className="text-sm text-gray-400 hover:text-gray-600 transition-colors">
+            ← Retour à l'accueil
           </Link>
         </div>
-
-        {/* MESSAGE */}
-        {message && (
-          <div style={{
-            padding: '0.75rem', borderRadius: '8px', marginBottom: '1rem',
-            backgroundColor: '#fee2e2', color: '#dc2626', fontSize: '0.85rem',
-          }}>{message}</div>
-        )}
-
-        {/* BOUTON */}
-        <button onClick={handleSubmit} disabled={loading} style={{
-          width: '100%', padding: '0.875rem',
-          backgroundColor: loading ? '#475569' : '#00bcd4',
-          color: '#fff', border: 'none', borderRadius: '8px',
-          fontSize: '1rem', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer',
-        }}>
-          {loading ? 'Connexion...' : 'Se connecter'}
-        </button>
       </div>
     </div>
   )
-}
-
-const labelStyle: React.CSSProperties = {
-  display: 'block', color: '#cbd5e1',
-  fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.4rem',
-}
-
-const inputStyle: React.CSSProperties = {
-  width: '100%', padding: '0.75rem 1rem',
-  backgroundColor: '#0f172a', border: '1px solid #334155',
-  borderRadius: '8px', color: '#fff', fontSize: '0.95rem',
-  outline: 'none', boxSizing: 'border-box',
 }

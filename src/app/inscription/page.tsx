@@ -1,155 +1,270 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function InscriptionPage() {
-  const [typeCompte, setTypeCompte] = useState<'client' | 'agent'>('client')
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState('')
+  const router = useRouter()
   const [form, setForm] = useState({
-    nom_complet: '', email: '', telephone: '',
-    mot_de_passe: '', nom_agence: '', biographie: '',
+    prenom: '', nom: '', email: '', telephone: '',
+    password: '', confirmPassword: '', role: 'client', cgu: false,
   })
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [errorMsg, setErrorMsg] = useState('')
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target
+    setForm(p => ({
+      ...p,
+      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+    }))
   }
 
-  const handleSubmit = async () => {
-    setLoading(true)
-    setMessage('')
-    const { error } = await supabase.auth.signUp({
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setErrorMsg('')
+
+    if (form.password !== form.confirmPassword) {
+      setErrorMsg('Les mots de passe ne correspondent pas.')
+      return
+    }
+    if (form.password.length < 6) {
+      setErrorMsg('Le mot de passe doit contenir au moins 6 caractères.')
+      return
+    }
+    if (!form.cgu) {
+      setErrorMsg('Vous devez accepter les CGU pour continuer.')
+      return
+    }
+
+    setStatus('loading')
+
+    const { data, error } = await supabase.auth.signUp({
       email: form.email,
-      password: form.mot_de_passe,
+      password: form.password,
       options: {
         data: {
-          nom_complet: form.nom_complet,
+          prenom: form.prenom,
+          nom: form.nom,
           telephone: form.telephone,
-          role: typeCompte,
-          nom_agence: form.nom_agence,
-          biographie: form.biographie,
-        }
-      }
+          role: form.role,
+          cgu_accepted_at: new Date().toISOString(),
+        },
+      },
     })
-    setLoading(false)
-    if (error) setMessage('Erreur : ' + error.message)
-    else setMessage('Compte créé ! Vérifiez votre email pour confirmer.')
+
+    if (error) {
+      setStatus('error')
+      setErrorMsg(
+        error.message.includes('already registered')
+          ? 'Cet email est déjà utilisé. Connectez-vous.'
+          : error.message
+      )
+      return
+    }
+
+    if (data.user) {
+      await supabase.from('profiles').upsert({
+        id: data.user.id,
+        prenom: form.prenom,
+        nom: form.nom,
+        telephone: form.telephone,
+        role: form.role,
+        email: form.email,
+      })
+    }
+
+    setStatus('success')
+  }
+
+  if (status === 'success') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 max-w-md w-full text-center">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Compte créé !</h2>
+          <p className="text-gray-500 text-sm mb-6">
+            Un email de confirmation vous a été envoyé à <strong>{form.email}</strong>.
+            Cliquez sur le lien pour activer votre compte.
+          </p>
+          <Link href="/connexion"
+            className="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white font-bold text-sm rounded-xl hover:bg-green-700 transition-colors">
+            Se connecter
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div style={{
-      minHeight: '100vh', backgroundColor: '#0f172a',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '2rem',
-    }}>
-      <div style={{
-        backgroundColor: '#1e293b', borderRadius: '16px',
-        padding: '2.5rem', width: '100%', maxWidth: '480px',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
-      }}>
-        {/* ICÔNE */}
-        <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-          <div style={{
-            width: '64px', height: '64px', backgroundColor: '#00bcd4',
-            borderRadius: '16px', display: 'inline-flex',
-            alignItems: 'center', justifyContent: 'center', fontSize: '2rem',
-          }}>👤</div>
-          <h1 style={{ color: '#fff', fontSize: '1.5rem', fontWeight: '700', marginTop: '0.75rem' }}>
-            Cr&eacute;er un compte
-          </h1>
-          <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
-            D&eacute;j&agrave; un compte ?{' '}
-            <Link href="/connexion" style={{ color: '#00bcd4', textDecoration: 'none' }}>Connexion</Link>
-          </p>
-        </div>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md">
 
-        {/* TYPE DE COMPTE */}
-        <div style={{ marginBottom: '1.25rem' }}>
-          <label style={labelStyle}>Type de compte</label>
-          <select
-            value={typeCompte}
-            onChange={(e) => setTypeCompte(e.target.value as 'client' | 'agent')}
-            style={inputStyle}
-          >
-            <option value="client">Client</option>
-            <option value="agent">Agent immobilier</option>
-          </select>
-        </div>
-
-        {/* CHAMPS COMMUNS */}
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={labelStyle}>Nom complet</label>
-          <input name="nom_complet" type="text" placeholder="Jean Dupont"
-            onChange={handleChange} style={inputStyle} />
-        </div>
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={labelStyle}>Email</label>
-          <input name="email" type="email" placeholder="email@exemple.com"
-            onChange={handleChange} style={inputStyle} />
-        </div>
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={labelStyle}>T&eacute;l&eacute;phone</label>
-          <input name="telephone" type="tel" placeholder="+229 00 00 00 00"
-            onChange={handleChange} style={inputStyle} />
-        </div>
-
-        {/* CHAMPS AGENT UNIQUEMENT */}
-        {typeCompte === 'agent' && (
-          <>
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={labelStyle}>Nom de l&apos;agence</label>
-              <input name="nom_agence" type="text" placeholder="Agence Immobilière XYZ"
-                onChange={handleChange} style={inputStyle} />
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <Link href="/" className="inline-flex flex-col items-center gap-2">
+            <div className="w-14 h-14 bg-green-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+              </svg>
             </div>
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={labelStyle}>Biographie</label>
-              <textarea name="biographie" placeholder="Décrivez votre expérience..."
-                onChange={handleChange}
-                style={{ ...inputStyle, height: '80px', resize: 'vertical' }} />
+            <div>
+              <p className="font-bold text-gray-900">Immo West Afro</p>
+              <p className="text-xs text-green-600 font-medium">Bénin</p>
             </div>
-          </>
-        )}
-
-        <div style={{ marginBottom: '1.5rem' }}>
-          <label style={labelStyle}>Mot de passe</label>
-          <input name="mot_de_passe" type="password" placeholder="••••••••"
-            onChange={handleChange} style={inputStyle} />
+          </Link>
+          <h1 className="text-2xl font-bold text-gray-900 mt-6 mb-1">Créer un compte</h1>
+          <p className="text-gray-500 text-sm">Rejoignez Immo West Afro gratuitement</p>
         </div>
 
-        {/* MESSAGE */}
-        {message && (
-          <div style={{
-            padding: '0.75rem', borderRadius: '8px', marginBottom: '1rem',
-            backgroundColor: message.includes('Erreur') ? '#fee2e2' : '#dcfce7',
-            color: message.includes('Erreur') ? '#dc2626' : '#16a34a',
-            fontSize: '0.85rem',
-          }}>{message}</div>
-        )}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
+          <form onSubmit={handleSubmit} className="space-y-4">
 
-        {/* BOUTON */}
-        <button onClick={handleSubmit} disabled={loading} style={{
-          width: '100%', padding: '0.875rem',
-          backgroundColor: loading ? '#475569' : '#00bcd4',
-          color: '#fff', border: 'none', borderRadius: '8px',
-          fontSize: '1rem', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer',
-        }}>
-          {loading ? 'Création...' : 'Créer mon compte'}
-        </button>
+            {/* Type de compte */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                Je suis
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { val: 'client', label: '👤 Acheteur / Locataire' },
+                  { val: 'agent', label: '🏢 Agent immobilier' },
+                ].map(r => (
+                  <button key={r.val} type="button"
+                    onClick={() => setForm(p => ({ ...p, role: r.val }))}
+                    className={`py-2.5 text-xs font-semibold rounded-xl border-2 transition-all ${
+                      form.role === r.val
+                        ? 'bg-green-600 border-green-600 text-white'
+                        : 'border-gray-200 text-gray-500 hover:border-green-300'
+                    }`}>
+                    {r.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Nom / Prénom */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                  Prénom *
+                </label>
+                <input name="prenom" type="text" required placeholder="Prénom"
+                  value={form.prenom} onChange={handleChange}
+                  className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50"/>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                  Nom *
+                </label>
+                <input name="nom" type="text" required placeholder="Nom"
+                  value={form.nom} onChange={handleChange}
+                  className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50"/>
+              </div>
+            </div>
+
+            {/* Email */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                Email *
+              </label>
+              <input name="email" type="email" required placeholder="votre@email.com"
+                value={form.email} onChange={handleChange}
+                className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50"/>
+            </div>
+
+            {/* Téléphone */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                Téléphone
+              </label>
+              <input name="telephone" type="tel" placeholder="+229 XX XX XX XX"
+                value={form.telephone} onChange={handleChange}
+                className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50"/>
+            </div>
+
+            {/* Mot de passe */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                  Mot de passe *
+                </label>
+                <input name="password" type="password" required placeholder="••••••••"
+                  value={form.password} onChange={handleChange}
+                  className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50"/>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                  Confirmer *
+                </label>
+                <input name="confirmPassword" type="password" required placeholder="••••••••"
+                  value={form.confirmPassword} onChange={handleChange}
+                  className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50"/>
+              </div>
+            </div>
+
+            {/* CGU */}
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input name="cgu" type="checkbox" checked={form.cgu} onChange={handleChange}
+                className="mt-0.5 w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500 flex-shrink-0"/>
+              <span className="text-xs text-gray-500 leading-relaxed">
+                J'accepte les{' '}
+                <Link href="/cgu" className="text-green-600 hover:underline font-medium" target="_blank">
+                  Conditions Générales d'Utilisation
+                </Link>
+                {' '}d'Immo West Afro *
+              </span>
+            </label>
+
+            {/* Erreur */}
+            {(status === 'error' || errorMsg) && (
+              <div className="flex items-start gap-2.5 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
+                <svg className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <p className="text-sm text-red-600">{errorMsg}</p>
+              </div>
+            )}
+
+            <button type="submit"
+              disabled={status === 'loading' || !form.cgu}
+              className="w-full py-3.5 bg-green-600 text-white font-bold text-sm rounded-xl hover:bg-green-700 transition-colors disabled:opacity-60 flex items-center justify-center gap-2 mt-2">
+              {status === 'loading' ? (
+                <>
+                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                  </svg>
+                  Création du compte...
+                </>
+              ) : 'Créer mon compte'}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-500">
+              Déjà un compte ?{' '}
+              <Link href="/connexion" className="text-green-600 font-semibold hover:underline">
+                Se connecter
+              </Link>
+            </p>
+          </div>
+        </div>
+
+        <div className="text-center mt-6">
+          <Link href="/" className="text-sm text-gray-400 hover:text-gray-600 transition-colors">
+            ← Retour à l'accueil
+          </Link>
+        </div>
       </div>
     </div>
   )
-}
-
-const labelStyle: React.CSSProperties = {
-  display: 'block', color: '#cbd5e1',
-  fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.4rem',
-}
-
-const inputStyle: React.CSSProperties = {
-  width: '100%', padding: '0.75rem 1rem',
-  backgroundColor: '#0f172a', border: '1px solid #334155',
-  borderRadius: '8px', color: '#fff', fontSize: '0.95rem',
-  outline: 'none', boxSizing: 'border-box',
 }
