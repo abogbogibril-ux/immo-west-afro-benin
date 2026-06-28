@@ -13,9 +13,11 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
-  if (pathname.startsWith('/dashboard') || pathname.startsWith('/admin')) return null
+  const isDashboard = pathname.startsWith('/dashboard') || pathname.startsWith('/admin')
 
   useEffect(() => {
+    if (isDashboard) return
+
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       setUser(user)
       if (user) {
@@ -43,7 +45,9 @@ export default function Navbar() {
       subscription.unsubscribe()
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [])
+  }, [isDashboard])
+
+  if (isDashboard) return null
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
@@ -117,7 +121,6 @@ export default function Navbar() {
           {/* Actions */}
           <div className="flex items-center gap-2">
 
-            {/* Publier */}
             <Link href="/publier"
               className="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -129,9 +132,7 @@ export default function Navbar() {
             {user ? (
               <div className="relative group">
                 <button className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
-                  scrolled || !isHero
-                    ? 'text-gray-700 hover:bg-gray-100'
-                    : 'text-white hover:bg-white/10'
+                  scrolled || !isHero ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/10'
                 }`}>
                   <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold">
                     {user.email?.[0].toUpperCase()}
@@ -141,7 +142,6 @@ export default function Navbar() {
                   </svg>
                 </button>
 
-                {/* Dropdown */}
                 <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-2xl shadow-lg border border-gray-100 py-1.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
                   <Link href={getDashboardLink()}
                     className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
@@ -180,7 +180,6 @@ export default function Navbar() {
               </Link>
             )}
 
-            {/* Hamburger mobile */}
             <button onClick={() => setMenuOpen(!menuOpen)}
               className={`lg:hidden p-2 rounded-xl transition-colors ${
                 scrolled || !isHero ? 'text-gray-600 hover:bg-gray-100' : 'text-white hover:bg-white/10'
