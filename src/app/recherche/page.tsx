@@ -60,7 +60,15 @@ export default function RecherchePage() {
 
     query = query.range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1)
 
-    const { data, count } = await query
+    const { data, error, count } = await query
+
+    // === DEBUG LOGS ===
+    console.log('[RECHERCHE] URL Supabase:', process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'MANQUANTE')
+    console.log('[RECHERCHE] Cle ANON:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'OK' : 'MANQUANTE')
+    console.log('[RECHERCHE] Resultats:', { count, data_length: data?.length ?? 0 })
+    if (error) console.error('[RECHERCHE] ERREUR:', JSON.stringify(error))
+    // === FIN DEBUG ===
+
     setBiens(data ?? [])
     setTotal(count ?? 0)
     setLoading(false)
