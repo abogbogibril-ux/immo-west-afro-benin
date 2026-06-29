@@ -1,10 +1,10 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 
 const LIENS_UTILES = [
   { href: '/', label: 'Accueil' },
-  { href: '/search', label: 'Recherche' },
-  { href: '/forfaits', label: 'Forfaits & Plans' },
-  { href: '/about', label: '\u00C0 propos' },
+  { href: '/recherche', label: 'Recherche' },
+  { href: '/contact', label: 'Forfaits & Plans' },
+  { href: '/a-propos', label: '\u00C0 propos' },
   { href: '/contact', label: 'Contact' },
 ]
 
@@ -15,16 +15,16 @@ const VILLES = [
 ]
 
 const CATEGORIES = [
-  { href: '/search?type=maison', label: 'Maisons' },
-  { href: '/search?type=appartement', label: 'Appartements' },
-  { href: '/search?type=terrain', label: 'Terrains' },
-  { href: '/search?type=villa', label: 'Villas' },
+  { href: '/recherche?type=maison', label: 'Maisons' },
+  { href: '/recherche?type=appartement', label: 'Appartements' },
+  { href: '/recherche?type=terrain', label: 'Terrains' },
+  { href: '/recherche?type=villa', label: 'Villas' },
 ]
 
 const LIENS_LEGAUX = [
-  { href: '/mentions-legales', label: 'Mentions l\u00E9gales' },
-  { href: '/confidentialite', label: 'Politique de confidentialit\u00E9' },
-  { href: '/conditions', label: 'Conditions d\u2019utilisation' },
+  { href: '/cgu', label: 'Mentions l\u00E9gales' },
+  { href: '/cgu', label: 'Politique de confidentialit\u00E9' },
+  { href: '/cgu', label: 'Conditions d\u2019utilisation' },
 ]
 
 const styleLien: React.CSSProperties = {
@@ -179,7 +179,7 @@ export default function Footer() {
             >
               {VILLES.map((ville) => (
                 <li key={ville}>
-                  <Link href={`/search?ville=${ville}`} style={styleLien}>
+                  <Link href={`/recherche?ville=${ville}`} style={styleLien}>
                     Immobilier &agrave; {ville}
                   </Link>
                 </li>
