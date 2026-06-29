@@ -111,7 +111,7 @@ export default function PublierPage() {
       securite: form.securite, eau: form.eau, electricite: form.electricite,
       disponible_immediat: form.disponible_immediat,
       video_url: form.video_url || null,
-      statut: 'publi\u00e9',
+      statut: 'brouillon',
     }).select().single()
 
     if (error) {

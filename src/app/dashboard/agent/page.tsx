@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
@@ -16,7 +16,8 @@ interface Annonce {
 }
 
 const STATUT_COLORS: Record<string, string> = {
-  'publié':  'bg-green-100 text-green-700',
+  'publi\u00e9':  'bg-green-100 text-green-700',
+  'brouillon': 'bg-yellow-100 text-yellow-700',
   'archivé': 'bg-gray-100 text-gray-600',
   'vendu':   'bg-blue-100 text-blue-700',
   'loué':    'bg-purple-100 text-purple-700',
