@@ -59,7 +59,7 @@ export default function ApercuBienPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="text-center">
         <div className="w-10 h-10 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-3"/>
-        <p className="text-gray-500 text-sm">Chargement de l&apos;aper\u00e7u...</p>
+        <p className="text-gray-500 text-sm">Chargement de l&apos;apercu...</p>
       </div>
     </div>
   )
@@ -84,7 +84,7 @@ export default function ApercuBienPage() {
       {/* BANNIERE APERCU */}
       <div className="bg-yellow-400 text-yellow-900 py-3 px-4 text-center font-bold text-sm sticky top-0 z-50 shadow-sm">
         <span className="mr-2">👁</span>
-        MODE APERçU — Ce bien n&apos;est pas encore publi\u00e9 et invisible du public
+        MODE APERçU — Ce bien n&apos;est pas encore publie et invisible du public
         <span className="ml-2">👁</span>
       </div>
 
@@ -114,7 +114,7 @@ export default function ApercuBienPage() {
               disabled={publishing}
               className="px-6 py-2 bg-green-600 text-white text-sm font-bold rounded-xl hover:bg-green-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
             >
-              {publishing ? 'Publication...' : 'Publier l\u2019annonce'}
+              {publishing ? 'Publication...' : 'Publier l'annonce'}
             </button>
           </div>
         </div>
@@ -138,7 +138,7 @@ export default function ApercuBienPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                   </svg>
-                  <p className="text-sm font-medium">Aucune photo ajout\u00e9e</p>
+                  <p className="text-sm font-medium">Aucune photo ajoutee</p>
                   <Link href={`/dashboard/agent/annonces?edit=${bien.id}`}
                     className="mt-2 text-xs text-blue-500 hover:underline">
                     Ajouter des photos →
@@ -161,7 +161,7 @@ export default function ApercuBienPage() {
                 <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${
                   bien.transaction === 'location' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
                 }`}>
-                  {bien.transaction === 'location' ? '\u00c0 louer' : '\u00c0 vendre'}
+                  {bien.transaction === 'location' ? 'A louer' : 'A vendre'}
                 </span>
                 <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">
                   {bien.type_bien}
@@ -186,11 +186,11 @@ export default function ApercuBienPage() {
 
             {/* CARACTERISTIQUES */}
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-              <h2 className="font-bold text-gray-900 mb-4">Caract\u00e9ristiques</h2>
+              <h2 className="font-bold text-gray-900 mb-4">Caracteristiques</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {bien.surface && (
                   <div className="text-center p-3 bg-gray-50 rounded-xl">
-                    <p className="text-lg font-bold text-gray-900">{bien.surface} m\u00b2</p>
+                    <p className="text-lg font-bold text-gray-900">{bien.surface} m2</p>
                     <p className="text-xs text-gray-500">Surface</p>
                   </div>
                 )}
@@ -203,7 +203,7 @@ export default function ApercuBienPage() {
                 {bien.nb_pieces && (
                   <div className="text-center p-3 bg-gray-50 rounded-xl">
                     <p className="text-lg font-bold text-gray-900">{bien.nb_pieces}</p>
-                    <p className="text-xs text-gray-500">Pi\u00e8ces</p>
+                    <p className="text-xs text-gray-500">Pieces</p>
                   </div>
                 )}
                 {bien.nb_salles_bain && (
@@ -217,16 +217,16 @@ export default function ApercuBienPage() {
 
             {/* EQUIPEMENTS */}
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-              <h2 className="font-bold text-gray-900 mb-4">\u00c9quipements</h2>
+              <h2 className="font-bold text-gray-900 mb-4">Equipements</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {[
-                  { key: 'meuble', label: 'Meubl\u00e9' },
+                  { key: 'meuble', label: 'Meuble' },
                   { key: 'parking', label: 'Parking' },
                   { key: 'terrasse', label: 'Terrasse' },
-                  { key: 'securite', label: 'S\u00e9curit\u00e9' },
+                  { key: 'securite', label: 'Securite' },
                   { key: 'eau', label: 'Eau' },
-                  { key: 'electricite', label: '\u00c9lectricit\u00e9' },
-                  { key: 'disponible_immediat', label: 'Dispo. imm\u00e9diat' },
+                  { key: 'electricite', label: 'Electricite' },
+                  { key: 'disponible_immediat', label: 'Dispo. immediat' },
                 ].map(eq => (
                   <div key={eq.key} className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium ${
                     bien[eq.key] ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-400'
@@ -263,7 +263,7 @@ export default function ApercuBienPage() {
                 disabled={publishing}
                 className="w-full py-3 bg-green-600 text-white font-bold text-sm rounded-xl hover:bg-green-700 disabled:opacity-60 transition-colors"
               >
-                {publishing ? 'Publication en cours...' : 'Publier l\u2019annonce'}
+                {publishing ? 'Publication en cours...' : 'Publier l'annonce'}
               </button>
               <Link
                 href={`/dashboard/agent/annonces?edit=${bien.id}`}
@@ -281,13 +281,13 @@ export default function ApercuBienPage() {
 
             {/* INFOS */}
             <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 text-sm text-yellow-800">
-              <p className="font-bold mb-1">Avant de publier, v\u00e9rifiez :</p>
+              <p className="font-bold mb-1">Avant de publier, verifiez :</p>
               <ul className="space-y-1 text-xs">
                 <li>✓ Titre clair et descriptif</li>
                 <li>✓ Prix correct en FCFA</li>
-                <li>✓ Photos ajout\u00e9es</li>
+                <li>✓ Photos ajoutees</li>
                 <li>✓ Ville et localisation</li>
-                <li>✓ Description compl\u00e8te</li>
+                <li>✓ Description complete</li>
               </ul>
             </div>
           </div>
