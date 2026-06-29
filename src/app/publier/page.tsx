@@ -111,7 +111,7 @@ export default function PublierPage() {
       securite: form.securite, eau: form.eau, electricite: form.electricite,
       disponible_immediat: form.disponible_immediat,
       video_url: form.video_url || null,
-      statut: 'publiÃ©',
+      statut: 'disponible',
     }).select().single()
 
     if (error) {
@@ -440,5 +440,6 @@ const inputStyle: React.CSSProperties = {
   borderRadius: '8px', color: '#0f172a', fontSize: '0.95rem',
   outline: 'none', boxSizing: 'border-box',
 }
+
 
 
