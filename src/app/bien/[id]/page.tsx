@@ -21,13 +21,13 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { data: bien } = await supabase
     .from('biens')
-    .select('titre, description, prix, type_bien, transaction, images(url, is_principale)')
+    .select('titre, description, prix, type_bien, transaction, images_biens(url, ordre)')
     .eq('id', params.id)
     .single()
 
   if (!bien) return { title: 'Annonce introuvable | Immo West Afro' }
 
-  const image = bien.images?.find((i: any) => i.is_principale)?.url ?? bien.images?.[0]?.url
+  const image = bien.images_biens?.find((i: any) => i.ordre === 0)?.url ?? bien.images_biens?.[0]?.url
 
   return {
     title: `${bien.titre} | Immo West Afro Bénin`,
@@ -65,12 +65,12 @@ export default async function BienDetailPage({ params }: Props) {
     .from('biens')
     .select(`
       *,
-      localites (id, nom, ville, departement),
+      localites (id, ville, arrondissement, quartier),
       profiles (id, nom, prenom, telephone, avatar_url, email, role, whatsapp),
-      images (id, url, ordre, is_principale)
+      images_biens (id, url, ordre)
     `)
     .eq('id', params.id)
-    .in('statut', ['publie', 'disponible'])
+    .in('statut', ['publi\u00e9', 'disponible'])
     .single()
 
   if (error || !bien) notFound()
@@ -85,7 +85,7 @@ export default async function BienDetailPage({ params }: Props) {
     isFavorited = !!fav
   }
 
-  const images = [...(bien.images ?? [])].sort((a: any, b: any) => {
+  const images = [...(bien.images_biens ?? [])].sort((a: any, b: any) => {
     if (a.is_principale) return -1
     if (b.is_principale) return 1
     return (a.ordre ?? 0) - (b.ordre ?? 0)
@@ -158,7 +158,7 @@ export default async function BienDetailPage({ params }: Props) {
                     <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                     </svg>
-                    {bien.localites.nom}, {bien.localites.ville}
+                    {bien.localites.ville}, {bien.localites.ville}
                   </span>
                 )}
                 <span className="text-gray-400">Réf. <span className="font-mono text-gray-600">{ref}</span></span>
