@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -68,7 +68,7 @@ export default function Navbar() {
   const NAV_LINKS = [
     { href: '/', label: 'Accueil' },
     { href: '/recherche', label: 'Annonces' },
-    { href: '/a-propos', label: 'À propos' },
+    { href: '/a-propos', label: 'Ã€ propos' },
     { href: '/contact', label: 'Contact' },
   ]
 
@@ -99,7 +99,7 @@ export default function Navbar() {
               <p className={`text-[10px] font-medium ${
                 scrolled || !isHero ? 'text-blue-500' : 'text-blue-200'
               }`}>
-                Bénin • 2026
+                BÃ©nin â€¢ 2026
               </p>
             </div>
           </Link>
@@ -165,7 +165,7 @@ export default function Navbar() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                         d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                     </svg>
-                    Déconnexion
+                    DÃ©connexion
                   </button>
                 </div>
               </div>
@@ -225,7 +225,7 @@ export default function Navbar() {
                   </Link>
                   <button onClick={() => { handleSignOut(); setMenuOpen(false) }}
                     className="w-full flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-colors">
-                    Déconnexion
+                    DÃ©connexion
                   </button>
                 </>
               ) : (
