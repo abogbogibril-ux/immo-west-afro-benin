@@ -1,11 +1,11 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 
-const VILLES = ['Cotonou','Abomey-Calavi','Porto-Novo','Sèmè-Kpodji','Parakou','Bohicon','Ouidah','Lokossa','Abomey','Djougou','Comè','Azovè','Natitingou']
+const VILLES = ['Cotonou','Abomey-Calavi','Porto-Novo','SÃ¨mÃ¨-Kpodji','Parakou','Bohicon','Ouidah','Lokossa','Abomey','Djougou','ComÃ¨','AzovÃ¨','Natitingou']
 const TYPES = ['Maison','Appartement','Villa','Terrain','Bureau','Studio','Chambre']
 const MAX_PHOTOS = 8
 
@@ -111,7 +111,7 @@ export default function PublierPage() {
       securite: form.securite, eau: form.eau, electricite: form.electricite,
       disponible_immediat: form.disponible_immediat,
       video_url: form.video_url || null,
-      statut: 'publié',
+      statut: 'publiÃ©',
     }).select().single()
 
     if (error) {
@@ -136,7 +136,7 @@ export default function PublierPage() {
     }
 
     setLoading(false)
-    setMessage('Bien publié avec succès !')
+    setMessage('Bien publiÃ© avec succÃ¨s !')
     setTimeout(() => router.push('/dashboard'), 2000)
   }
 
@@ -151,11 +151,11 @@ export default function PublierPage() {
         <div style={{ backgroundColor: '#fff', borderRadius: '16px', padding: '2rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
 
           {/* INFOS PRINCIPALES */}
-          <h2 style={sectionTitle}>📋 Informations principales</h2>
+          <h2 style={sectionTitle}>ðŸ“‹ Informations principales</h2>
           <div style={gridTwo}>
             <div style={{ gridColumn: '1/-1' }}>
               <label style={labelStyle}>Titre du bien *</label>
-              <input name="titre" type="text" placeholder="Ex: Belle villa 4 chambres à Cotonou"
+              <input name="titre" type="text" placeholder="Ex: Belle villa 4 chambres Ã  Cotonou"
                 onChange={handleChange} style={inputStyle} />
             </div>
             <div>
@@ -168,26 +168,26 @@ export default function PublierPage() {
             <div>
               <label style={labelStyle}>Type de bien *</label>
               <select name="type_bien" onChange={handleChange} style={inputStyle}>
-                <option value="">Sélectionner...</option>
+                <option value="">SÃ©lectionner...</option>
                 {TYPES.map(t => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
             <div>
-              <label style={labelStyle}>Prix (FCFA) *</label>
+              {form.transaction === "location" ? <label style={labelStyle}>Prix mensuel (FCFA/mois) *</label> : <label style={labelStyle}>Prix de vente (FCFA) *</label>}
               <input name="prix" type="number" placeholder="150000"
                 onChange={handleChange} style={inputStyle} />
             </div>
             <div style={{ gridColumn: '1/-1' }}>
               <label style={labelStyle}>Description</label>
-              <textarea name="description" placeholder="Décrivez votre bien en détail..."
+              <textarea name="description" placeholder="DÃ©crivez votre bien en dÃ©tail..."
                 onChange={handleChange} style={{ ...inputStyle, height: '100px', resize: 'vertical' }} />
             </div>
           </div>
 
           {/* PHOTOS */}
-          <h2 style={sectionTitle}>📸 Photos du bien</h2>
+          <h2 style={sectionTitle}>ðŸ“¸ Photos du bien</h2>
           <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '1rem' }}>
-            Maximum {MAX_PHOTOS} photos · 5 MB par photo · La 1ère photo sera la photo principale
+            Maximum {MAX_PHOTOS} photos Â· 5 MB par photo Â· La 1Ã¨re photo sera la photo principale
           </p>
           <div
             onClick={() => fileInputRef.current?.click()}
@@ -198,12 +198,12 @@ export default function PublierPage() {
               marginBottom: '1rem', transition: 'all 0.2s',
             }}
           >
-            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📷</div>
+            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>ðŸ“·</div>
             <p style={{ color: '#475569', fontWeight: '600', marginBottom: '0.25rem' }}>
               {photos.length >= MAX_PHOTOS ? `Maximum atteint (${MAX_PHOTOS} photos)` : 'Cliquez pour ajouter des photos'}
             </p>
             <p style={{ color: '#94a3b8', fontSize: '0.8rem' }}>
-              JPG, PNG, WEBP · {photos.length}/{MAX_PHOTOS} photo{photos.length > 1 ? 's' : ''} sélectionnée{photos.length > 1 ? 's' : ''}
+              JPG, PNG, WEBP Â· {photos.length}/{MAX_PHOTOS} photo{photos.length > 1 ? 's' : ''} sÃ©lectionnÃ©e{photos.length > 1 ? 's' : ''}
             </p>
             <input ref={fileInputRef} type="file" accept="image/*" multiple
               onChange={handlePhotos} disabled={photos.length >= MAX_PHOTOS}
@@ -231,7 +231,7 @@ export default function PublierPage() {
                     color: '#fff', border: 'none', borderRadius: '50%',
                     cursor: 'pointer', fontSize: '0.7rem',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>✕</button>
+                  }}>âœ•</button>
                   <div style={{
                     position: 'absolute', bottom: '4px', right: '4px',
                     backgroundColor: 'rgba(0,0,0,0.5)', color: '#fff',
@@ -257,13 +257,13 @@ export default function PublierPage() {
             </div>
           )}
 
-          {/* VISITE VIDÉO */}
-          <h2 style={sectionTitle}>🎥 Visite vidéo (optionnel)</h2>
+          {/* VISITE VIDÃ‰O */}
+          <h2 style={sectionTitle}>ðŸŽ¥ Visite vidÃ©o (optionnel)</h2>
           <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '1rem' }}>
             Collez un lien YouTube ou Vimeo pour offrir une visite virtuelle de votre bien.
           </p>
           <div style={{ marginBottom: '1.5rem' }}>
-            <label style={labelStyle}>Lien de la vidéo</label>
+            <label style={labelStyle}>Lien de la vidÃ©o</label>
             <input
               name="video_url"
               type="url"
@@ -277,12 +277,12 @@ export default function PublierPage() {
           </div>
 
           {/* LOCALISATION */}
-          <h2 style={sectionTitle}>📍 Localisation</h2>
+          <h2 style={sectionTitle}>ðŸ“ Localisation</h2>
           <div style={gridTwo}>
             <div>
               <label style={labelStyle}>Ville *</label>
               <select name="ville" onChange={handleChange} style={inputStyle}>
-                <option value="">Sélectionner...</option>
+                <option value="">SÃ©lectionner...</option>
                 {VILLES.map(v => <option key={v} value={v}>{v}</option>)}
               </select>
             </div>
@@ -297,17 +297,17 @@ export default function PublierPage() {
                 onChange={handleChange} style={inputStyle} />
             </div>
             <div>
-              <label style={labelStyle}>Surface (m²)</label>
+              <label style={labelStyle}>Surface (mÂ²)</label>
               <input name="surface" type="number" placeholder="120"
                 onChange={handleChange} style={inputStyle} />
             </div>
           </div>
 
-          {/* CARACTÉRISTIQUES */}
-          <h2 style={sectionTitle}>🏠 Caractéristiques</h2>
+          {/* CARACTÃ‰RISTIQUES */}
+          <h2 style={sectionTitle}>ðŸ  CaractÃ©ristiques</h2>
           <div style={gridTwo}>
             <div>
-              <label style={labelStyle}>Nb. pièces</label>
+              <label style={labelStyle}>Nb. piÃ¨ces</label>
               <input name="nb_pieces" type="number" placeholder="5"
                 onChange={handleChange} style={inputStyle} />
             </div>
@@ -323,17 +323,17 @@ export default function PublierPage() {
             </div>
           </div>
 
-          {/* ÉQUIPEMENTS */}
-          <h2 style={sectionTitle}>✅ Équipements</h2>
+          {/* Ã‰QUIPEMENTS */}
+          <h2 style={sectionTitle}>âœ… Ã‰quipements</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '0.75rem', marginBottom: '1.5rem' }}>
             {[
-              { name: 'meuble', label: '🛋️ Meublé' },
-              { name: 'parking', label: '🚗 Parking' },
-              { name: 'terrasse', label: '🌿 Terrasse' },
-              { name: 'securite', label: '🔒 Sécurité' },
-              { name: 'eau', label: '💧 Eau' },
-              { name: 'electricite', label: '⚡ Électricité' },
-              { name: 'disponible_immediat', label: '✅ Dispo. immédiat' },
+              { name: 'meuble', label: 'ðŸ›‹ï¸ MeublÃ©' },
+              { name: 'parking', label: 'ðŸš— Parking' },
+              { name: 'terrasse', label: 'ðŸŒ¿ Terrasse' },
+              { name: 'securite', label: 'ðŸ”’ SÃ©curitÃ©' },
+              { name: 'eau', label: 'ðŸ’§ Eau' },
+              { name: 'electricite', label: 'âš¡ Ã‰lectricitÃ©' },
+              { name: 'disponible_immediat', label: 'âœ… Dispo. immÃ©diat' },
             ].map((eq) => (
               <label key={eq.name} style={{
                 display: 'flex', alignItems: 'center', gap: '0.5rem',
@@ -376,12 +376,12 @@ export default function PublierPage() {
                 </div>
               </div>
               <span style={{ fontSize: '0.875rem', color: '#374151', lineHeight: '1.6' }}>
-                En publiant cette annonce, je certifie être propriétaire ou mandaté pour ce bien
+                En publiant cette annonce, je certifie Ãªtre propriÃ©taire ou mandatÃ© pour ce bien
                 et j'accepte les{' '}
                 <Link href="/cgu" target="_blank"
                   style={{ color: '#00bcd4', textDecoration: 'underline', fontWeight: '500' }}
                   onClick={e => e.stopPropagation()}>
-                  Conditions Générales d'Utilisation
+                  Conditions GÃ©nÃ©rales d'Utilisation
                 </Link>
                 {' '}d'Immo West Afro.{' '}
                 <span style={{ color: '#ef4444' }}>*</span>
@@ -408,7 +408,7 @@ export default function PublierPage() {
               border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: '700',
               cursor: loading || !cguAccepted ? 'not-allowed' : 'pointer', transition: 'all 0.2s',
             }}>
-            {loading ? '⏳ Publication en cours...' : '🚀 Publier mon bien'}
+            {loading ? 'â³ Publication en cours...' : 'ðŸš€ Publier mon bien'}
           </button>
 
           <p style={{ textAlign: 'center', color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.75rem' }}>
@@ -440,4 +440,5 @@ const inputStyle: React.CSSProperties = {
   borderRadius: '8px', color: '#0f172a', fontSize: '0.95rem',
   outline: 'none', boxSizing: 'border-box',
 }
+
 
