@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+﻿import { supabase } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -69,7 +69,7 @@ export default async function BienDetailPage({ params }: Props) {
       images (id, url, ordre, is_principale)
     `)
     .eq('id', params.id)
-    .eq('statut', 'publié')
+    .in('statut', ['publie', 'disponible'])
     .single()
 
   if (error || !bien) notFound()
