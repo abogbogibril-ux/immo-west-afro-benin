@@ -137,7 +137,7 @@ export default function PublierPage() {
 
     setLoading(false)
     setMessage('Bien publiÃ© avec succÃ¨s !')
-    setTimeout(() => router.push('/dashboard'), 2000)
+    setTimeout(() => router.push('/dashboard/agent'), 2000)
   }
 
   return (
