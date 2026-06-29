@@ -1,4 +1,4 @@
-'use client'
+ï»¿'use client'
 
 export const dynamic = 'force-dynamic'
 
@@ -115,7 +115,7 @@ export default function ConnexionPage() {
               </div>
               <div className="relative">
                 <input name="password" type={showPassword ? 'text' : 'password'} required
-                  placeholder="••••••••"
+                  placeholder="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
                   value={form.password} onChange={handleChange}
                   className="w-full px-3.5 py-3 pr-10 border border-gray-200 rounded-xl text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-green-400/30"/>
                 <button type="button" onClick={() => setShowPassword(!showPassword)}
@@ -168,3 +168,4 @@ export default function ConnexionPage() {
     </div>
   )
 }
+
