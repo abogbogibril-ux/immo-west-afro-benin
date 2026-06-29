@@ -1,4 +1,5 @@
 'use client'
+
 export const dynamic = 'force-dynamic'
 
 import { useState } from 'react'
@@ -6,12 +7,27 @@ import { supabase } from '@/lib/supabase'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
+function EyeIcon({ visible }: { visible: boolean }) {
+  return visible ? (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+    </svg>
+  ) : (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+    </svg>
+  )
+}
+
 export default function ConnexionPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') ?? '/'
-
   const [form, setForm] = useState({ email: '', password: '' })
+  const [showPassword, setShowPassword] = useState(false)
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
 
@@ -36,12 +52,11 @@ export default function ConnexionPage() {
           ? 'Email ou mot de passe incorrect.'
           : error.message.includes('Email not confirmed')
           ? 'Veuillez confirmer votre email avant de vous connecter.'
-          : 'Une erreur est survenue. Réessayez.'
+          : 'Une erreur est survenue. Reessayez.'
       )
       return
     }
 
-    // Redirection selon le rôle
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
       const { data: profile } = await supabase
@@ -64,25 +79,18 @@ export default function ConnexionPage() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
 
-        {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex flex-col items-center gap-2">
-            <div className="w-14 h-14 bg-green-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-              </svg>
-            </div>
+            <img src="/logo.png" alt="Immo West Afro" className="w-14 h-14 object-contain"/>
             <div>
               <p className="font-bold text-gray-900">Immo West Afro</p>
-              <p className="text-xs text-green-600 font-medium">Bénin</p>
+              <p className="text-xs text-blue-600 font-medium">Benin</p>
             </div>
           </Link>
           <h1 className="text-2xl font-bold text-gray-900 mt-6 mb-1">Connexion</h1>
-          <p className="text-gray-500 text-sm">Accédez à votre espace personnel</p>
+          <p className="text-gray-500 text-sm">Acces a votre espace personnel</p>
         </div>
 
-        {/* Formulaire */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
           <form onSubmit={handleSubmit} className="space-y-4">
 
@@ -90,10 +98,9 @@ export default function ConnexionPage() {
               <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
                 Adresse email
               </label>
-              <input name="email" type="email" required
-                placeholder="votre@email.com"
+              <input name="email" type="email" required placeholder="votre@email.com"
                 value={form.email} onChange={handleChange}
-                className="w-full px-3.5 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50 transition-all"/>
+                className="w-full px-3.5 py-3 border border-gray-200 rounded-xl text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-green-400/30"/>
             </div>
 
             <div>
@@ -103,13 +110,19 @@ export default function ConnexionPage() {
                 </label>
                 <Link href="/mot-de-passe-oublie"
                   className="text-xs text-green-600 hover:underline font-medium">
-                  Mot de passe oublié ?
+                  Mot de passe oublie ?
                 </Link>
               </div>
-              <input name="password" type="password" required
-                placeholder="••••••••"
-                value={form.password} onChange={handleChange}
-                className="w-full px-3.5 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50 transition-all"/>
+              <div className="relative">
+                <input name="password" type={showPassword ? 'text' : 'password'} required
+                  placeholder="��������"
+                  value={form.password} onChange={handleChange}
+                  className="w-full px-3.5 py-3 pr-10 border border-gray-200 rounded-xl text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-green-400/30"/>
+                <button type="button" onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                  <EyeIcon visible={showPassword} />
+                </button>
+              </div>
             </div>
 
             {status === 'error' && (
@@ -140,16 +153,15 @@ export default function ConnexionPage() {
             <p className="text-sm text-gray-500">
               Pas encore de compte ?{' '}
               <Link href="/inscription" className="text-green-600 font-semibold hover:underline">
-                Créer un compte
+                Creer un compte
               </Link>
             </p>
           </div>
         </div>
 
-        {/* Retour accueil */}
         <div className="text-center mt-6">
           <Link href="/" className="text-sm text-gray-400 hover:text-gray-600 transition-colors">
-            ← Retour à l'accueil
+            Retour a l accueil
           </Link>
         </div>
       </div>
