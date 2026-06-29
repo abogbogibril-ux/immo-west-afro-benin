@@ -43,7 +43,7 @@ export default function RecherchePage() {
       .select(`
         id, titre, prix, transaction, type_bien, surface, nb_chambres, created_at, vues,
         localites (ville, arrondissement, quartier),
-        images_biens (url, is_principale)
+        images_biens (url, ordre)
       `, { count: 'exact' })
       .eq('statut', 'publié')
 

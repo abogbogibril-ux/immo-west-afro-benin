@@ -35,7 +35,7 @@ export default async function HomePage() {
     .select(`
       id, titre, prix, transaction, type_bien, surface, nb_chambres, created_at,
       localites (ville, arrondissement, quartier),
-      images_biens (url, is_principale)
+      images_biens (url, ordre)
     `)
     .eq('statut', 'publié')
     .order('created_at', { ascending: false })
@@ -46,7 +46,7 @@ export default async function HomePage() {
     .select(`
       id, titre, prix, transaction, type_bien, surface, nb_chambres, created_at,
       localites (ville, arrondissement, quartier),
-      images_biens (url, is_principale)
+      images_biens (url, ordre)
     `)
     .eq('statut', 'publié')
     .eq('transaction', 'location')
