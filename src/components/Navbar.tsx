@@ -58,8 +58,8 @@ export default function Navbar() {
 
   const getDashboardLink = () => {
     if (role === 'admin') return '/dashboard/admin'
-    if (role === 'agent') return '/dashboard/agent'
-    return '/dashboard/client'
+    if (role === 'agent' || role === 'proprietaire') return '/dashboard/agent'
+    return '/dashboard/agent'
   }
 
   const isActive = (href: string) =>
@@ -68,7 +68,7 @@ export default function Navbar() {
   const NAV_LINKS = [
     { href: '/', label: 'Accueil' },
     { href: '/recherche', label: 'Annonces' },
-    { href: '/a-propos', label: 'Ã€ propos' },
+    { href: '/a-propos', label: 'A propos' },
     { href: '/contact', label: 'Contact' },
   ]
 
@@ -87,19 +87,11 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
-            <img
-              src="/logo.png"
-              alt="Immo West Afro"
-              className="w-10 h-10 object-contain drop-shadow-sm"
-            />
+            <img src="/logo.png" alt="Immo West Afro" className="w-10 h-10 object-contain drop-shadow-sm"/>
             <div className="hidden sm:block">
-              <p className={`font-bold text-sm leading-tight ${logoColor}`}>
-                Immo West Afro
-              </p>
-              <p className={`text-[10px] font-medium ${
-                scrolled || !isHero ? 'text-blue-500' : 'text-blue-200'
-              }`}>
-                BÃ©nin â€¢ 2026
+              <p className={`font-bold text-sm leading-tight ${logoColor}`}>Immo West Afro</p>
+              <p className={`text-[10px] font-medium ${scrolled || !isHero ? 'text-blue-500' : 'text-blue-200'}`}>
+                Benin 2026
               </p>
             </div>
           </Link>
@@ -121,12 +113,13 @@ export default function Navbar() {
           {/* Actions */}
           <div className="flex items-center gap-2">
 
-            <Link href="/publier"
+            {/* Deposer un besoin */}
+            <Link href="/deposer"
               className="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
               </svg>
-              Publier
+              Deposer un besoin
             </Link>
 
             {user ? (
@@ -151,13 +144,6 @@ export default function Navbar() {
                     </svg>
                     Mon espace
                   </Link>
-                  <Link href="/publier"
-                    className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
-                    </svg>
-                    Publier un bien
-                  </Link>
                   <div className="border-t border-gray-100 my-1"/>
                   <button onClick={handleSignOut}
                     className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors">
@@ -165,21 +151,28 @@ export default function Navbar() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                         d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                     </svg>
-                    DÃ©connexion
+                    Deconnexion
                   </button>
                 </div>
               </div>
             ) : (
-              <Link href="/connexion"
-                className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium border transition-all ${
-                  scrolled || !isHero
-                    ? 'border-gray-200 text-gray-700 hover:border-blue-300 hover:text-blue-600'
-                    : 'border-white/30 text-white hover:bg-white/10'
-                }`}>
-                Se connecter
-              </Link>
+              <div className="hidden sm:flex items-center gap-2">
+                <Link href="/inscription"
+                  className="px-3 py-2 bg-green-600 text-white text-sm font-semibold rounded-xl hover:bg-green-700 transition-colors">
+                  S inscrire
+                </Link>
+                <Link href="/connexion"
+                  className={`px-3 py-2 rounded-xl text-sm font-medium border transition-all ${
+                    scrolled || !isHero
+                      ? 'border-gray-200 text-gray-700 hover:border-blue-300 hover:text-blue-600'
+                      : 'border-white/30 text-white hover:bg-white/10'
+                  }`}>
+                  Se connecter
+                </Link>
+              </div>
             )}
 
+            {/* Hamburger mobile */}
             <button onClick={() => setMenuOpen(!menuOpen)}
               className={`lg:hidden p-2 rounded-xl transition-colors ${
                 scrolled || !isHero ? 'text-gray-600 hover:bg-gray-100' : 'text-white hover:bg-white/10'
@@ -210,12 +203,12 @@ export default function Navbar() {
                 </Link>
               ))}
               <div className="border-t border-gray-100 my-2"/>
-              <Link href="/publier" onClick={() => setMenuOpen(false)}
+              <Link href="/deposer" onClick={() => setMenuOpen(false)}
                 className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-blue-600 hover:bg-blue-50 transition-colors">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
                 </svg>
-                Publier une annonce
+                Deposer un besoin
               </Link>
               {user ? (
                 <>
@@ -225,14 +218,20 @@ export default function Navbar() {
                   </Link>
                   <button onClick={() => { handleSignOut(); setMenuOpen(false) }}
                     className="w-full flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-colors">
-                    DÃ©connexion
+                    Deconnexion
                   </button>
                 </>
               ) : (
-                <Link href="/connexion" onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-                  Se connecter
-                </Link>
+                <>
+                  <Link href="/inscription" onClick={() => setMenuOpen(false)}
+                    className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-green-600 hover:bg-green-50 transition-colors">
+                    S inscrire
+                  </Link>
+                  <Link href="/connexion" onClick={() => setMenuOpen(false)}
+                    className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                    Se connecter
+                  </Link>
+                </>
               )}
             </nav>
           </div>
