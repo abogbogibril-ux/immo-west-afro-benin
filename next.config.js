@@ -1,4 +1,4 @@
-/** @type {import('next').NextConfig} */
+﻿/** @type {import('next').NextConfig} */
 const nextConfig = {
   // ── Ignorer ESLint pendant le build Vercel ──────────────────────────────
   eslint: {
@@ -50,15 +50,6 @@ const nextConfig = {
     ]
   },
 
-  async redirects() {
-    return [
-      {
-        source: '/admin',
-        destination: '/dashboard/admin',
-        permanent: true,
-      },
-    ]
-  },
 }
 
 module.exports = nextConfig
