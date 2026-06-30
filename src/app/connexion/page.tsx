@@ -66,7 +66,7 @@ export default function ConnexionPage() {
       if (redirect !== '/') {
         router.push(redirect)
       } else if (role === 'admin') {
-        router.push('/dashboard/admin')
+        router.push('/admin')
       } else if (role === 'agent') {
         router.push('/dashboard/agent')
       } else {
