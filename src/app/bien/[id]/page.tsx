@@ -13,6 +13,7 @@ import LocationBlock from './LocationBlock'
 import AgentSection from './AgentSection'
 import SimilarProperties from './SimilarProperties'
 import BienDisclaimer from './BienDisclaimer'
+import ReportButton from './ReportButton'
 
 interface Props {
   params: { id: string }
@@ -292,6 +293,9 @@ export default async function BienDetailPage({ params }: Props) {
                   <span>Vues</span>
                   <span className="text-gray-600">{bien.vues ?? 0}</span>
                 </div>
+              </div>
+              <div className="text-center">
+                <ReportButton bienId={params.id} />
               </div>
             </div>
           </div>
