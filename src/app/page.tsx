@@ -1,5 +1,14 @@
 ﻿export const dynamic = 'force-dynamic'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
+
+function createServerClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { global: { fetch: (url: RequestInfo | URL, options?: RequestInit) => fetch(url, { ...options, cache: 'no-store' }) } }
+  )
+}
+const supabase = createServerClient()
 import Link from 'next/link'
 import HeroSearch from '@/components/HeroSearch'
 import BienCard from '@/components/BienCard'
