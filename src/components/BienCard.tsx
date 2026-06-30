@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import OptimizedImage from './OptimizedImage'
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
     nb_chambres?: number
     ville?: string
     localites?: { nom: string; ville: string }
-    images?: { url: string; is_principale: boolean }[]
+    images_biens?: { url: string; ordre: number }[]
     statut?: string
     created_at?: string
   }
@@ -25,9 +25,7 @@ const TYPE_LABELS: Record<string, string> = {
 }
 
 export default function BienCard({ bien, priority = false }: Props) {
-  const imgs = [...(bien.images ?? [])].sort((a, b) =>
-    b.is_principale ? 1 : a.is_principale ? -1 : 0
-  )
+  const imgs = [...(bien.images_biens ?? [])].sort((a, b) => a.ordre - b.ordre)
   const photo = imgs[0]?.url
   const ville = bien.localites?.ville ?? bien.ville ?? ''
   const quartier = bien.localites?.nom ?? ''
