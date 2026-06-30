@@ -30,7 +30,7 @@ export default function ApercuBienPage() {
         .single()
 
       if (error || !data) {
-        setErreur('Bien introuvable ou acc\u00e8s non autoris\u00e9.')
+        setErreur('Bien introuvable ou accès non autorisé.')
         setLoading(false)
         return
       }
@@ -44,7 +44,7 @@ export default function ApercuBienPage() {
     setPublishing(true)
     const { error } = await supabase
       .from('biens')
-      .update({ statut: 'publi\u00e9' })
+      .update({ statut: 'publié' })
       .eq('id', id)
 
     if (error) {

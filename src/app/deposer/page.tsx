@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 
 const TYPES = ['Maison', 'Appartement', 'Villa', 'Terrain', 'Bureau', 'Studio', 'Chambre']
-const VILLES = ['Cotonou', 'Abomey-Calavi', 'Porto-Novo', 'S\u00e8m\u00e8-Kpodji', 'Parakou', 'Bohicon', 'Ouidah', 'Lokossa', 'Abomey', 'Djougou', 'Natitingou']
+const VILLES = ['Cotonou', 'Abomey-Calavi', 'Porto-Novo', 'Sèmè-Kpodji', 'Parakou', 'Bohicon', 'Ouidah', 'Lokossa', 'Abomey', 'Djougou', 'Natitingou']
 
 export default function DeposerPage() {
   const [etape, setEtape] = useState<'formulaire' | 'succes'>('formulaire')
@@ -31,11 +31,11 @@ export default function DeposerPage() {
 
   const handleSubmit = async () => {
     if (!form.type_besoin || !form.ville || !form.telephone) {
-      setErreur('Veuillez remplir les champs obligatoires : type de bien, ville et t\u00e9l\u00e9phone.')
+      setErreur('Veuillez remplir les champs obligatoires : type de bien, ville et téléphone.')
       return
     }
     if (form.telephone.replace(/\D/g, '').length < 8) {
-      setErreur('Num\u00e9ro de t\u00e9l\u00e9phone invalide.')
+      setErreur('Numéro de téléphone invalide.')
       return
     }
 
@@ -55,7 +55,7 @@ export default function DeposerPage() {
     setLoading(false)
 
     if (error) {
-      setErreur('Une erreur est survenue. Veuillez r\u00e9essayer.')
+      setErreur('Une erreur est survenue. Veuillez réessayer.')
       console.error(error)
       return
     }
@@ -71,9 +71,9 @@ export default function DeposerPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7"/>
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Besoin enregistr\u00e9 !</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Besoin enregistré !</h1>
           <p className="text-gray-500 mb-6 text-sm leading-relaxed">
-            Votre besoin a \u00e9t\u00e9 transmis \u00e0 nos agents. Vous serez contact\u00e9 tr\u00e8s rapidement
+            Votre besoin a été transmis à nos agents. Vous serez contacté très rapidement
             au <span className="font-semibold text-gray-700">{form.telephone}</span>.
           </p>
           <div className="flex flex-col gap-3">
@@ -83,7 +83,7 @@ export default function DeposerPage() {
             </Link>
             <Link href="/"
               className="w-full py-3 border border-gray-200 text-gray-600 font-medium rounded-xl hover:bg-gray-50 transition-colors text-sm text-center">
-              Retour \u00e0 l&apos;accueil
+              Retour à l&apos;accueil
             </Link>
           </div>
         </div>
@@ -100,10 +100,10 @@ export default function DeposerPage() {
             Gratuit &middot; Sans inscription
           </div>
           <h1 className="text-3xl md:text-4xl font-bold mb-3">
-            D\u00e9posez votre besoin immobilier
+            Déposez votre besoin immobilier
           </h1>
           <p className="text-blue-100 text-base max-w-lg mx-auto">
-            Dites-nous ce que vous cherchez. Nos agents vous contacteront avec les meilleures offres disponibles au B\u00e9nin.
+            Dites-nous ce que vous cherchez. Nos agents vous contacteront avec les meilleures offres disponibles au Bénin.
           </p>
         </div>
       </div>
@@ -149,7 +149,7 @@ export default function DeposerPage() {
           {/* ETAPE 2 — Localisation & Budget */}
           <div className="mb-6">
             <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wide mb-4">
-              O\u00f9 et quel budget ?
+              Où et quel budget ?
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="sm:col-span-2">
@@ -158,7 +158,7 @@ export default function DeposerPage() {
                 </label>
                 <select name="ville" value={form.ville} onChange={handleChange}
                   className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50">
-                  <option value="">S\u00e9lectionner une ville...</option>
+                  <option value="">Sélectionner une ville...</option>
                   {VILLES.map(v => <option key={v} value={v}>{v}</option>)}
                 </select>
               </div>
@@ -188,7 +188,7 @@ export default function DeposerPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nb. chambres souhait\u00e9es
+                  Nb. chambres souhaitées
                 </label>
                 <select name="nb_chambres" value={form.nb_chambres} onChange={handleChange}
                   className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50">
@@ -204,7 +204,7 @@ export default function DeposerPage() {
           {/* ETAPE 3 — Description & Contact */}
           <div className="mb-6">
             <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wide mb-4">
-              D\u00e9tails & Contact
+              Détails & Contact
             </h2>
             <div className="space-y-4">
               <div>
@@ -212,7 +212,7 @@ export default function DeposerPage() {
                   Description de votre besoin
                 </label>
                 <textarea name="description" value={form.description} onChange={handleChange}
-                  placeholder="Ex: Je cherche une villa avec jardin, proche \u00e9coles, disponible imm\u00e9diatement..."
+                  placeholder="Ex: Je cherche une villa avec jardin, proche écoles, disponible immédiatement..."
                   rows={3}
                   className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50 resize-none"/>
               </div>
@@ -227,7 +227,7 @@ export default function DeposerPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    T\u00e9l\u00e9phone *
+                    Téléphone *
                   </label>
                   <input type="tel" name="telephone" value={form.telephone} onChange={handleChange}
                     placeholder="+229 XX XX XX XX"
@@ -251,18 +251,18 @@ export default function DeposerPage() {
           </button>
 
           <p className="text-center text-xs text-gray-400 mt-3">
-            <span className="text-red-400">*</span> Champs obligatoires &middot; Vos donn\u00e9es sont confidentielles
+            <span className="text-red-400">*</span> Champs obligatoires &middot; Vos données sont confidentielles
           </p>
         </div>
 
         {/* LIEN INSCRIPTION */}
         <div className="mt-6 bg-blue-50 border border-blue-100 rounded-2xl p-5 text-center">
           <p className="text-sm text-gray-600 mb-3">
-            Vous \u00eates agent immobilier ou propri\u00e9taire ?
+            Vous êtes agent immobilier ou propriétaire ?
           </p>
           <Link href="/inscription"
             className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white font-bold text-sm rounded-xl hover:bg-blue-700 transition-colors">
-            Cr\u00e9er un compte professionnel
+            Créer un compte professionnel
           </Link>
         </div>
       </div>

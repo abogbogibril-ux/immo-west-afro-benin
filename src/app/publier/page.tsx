@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 
-const VILLES = ['Cotonou','Abomey-Calavi','Porto-Novo','S\u00e8m\u00e8-Kpodji','Parakou','Bohicon','Ouidah','Lokossa','Abomey','Djougou','Com\u00e8','Azov\u00e8','Natitingou']
+const VILLES = ['Cotonou','Abomey-Calavi','Porto-Novo','Sèmè-Kpodji','Parakou','Bohicon','Ouidah','Lokossa','Abomey','Djougou','Comè','Azovè','Natitingou']
 const TYPES = ['Maison','Appartement','Villa','Terrain','Bureau','Studio','Chambre']
 const MAX_PHOTOS = 8
 
@@ -136,7 +136,7 @@ export default function PublierPage() {
     }
 
     setLoading(false)
-    setMessage('Bien publi\u00e9 avec succ\u00e8s !')
+    setMessage('Bien publié avec succès !')
     setTimeout(() => router.push('/dashboard/agent'), 2000)
   }
 
@@ -155,7 +155,7 @@ export default function PublierPage() {
           <div style={gridTwo}>
             <div style={{ gridColumn: '1/-1' }}>
               <label style={labelStyle}>Titre du bien *</label>
-              <input name="titre" type="text" placeholder="Ex: Belle villa 4 chambres \u00e0 Cotonou"
+              <input name="titre" type="text" placeholder="Ex: Belle villa 4 chambres à Cotonou"
                 onChange={handleChange} style={inputStyle} />
             </div>
             <div>
@@ -168,7 +168,7 @@ export default function PublierPage() {
             <div>
               <label style={labelStyle}>Type de bien *</label>
               <select name="type_bien" onChange={handleChange} style={inputStyle}>
-                <option value="">S\u00e9lectionner...</option>
+                <option value="">Sélectionner...</option>
                 {TYPES.map(t => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
@@ -181,7 +181,7 @@ export default function PublierPage() {
             </div>
             <div style={{ gridColumn: '1/-1' }}>
               <label style={labelStyle}>Description</label>
-              <textarea name="description" placeholder="D\u00e9crivez votre bien en d\u00e9tail..."
+              <textarea name="description" placeholder="Décrivez votre bien en détail..."
                 onChange={handleChange} style={{ ...inputStyle, height: '100px', resize: 'vertical' }} />
             </div>
           </div>
@@ -189,7 +189,7 @@ export default function PublierPage() {
           {/* PHOTOS */}
           <h2 style={sectionTitle}>Photos du bien</h2>
           <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '1rem' }}>
-            Maximum {MAX_PHOTOS} photos &middot; 5 MB par photo &middot; La 1\u00e8re photo sera la photo principale
+            Maximum {MAX_PHOTOS} photos &middot; 5 MB par photo &middot; La 1ère photo sera la photo principale
           </p>
           <div
             onClick={() => fileInputRef.current?.click()}
@@ -206,7 +206,7 @@ export default function PublierPage() {
                 : 'Cliquez pour ajouter des photos'}
             </p>
             <p style={{ color: '#94a3b8', fontSize: '0.8rem' }}>
-              JPG, PNG, WEBP &middot; {photos.length}/{MAX_PHOTOS} photo{photos.length > 1 ? 's' : ''} s\u00e9lectionn\u00e9e{photos.length > 1 ? 's' : ''}
+              JPG, PNG, WEBP &middot; {photos.length}/{MAX_PHOTOS} photo{photos.length > 1 ? 's' : ''} sélectionnée{photos.length > 1 ? 's' : ''}
             </p>
             <input ref={fileInputRef} type="file" accept="image/*" multiple
               onChange={handlePhotos} disabled={photos.length >= MAX_PHOTOS}
@@ -256,12 +256,12 @@ export default function PublierPage() {
           )}
 
           {/* VIDEO */}
-          <h2 style={sectionTitle}>Visite vid\u00e9o (optionnel)</h2>
+          <h2 style={sectionTitle}>Visite vidéo (optionnel)</h2>
           <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '1rem' }}>
             Collez un lien YouTube ou Vimeo pour offrir une visite virtuelle de votre bien.
           </p>
           <div style={{ marginBottom: '1.5rem' }}>
-            <label style={labelStyle}>Lien de la vid\u00e9o</label>
+            <label style={labelStyle}>Lien de la vidéo</label>
             <input
               name="video_url"
               type="url"
@@ -280,7 +280,7 @@ export default function PublierPage() {
             <div>
               <label style={labelStyle}>Ville *</label>
               <select name="ville" onChange={handleChange} style={inputStyle}>
-                <option value="">S\u00e9lectionner...</option>
+                <option value="">Sélectionner...</option>
                 {VILLES.map(v => <option key={v} value={v}>{v}</option>)}
               </select>
             </div>
@@ -302,10 +302,10 @@ export default function PublierPage() {
           </div>
 
           {/* CARACTERISTIQUES */}
-          <h2 style={sectionTitle}>Caract\u00e9ristiques</h2>
+          <h2 style={sectionTitle}>Caractéristiques</h2>
           <div style={gridTwo}>
             <div>
-              <label style={labelStyle}>Nb. pi\u00e8ces</label>
+              <label style={labelStyle}>Nb. pièces</label>
               <input name="nb_pieces" type="number" placeholder="5"
                 onChange={handleChange} style={inputStyle} />
             </div>
@@ -322,16 +322,16 @@ export default function PublierPage() {
           </div>
 
           {/* EQUIPEMENTS */}
-          <h2 style={sectionTitle}>\u00c9quipements</h2>
+          <h2 style={sectionTitle}>Équipements</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '0.75rem', marginBottom: '1.5rem' }}>
             {[
-              { name: 'meuble', label: 'Meubl\u00e9' },
+              { name: 'meuble', label: 'Meublé' },
               { name: 'parking', label: 'Parking' },
               { name: 'terrasse', label: 'Terrasse' },
-              { name: 'securite', label: 'S\u00e9curit\u00e9' },
+              { name: 'securite', label: 'Sécurité' },
               { name: 'eau', label: 'Eau' },
-              { name: 'electricite', label: '\u00c9lectricit\u00e9' },
-              { name: 'disponible_immediat', label: 'Dispo. imm\u00e9diat' },
+              { name: 'electricite', label: 'Électricité' },
+              { name: 'disponible_immediat', label: 'Dispo. immédiat' },
             ].map((eq) => (
               <label key={eq.name} style={{
                 display: 'flex', alignItems: 'center', gap: '0.5rem',
@@ -374,12 +374,12 @@ export default function PublierPage() {
                 </div>
               </div>
               <span style={{ fontSize: '0.875rem', color: '#374151', lineHeight: '1.6' }}>
-                En publiant cette annonce, je certifie \u00eatre propri\u00e9taire ou mandat\u00e9 pour ce bien
+                En publiant cette annonce, je certifie être propriétaire ou mandaté pour ce bien
                 et j&apos;accepte les{' '}
                 <Link href="/cgu" target="_blank"
                   style={{ color: '#00bcd4', textDecoration: 'underline', fontWeight: '500' }}
                   onClick={e => e.stopPropagation()}>
-                  Conditions G\u00e9n\u00e9rales d&apos;Utilisation
+                  Conditions Générales d&apos;Utilisation
                 </Link>
                 {' '}d&apos;Immo West Afro.{' '}
                 <span style={{ color: '#ef4444' }}>*</span>
