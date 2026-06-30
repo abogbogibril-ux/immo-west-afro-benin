@@ -84,7 +84,7 @@ export default function ApercuBienPage() {
       {/* BANNIERE APERCU */}
       <div className="bg-yellow-400 text-yellow-900 py-3 px-4 text-center font-bold text-sm sticky top-0 z-50 shadow-sm">
         <span className="mr-2">👁</span>
-        MODE APERçU — Ce bien n&apos;est pas encore publie et invisible du public
+        MODE APERCU — Ce bien n&apos;est pas encore publie et invisible du public
         <span className="ml-2">👁</span>
       </div>
 
@@ -114,7 +114,7 @@ export default function ApercuBienPage() {
               disabled={publishing}
               className="px-6 py-2 bg-green-600 text-white text-sm font-bold rounded-xl hover:bg-green-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
             >
-              {publishing ? 'Publication...' : 'Publier l'annonce'}
+              {publishing ? 'Publication...' : "Publier l'annonce"}
             </button>
           </div>
         </div>
@@ -263,7 +263,7 @@ export default function ApercuBienPage() {
                 disabled={publishing}
                 className="w-full py-3 bg-green-600 text-white font-bold text-sm rounded-xl hover:bg-green-700 disabled:opacity-60 transition-colors"
               >
-                {publishing ? 'Publication en cours...' : 'Publier l'annonce'}
+                {publishing ? 'Publication en cours...' : "Publier l'annonce"}
               </button>
               <Link
                 href={`/dashboard/agent/annonces?edit=${bien.id}`}
