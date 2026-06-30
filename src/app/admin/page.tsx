@@ -11,16 +11,18 @@ type Stats = {
   biensBrouillons: number
   besoins: number
   messages: number
+  signalements: number
 }
 
 export default function AdminPage() {
   const router = useRouter()
   const [stats, setStats] = useState<Stats>({ agents: 0, proprietaires: 0, biensPublies: 0, biensBrouillons: 0, besoins: 0, messages: 0 })
   const [loading, setLoading] = useState(true)
-  const [onglet, setOnglet] = useState<'stats' | 'utilisateurs' | 'biens' | 'besoins' | 'messages'>('stats')
+  const [onglet, setOnglet] = useState<'stats' | 'utilisateurs' | 'biens' | 'besoins' | 'signalements' | 'messages'>('stats')
   const [utilisateurs, setUtilisateurs] = useState<any[]>([])
   const [biens, setBiens] = useState<any[]>([])
   const [besoins, setBesoins] = useState<any[]>([])
+  const [signalements, setSignalements] = useState<any[]>([])
   const [filtreStatut, setFiltreStatut] = useState<string>('tous')
 
   useEffect(() => {
@@ -45,6 +47,7 @@ export default function AdminPage() {
       { count: biensPublies },
       { count: biensBrouillons },
       { count: besoins },
+      { count: signalementsCount },
       { count: messages },
     ] = await Promise.all([
       supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'agent'),
@@ -52,6 +55,7 @@ export default function AdminPage() {
       supabase.from('biens').select('*', { count: 'exact', head: true }).eq('statut', 'publié'),
       supabase.from('biens').select('*', { count: 'exact', head: true }).eq('statut', 'brouillon'),
       supabase.from('besoins').select('*', { count: 'exact', head: true }),
+      supabase.from('signalements').select('*', { count: 'exact', head: true }),
       supabase.from('messages').select('*', { count: 'exact', head: true }),
     ])
     setStats({
@@ -60,6 +64,7 @@ export default function AdminPage() {
       biensPublies: biensPublies || 0,
       biensBrouillons: biensBrouillons || 0,
       besoins: besoins || 0,
+      signalements: signalementsCount || 0,
       messages: messages || 0,
     })
     setLoading(false)
@@ -84,6 +89,25 @@ export default function AdminPage() {
       .select('*')
       .order('created_at', { ascending: false })
     setBesoins(data || [])
+  }
+
+  const loadSignalements = async () => {
+    const { data } = await supabase
+      .from('signalements')
+      .select('*, biens(titre)')
+      .order('created_at', { ascending: false })
+    setSignalements(data || [])
+  }
+
+  const supprimerSignalement = async (id: string) => {
+    if (!confirm('Supprimer ce signalement ?')) return
+    await supabase.from('signalements').delete().eq('id', id)
+    loadSignalements()
+  }
+
+  const changerStatutSignalement = async (id: string, nouveauStatut: string) => {
+    await supabase.from('signalements').update({ statut: nouveauStatut }).eq('id', id)
+    loadSignalements()
   }
 
   const supprimerUtilisateur = async (id: string) => {
@@ -147,6 +171,7 @@ export default function AdminPage() {
           { key: 'utilisateurs', label: 'Utilisateurs' },
           { key: 'biens', label: 'Biens' },
           { key: 'besoins', label: 'Besoins', badge: stats.besoins },
+          { key: 'signalements', label: 'Signalements', badge: stats.signalements },
           { key: 'messages', label: 'Messages' },
         ] as const).map((o) => (
           <button key={o.key} onClick={() => setOnglet(o.key as any)} style={{
@@ -182,6 +207,7 @@ export default function AdminPage() {
             : onglet === 'utilisateurs' ? 'Gestion des utilisateurs'
             : onglet === 'biens' ? 'Modération des biens'
             : onglet === 'besoins' ? 'Besoins déposés'
+            : onglet === 'signalements' ? 'Signalements'
             : 'Messages'}
         </h1>
 
@@ -194,6 +220,7 @@ export default function AdminPage() {
               { label: 'Biens publiés', value: stats.biensPublies, color: '#059669' },
               { label: 'Brouillons', value: stats.biensBrouillons, color: '#d97706' },
               { label: 'Besoins déposés', value: stats.besoins, color: '#ef4444' },
+              { label: 'Signalements', value: stats.signalements, color: '#dc2626' },
               { label: 'Messages', value: stats.messages, color: '#8b5cf6' },
             ].map((s) => (
               <div key={s.label} style={{
@@ -366,6 +393,49 @@ export default function AdminPage() {
                 ))}
                 {besoins.length === 0 && (
                   <tr><td colSpan={7} style={{ padding: '2rem', textAlign: 'center', color: '#475569' }}>Aucun besoin déposé</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* SIGNALEMENTS */}
+        {onglet === 'signalements' && (
+          <div style={{ backgroundColor: '#1e293b', borderRadius: '12px', overflow: 'hidden' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#0f172a' }}>
+                  {['Bien', 'Motif', 'Description', 'Email', 'Statut', 'Action'].map(h => (
+                    <th key={h} style={{ padding: '1rem', color: '#94a3b8', textAlign: 'left', fontSize: '0.85rem' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {signalements.map((s) => (
+                  <tr key={s.id} style={{ borderTop: '1px solid #334155' }}>
+                    <td style={{ padding: '1rem', color: '#fff', maxWidth: '200px' }}>{s.biens?.titre || 'Bien supprimé'}</td>
+                    <td style={{ padding: '1rem', color: '#fca5a5', fontWeight: '600', fontSize: '0.85rem' }}>{s.motif}</td>
+                    <td style={{ padding: '1rem', color: '#94a3b8', fontSize: '0.8rem', maxWidth: '220px' }}>{s.description || '-'}</td>
+                    <td style={{ padding: '1rem', color: '#cbd5e1', fontSize: '0.8rem' }}>{s.email_signaleur || '-'}</td>
+                    <td style={{ padding: '1rem' }}>
+                      <select value={s.statut} onChange={e => changerStatutSignalement(s.id, e.target.value)} style={{
+                        backgroundColor: s.statut === 'nouveau' ? '#dc2626' : '#059669',
+                        color: '#fff', border: 'none', borderRadius: '6px', padding: '0.3rem 0.5rem', fontSize: '0.75rem',
+                      }}>
+                        <option value="nouveau">Nouveau</option>
+                        <option value="traite">Traité</option>
+                      </select>
+                    </td>
+                    <td style={{ padding: '1rem' }}>
+                      <button onClick={() => supprimerSignalement(s.id)} style={{
+                        padding: '0.4rem 0.75rem', backgroundColor: '#ef4444', color: '#fff',
+                        border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem',
+                      }}>Suppr.</button>
+                    </td>
+                  </tr>
+                ))}
+                {signalements.length === 0 && (
+                  <tr><td colSpan={6} style={{ padding: '2rem', textAlign: 'center', color: '#475569' }}>Aucun signalement</td></tr>
                 )}
               </tbody>
             </table>
