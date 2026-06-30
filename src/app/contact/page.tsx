@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
@@ -69,20 +69,20 @@ export default function ContactPage() {
                   {
                     icon: '📍',
                     label: 'Adresse',
-                    value: 'Cotonou, Bénin',
-                    sub: 'Haie Vive, Cotonou',
+                    value: 'Abomey-Calavi, Togba',
+                    sub: 'Quartier SOME',
                   },
                   {
                     icon: '📞',
                     label: 'Téléphone',
-                    value: '+229 XX XX XX XX',
-                    href: 'tel:+229XXXXXXXX',
+                    value: '+229 01 96 13 77 20',
+                    href: 'tel:+22901961377',
                   },
                   {
                     icon: '✉️',
                     label: 'Email',
-                    value: 'contact@immowestafro.com',
-                    href: 'mailto:contact@immowestafro.com',
+                    value: 'abogbogibril@gmail.com',
+                    href: 'mailto:abogbogibril@gmail.com',
                   },
                   {
                     icon: '🕐',
@@ -110,7 +110,7 @@ export default function ContactPage() {
             </div>
 
             {/* WhatsApp */}
-            <a href={`https://wa.me/229XXXXXXXX?text=${waText}`}
+            <a href={`https://wa.me/22901961377?text=${waText}`}
               target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-3 bg-[#25D366] text-white rounded-2xl p-5 hover:bg-[#1fba59] transition-colors">
               <svg className="w-8 h-8 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
@@ -187,7 +187,7 @@ export default function ContactPage() {
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
                         Téléphone
                       </label>
-                      <input name="telephone" type="tel" placeholder="+229 XX XX XX XX"
+                      <input name="telephone" type="tel" placeholder="+229 XX XX XX XX XX"
                         value={form.telephone} onChange={handleChange}
                         className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50"/>
                     </div>
@@ -242,7 +242,7 @@ export default function ContactPage() {
 
                   <p className="text-center text-xs text-gray-400">
                     Ou contactez-nous directement sur{' '}
-                    <a href={`https://wa.me/229XXXXXXXX?text=${waText}`}
+                    <a href={`https://wa.me/22901961377?text=${waText}`}
                       target="_blank" rel="noopener noreferrer"
                       className="text-green-600 font-semibold hover:underline">
                       WhatsApp

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
@@ -183,8 +183,8 @@ export default function ClientParametresPage() {
                 { label: 'Prénom', name: 'prenom', type: 'text', placeholder: 'Votre prénom' },
                 { label: 'Nom', name: 'nom', type: 'text', placeholder: 'Votre nom' },
                 { label: 'Email', name: 'email', type: 'email', placeholder: '', disabled: true },
-                { label: 'Téléphone', name: 'telephone', type: 'tel', placeholder: '+229 XX XX XX XX' },
-                { label: 'WhatsApp', name: 'whatsapp', type: 'tel', placeholder: '+229 XX XX XX XX' },
+                { label: 'Téléphone', name: 'telephone', type: 'tel', placeholder: '+229 XX XX XX XX XX' },
+                { label: 'WhatsApp', name: 'whatsapp', type: 'tel', placeholder: '+229 XX XX XX XX XX' },
                 { label: 'Ville', name: 'ville', type: 'text', placeholder: 'Cotonou' },
               ].map(f => (
                 <div key={f.name}>

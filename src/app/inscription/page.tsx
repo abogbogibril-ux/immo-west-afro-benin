@@ -227,7 +227,7 @@ export default function InscriptionPage() {
 
               <div>
                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Telephone WhatsApp *</label>
-                <input name="telephone" type="tel" required placeholder="+229 XX XX XX XX"
+                <input name="telephone" type="tel" required placeholder="+229 XX XX XX XX XX"
                   value={form.telephone} onChange={handleChange}
                   className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-green-400/30"/>
               </div>

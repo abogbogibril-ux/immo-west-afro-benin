@@ -34,7 +34,7 @@ export default function DeposerPage() {
       setErreur('Veuillez remplir les champs obligatoires : type de bien, ville et téléphone.')
       return
     }
-    if (form.telephone.replace(/\D/g, '').length < 8) {
+    if (form.telephone.replace(/\D/g, '').length < 10) {
       setErreur('Numéro de téléphone invalide.')
       return
     }
@@ -230,7 +230,7 @@ export default function DeposerPage() {
                     Téléphone *
                   </label>
                   <input type="tel" name="telephone" value={form.telephone} onChange={handleChange}
-                    placeholder="+229 XX XX XX XX"
+                    placeholder="+229 XX XX XX XX XX"
                     className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50"/>
                 </div>
               </div>

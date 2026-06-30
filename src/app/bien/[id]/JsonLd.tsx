@@ -1,4 +1,4 @@
-interface Props {
+﻿interface Props {
   bien: {
     id: string
     titre: string
@@ -110,7 +110,7 @@ export default function JsonLd({ bien }: Props) {
     name: 'Immo West Afro Bénin',
     url: baseUrl,
     logo: `${baseUrl}/favicon.ico`,
-    telephone: '+229 XX XX XX XX',
+    telephone: '+229 XX XX XX XX XX',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Cotonou',

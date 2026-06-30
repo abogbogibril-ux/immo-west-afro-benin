@@ -129,14 +129,14 @@ export default function Footer() {
                 f
               </a>
               <a
-                href="tel:+22901961377 20"
+                href="tel:+22901961377"
                 aria-label="T&eacute;l&eacute;phone"
                 style={styleSocial}
               >
                 📞
               </a>
               <a
-                href="mailto:calavi_immo@immowestafro.com"
+                href="mailto:abogbogibril@gmail.com"
                 aria-label="Email"
                 style={styleSocial}
               >
@@ -218,14 +218,14 @@ export default function Footer() {
               }}
             >
               <p>📍 Abomey-Calavi, B&eacute;nin</p>
-              <a href="tel:+22901961377 20" style={styleLien}>
+              <a href="tel:+22901961377" style={styleLien}>
                 📞 +229 01 96 13 77 20
               </a>
               <a
-                href="mailto:calavi_immo@immowestafro.com"
+                href="mailto:abogbogibril@gmail.com"
                 style={{ ...styleLien, wordBreak: 'break-all' }}
               >
-                ✉️ calavi_immo@immowestafro.com
+                ✉️ abogbogibril@gmail.com
               </a>
             </div>
           </div>
