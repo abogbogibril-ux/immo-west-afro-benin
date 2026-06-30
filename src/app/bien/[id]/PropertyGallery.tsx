@@ -1,6 +1,7 @@
-'use client'
+﻿'use client'
 
 import { useState, useCallback, useEffect } from 'react'
+import ReportButton from './ReportButton'
 
 interface Photo {
   id: string
@@ -12,9 +13,10 @@ interface Photo {
 interface Props {
   images: Photo[]
   titre: string
+  bienId?: string
 }
 
-export default function PropertyGallery({ images, titre }: Props) {
+export default function PropertyGallery({ images, titre, bienId }: Props) {
   const [current, setCurrent] = useState(0)
   const [lightbox, setLightbox] = useState(false)
   const [lbIndex, setLbIndex] = useState(0)
@@ -84,6 +86,7 @@ export default function PropertyGallery({ images, titre }: Props) {
               📷 {current + 1} / {images.length}
             </span>
           </div>
+          {bienId && <ReportButton bienId={bienId} floating />}
           {images.length > 1 && (
             <>
               <button onClick={e => { e.stopPropagation(); go(current - 1) }}

@@ -13,7 +13,7 @@ const MOTIFS = [
   'Autre',
 ]
 
-export default function ReportButton({ bienId }: { bienId: string }) {
+export default function ReportButton({ bienId, floating = false }: { bienId: string; floating?: boolean }) {
   const [open, setOpen] = useState(false)
   const [motif, setMotif] = useState('')
   const [description, setDescription] = useState('')
@@ -60,16 +60,30 @@ export default function ReportButton({ bienId }: { bienId: string }) {
 
   return (
     <>
-      <button
-        onClick={() => setOpen(true)}
-        className="flex items-center gap-1.5 text-gray-400 hover:text-red-500 text-xs font-medium transition-colors"
-      >
-        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-            d="M3 3v18h2v-7h4.5l.5 1h7V5h-7l-.5-1H5V3H3z"/>
-        </svg>
-        Signaler cette annonce
-      </button>
+      {floating ? (
+        <button
+          onClick={(e) => { e.stopPropagation(); setOpen(true) }}
+          className="absolute bottom-3 right-3 w-9 h-9 bg-black/55 hover:bg-red-500/90 backdrop-blur-sm text-white rounded-full flex items-center justify-center transition-all z-10"
+          aria-label="Signaler cette annonce"
+          title="Signaler cette annonce"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+              d="M3 3v18h2v-7h4.5l.5 1h7V5h-7l-.5-1H5V3H3z"/>
+          </svg>
+        </button>
+      ) : (
+        <button
+          onClick={() => setOpen(true)}
+          className="flex items-center gap-1.5 text-gray-400 hover:text-red-500 text-xs font-medium transition-colors"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+              d="M3 3v18h2v-7h4.5l.5 1h7V5h-7l-.5-1H5V3H3z"/>
+          </svg>
+          Signaler cette annonce
+        </button>
+      )}
 
       {open && (
         <div

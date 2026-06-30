@@ -121,7 +121,7 @@ export default async function BienDetailPage({ params }: Props) {
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] xl:grid-cols-[1fr_380px] gap-5 lg:gap-6">
-            <PropertyGallery images={images} titre={bien.titre} />
+            <PropertyGallery images={images} titre={bien.titre} bienId={params.id} />
             <AgentContactCard
               prix={bien.prix}
               transaction={bien.transaction}
@@ -293,9 +293,6 @@ export default async function BienDetailPage({ params }: Props) {
                   <span>Vues</span>
                   <span className="text-gray-600">{bien.vues ?? 0}</span>
                 </div>
-              </div>
-              <div className="text-center">
-                <ReportButton bienId={params.id} />
               </div>
             </div>
           </div>
