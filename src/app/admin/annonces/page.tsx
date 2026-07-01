@@ -194,35 +194,13 @@ export default function AdminAnnoncesPage() {
                   </svg>
                 </Link>
 
-                {/* Publier */}
-                {b.statut !== 'publié' && (
-                  <button onClick={() => changerStatut(b.id, 'publié')}
-                    title="Publier"
-                    className="p-2 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 transition-colors">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                  </button>
-                )}
-
-                {/* Depublier / Archiver */}
+                {/* Depublier / Archiver — visible seulement si publie */}
                 {b.statut === 'publié' && (
                   <button onClick={() => changerStatut(b.id, 'archivé')}
                     title="Depublier (archiver)"
                     className="p-2 rounded-lg text-gray-400 hover:text-amber-600 hover:bg-amber-50 transition-colors">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
-                    </svg>
-                  </button>
-                )}
-
-                {/* Mettre en brouillon */}
-                {b.statut === 'archivé' && (
-                  <button onClick={() => changerStatut(b.id, 'brouillon')}
-                    title="Remettre en brouillon"
-                    className="p-2 rounded-lg text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 transition-colors">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                     </svg>
                   </button>
                 )}
