@@ -338,56 +338,59 @@ export default function AdminPage() {
 
         {/* BESOINS */}
         {onglet === 'besoins' && (
-          <div style={{ backgroundColor: '#1e293b', borderRadius: '12px', overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px' }}>
-              <thead>
-                <tr style={{ backgroundColor: '#0f172a' }}>
-                  {['Type', 'Ville', 'Budget', 'Contact', 'Description', 'Statut', 'Action'].map(h => (
-                    <th key={h} style={{ padding: '0.6rem 0.75rem', color: '#94a3b8', textAlign: 'left', fontSize: '0.75rem', whiteSpace: 'nowrap' }}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {besoins.map((b) => (
-                  <tr key={b.id} style={{ borderTop: '1px solid #334155' }}>
-                    <td style={{ padding: '1rem', color: '#fff' }}>
-                      {b.type_besoin}<br/>
-                      <span style={{ color: '#94a3b8', fontSize: '0.75rem' }}>{b.transaction}</span>
-                    </td>
-                    <td style={{ padding: '1rem', color: '#cbd5e1' }}>{b.ville}</td>
-                    <td style={{ padding: '1rem', color: '#10b981', fontSize: '0.8rem' }}>
-                      {b.budget_min ? `${b.budget_min.toLocaleString()}` : '?'} - {b.budget_max ? `${b.budget_max.toLocaleString()} FCFA` : '?'}
-                    </td>
-                    <td style={{ padding: '1rem', color: '#cbd5e1' }}>
-                      {b.nom || 'Anonyme'}<br/>
-                      <a href={`tel:${b.telephone}`} style={{ color: '#00bcd4', fontSize: '0.8rem' }}>{b.telephone}</a>
-                    </td>
-                    <td style={{ padding: '1rem', color: '#94a3b8', fontSize: '0.8rem', maxWidth: '220px' }}>
-                      {b.description || '-'}
-                    </td>
-                    <td style={{ padding: '1rem' }}>
-                      <select value={b.statut} onChange={e => changerStatutBesoin(b.id, e.target.value)} style={{
-                        backgroundColor: b.statut === 'nouveau' ? '#0891b2' : b.statut === 'traite' ? '#059669' : '#6b7280',
-                        color: '#fff', border: 'none', borderRadius: '6px', padding: '0.3rem 0.5rem', fontSize: '0.75rem',
-                      }}>
-                        <option value="nouveau">Nouveau</option>
-                        <option value="en_cours">En cours</option>
-                        <option value="traite">Traité</option>
-                      </select>
-                    </td>
-                    <td style={{ padding: '1rem' }}>
-                      <button onClick={() => supprimerBesoin(b.id)} style={{
-                        padding: '0.4rem 0.75rem', backgroundColor: '#ef4444', color: '#fff',
-                        border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem',
-                      }}>Suppr.</button>
-                    </td>
+          <div style={{ overflowX: 'auto' }}>
+            <div style={{ backgroundColor: '#1e293b', borderRadius: '12px', overflow: 'hidden' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '400px' }}>
+                <thead>
+                  <tr style={{ backgroundColor: '#0f172a' }}>
+                    {['Type', 'Ville', 'Contact', 'Statut', 'Actions'].map(h => (
+                      <th key={h} style={{ padding: '0.6rem 0.75rem', color: '#94a3b8', textAlign: 'left', fontSize: '0.75rem', whiteSpace: 'nowrap' }}>{h}</th>
+                    ))}
                   </tr>
-                ))}
-                {besoins.length === 0 && (
-                  <tr><td colSpan={7} style={{ padding: '2rem', textAlign: 'center', color: '#475569' }}>Aucun besoin déposé</td></tr>
-                )}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {besoins.map((b) => (
+                    <tr key={b.id} style={{ borderTop: '1px solid #334155' }}>
+                      <td style={{ padding: '0.6rem 0.75rem', color: '#fff', fontSize: '0.82rem', whiteSpace: 'nowrap' }}>
+                        <span style={{ textTransform: 'capitalize' }}>{b.type_besoin}</span>
+                        <br/>
+                        <span style={{ color: '#94a3b8', fontSize: '0.7rem', textTransform: 'capitalize' }}>{b.transaction}</span>
+                      </td>
+                      <td style={{ padding: '0.6rem 0.75rem', color: '#cbd5e1', fontSize: '0.82rem', whiteSpace: 'nowrap' }}>{b.ville || '-'}</td>
+                      <td style={{ padding: '0.6rem 0.75rem', color: '#cbd5e1', fontSize: '0.8rem' }}>
+                        <span style={{ display: 'block' }}>{b.nom || 'Anonyme'}</span>
+                        <a href={'tel:' + b.telephone} style={{ color: '#00bcd4', fontSize: '0.75rem' }}>{b.telephone}</a>
+                      </td>
+                      <td style={{ padding: '0.6rem 0.75rem' }}>
+                        <select value={b.statut} onChange={e => changerStatutBesoin(b.id, e.target.value)} style={{
+                          backgroundColor: b.statut === 'nouveau' ? '#0891b2' : b.statut === 'traite' ? '#059669' : '#6b7280',
+                          color: '#fff', border: 'none', borderRadius: '6px', padding: '0.25rem 0.4rem', fontSize: '0.7rem', cursor: 'pointer',
+                        }}>
+                          <option value="nouveau">Nouveau</option>
+                          <option value="en_cours">En cours</option>
+                          <option value="traite">Traite</option>
+                        </select>
+                      </td>
+                      <td style={{ padding: '0.6rem 0.75rem' }}>
+                        <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+                          <a href={'/besoins/' + b.id} target="_blank" title="Voir le besoin"
+                            style={{ padding: '0.35rem', backgroundColor: '#1e40af20', color: '#60a5fa', borderRadius: '6px', display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                          </a>
+                          <button onClick={() => supprimerBesoin(b.id)} title="Supprimer"
+                            style={{ padding: '0.35rem', backgroundColor: '#fee2e210', color: '#ef4444', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {besoins.length === 0 && (
+                    <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: '#475569' }}>Aucun besoin depose</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 

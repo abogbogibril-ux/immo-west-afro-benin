@@ -68,6 +68,7 @@ export default function Navbar() {
   const NAV_LINKS = [
     { href: '/', label: 'Accueil' },
     { href: '/recherche', label: 'Annonces' },
+    { href: '/besoins', label: 'Besoins' },
     { href: '/a-propos', label: 'A propos' },
     { href: '/contact', label: 'Contact' },
   ]

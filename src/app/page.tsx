@@ -1,6 +1,16 @@
 ﻿export const dynamic = 'force-dynamic'
 import { createClient } from '@supabase/supabase-js'
 
+async function getBesoinsRecents() {
+  const supabase = createServerClient()
+  const { data } = await supabase
+    .from('besoins')
+    .select('id, type_besoin, transaction, ville, budget_min, budget_max, created_at')
+    .order('created_at', { ascending: false })
+    .limit(3)
+  return data || []
+}
+
 function createServerClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -299,6 +309,72 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* BESOINS RECENTS */}
+      {besoinsRecents.length > 0 && (
+        <section className="py-10 md:py-14 bg-blue-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Besoins immobiliers</h2>
+                <p className="text-gray-500 text-sm mt-1">Des acheteurs et locataires recherchent activement</p>
+              </div>
+              <a href="/besoins" className="text-green-600 font-semibold text-sm hover:underline flex items-center gap-1">
+                Voir tous
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
+                </svg>
+              </a>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {besoinsRecents.map((b: any) => (
+                <a key={b.id} href={`/besoins/${b.id}`}
+                  className="bg-white rounded-2xl border border-blue-100 shadow-sm p-5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col gap-3">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-lg capitalize">
+                      {b.transaction === 'location' ? 'Cherche a louer' : 'Cherche a acheter'}
+                    </span>
+                    <span className="bg-gray-100 text-gray-600 text-xs font-medium px-2.5 py-1 rounded-lg capitalize">
+                      {b.type_besoin}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-gray-700">
+                    <svg className="w-4 h-4 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    </svg>
+                    <span className="font-semibold text-sm">{b.ville || 'Ville non precisee'}</span>
+                  </div>
+                  {(b.budget_min || b.budget_max) && (
+                    <p className="text-green-600 font-semibold text-sm">
+                      {b.budget_min && b.budget_max
+                        ? `${new Intl.NumberFormat('fr-FR').format(b.budget_min)} - ${new Intl.NumberFormat('fr-FR').format(b.budget_max)} FCFA`
+                        : b.budget_max
+                        ? `Max ${new Intl.NumberFormat('fr-FR').format(b.budget_max)} FCFA`
+                        : `Min ${new Intl.NumberFormat('fr-FR').format(b.budget_min)} FCFA`
+                      }
+                    </p>
+                  )}
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-50 mt-auto">
+                    <span className="text-xs text-gray-400">{new Date(b.created_at).toLocaleDateString('fr-FR')}</span>
+                    <span className="text-xs text-green-600 font-semibold flex items-center gap-1">
+                      Voir details
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
+                      </svg>
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+            <div className="text-center mt-8">
+              <a href="/deposer"
+                className="inline-flex items-center gap-2 bg-green-600 text-white font-bold text-sm px-6 py-3 rounded-xl hover:bg-green-700 transition-colors">
+                Deposer mon besoin gratuitement
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
 
     </div>
   )
