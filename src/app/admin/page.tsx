@@ -236,12 +236,12 @@ export default function AdminPage() {
 
         {/* UTILISATEURS */}
         {onglet === 'utilisateurs' && (
-          <div style={{ backgroundColor: '#1e293b', borderRadius: '12px', overflow: 'hidden' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <div style={{ backgroundColor: '#1e293b', borderRadius: '12px', overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px' }}>
               <thead>
                 <tr style={{ backgroundColor: '#0f172a' }}>
-                  {['Nom', 'Email', 'Rôle', 'Téléphone', 'Action'].map(h => (
-                    <th key={h} style={{ padding: '1rem', color: '#94a3b8', textAlign: 'left', fontSize: '0.85rem' }}>{h}</th>
+                  {['Nom', 'Email', 'Rôle', 'Tél', 'Action'].map(h => (
+                    <th key={h} style={{ padding: '0.6rem 0.75rem', color: '#94a3b8', textAlign: 'left', fontSize: '0.75rem', whiteSpace: 'nowrap' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -261,9 +261,7 @@ export default function AdminPage() {
                     <td style={{ padding: '1rem' }}>
                       {u.role !== 'admin' && (
                         <button onClick={() => supprimerUtilisateur(u.id)} style={{
-                          padding: '0.4rem 0.75rem', backgroundColor: '#ef4444', color: '#fff',
-                          border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem',
-                        }}>Supprimer</button>
+                          padding: '0.35rem', backgroundColor: '#fee2e2', color: '#ef4444', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex' }}><svg width='14' height='14' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'/></svg></button>
                       )}
                     </td>
                   </tr>
@@ -290,12 +288,12 @@ export default function AdminPage() {
                 }}>{f.label}</button>
               ))}
             </div>
-            <div style={{ backgroundColor: '#1e293b', borderRadius: '12px', overflow: 'hidden' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <div style={{ backgroundColor: '#1e293b', borderRadius: '12px', overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px' }}>
                 <thead>
                   <tr style={{ backgroundColor: '#0f172a' }}>
                     {['Titre', 'Agent', 'Ville', 'Prix', 'Statut', 'Action'].map(h => (
-                      <th key={h} style={{ padding: '1rem', color: '#94a3b8', textAlign: 'left', fontSize: '0.85rem' }}>{h}</th>
+                      <th key={h} style={{ padding: '0.6rem 0.75rem', color: '#94a3b8', textAlign: 'left', fontSize: '0.75rem', whiteSpace: 'nowrap' }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -318,20 +316,14 @@ export default function AdminPage() {
                       <td style={{ padding: '1rem', display: 'flex', gap: '0.4rem' }}>
                         {b.statut === 'brouillon' && (
                           <button onClick={() => changerStatutBien(b.id, 'publié')} style={{
-                            padding: '0.4rem 0.75rem', backgroundColor: '#059669', color: '#fff',
-                            border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem',
-                          }}>Publier</button>
+                            padding: '0.35rem', backgroundColor: '#dcfce7', color: '#059669', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex' }}><svg width='14' height='14' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'/></svg></button>
                         )}
                         {b.statut === 'publié' && (
                           <button onClick={() => changerStatutBien(b.id, 'brouillon')} style={{
-                            padding: '0.4rem 0.75rem', backgroundColor: '#d97706', color: '#fff',
-                            border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem',
-                          }}>Dépublier</button>
+                            padding: '0.35rem', backgroundColor: '#fef9c3', color: '#d97706', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex' }}><svg width='14' height='14' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4'/></svg></button>
                         )}
                         <button onClick={() => supprimerBien(b.id)} style={{
-                          padding: '0.4rem 0.75rem', backgroundColor: '#ef4444', color: '#fff',
-                          border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem',
-                        }}>Suppr.</button>
+                          padding: '0.35rem', backgroundColor: '#fee2e2', color: '#ef4444', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex' }}><svg width='14' height='14' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'/></svg></button>
                       </td>
                     </tr>
                   ))}
@@ -346,12 +338,12 @@ export default function AdminPage() {
 
         {/* BESOINS */}
         {onglet === 'besoins' && (
-          <div style={{ backgroundColor: '#1e293b', borderRadius: '12px', overflow: 'hidden' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <div style={{ backgroundColor: '#1e293b', borderRadius: '12px', overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px' }}>
               <thead>
                 <tr style={{ backgroundColor: '#0f172a' }}>
                   {['Type', 'Ville', 'Budget', 'Contact', 'Description', 'Statut', 'Action'].map(h => (
-                    <th key={h} style={{ padding: '1rem', color: '#94a3b8', textAlign: 'left', fontSize: '0.85rem' }}>{h}</th>
+                    <th key={h} style={{ padding: '0.6rem 0.75rem', color: '#94a3b8', textAlign: 'left', fontSize: '0.75rem', whiteSpace: 'nowrap' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -401,12 +393,12 @@ export default function AdminPage() {
 
         {/* SIGNALEMENTS */}
         {onglet === 'signalements' && (
-          <div style={{ backgroundColor: '#1e293b', borderRadius: '12px', overflow: 'hidden' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <div style={{ backgroundColor: '#1e293b', borderRadius: '12px', overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px' }}>
               <thead>
                 <tr style={{ backgroundColor: '#0f172a' }}>
                   {['Bien', 'Motif', 'Description', 'Email', 'Statut', 'Action'].map(h => (
-                    <th key={h} style={{ padding: '1rem', color: '#94a3b8', textAlign: 'left', fontSize: '0.85rem' }}>{h}</th>
+                    <th key={h} style={{ padding: '0.6rem 0.75rem', color: '#94a3b8', textAlign: 'left', fontSize: '0.75rem', whiteSpace: 'nowrap' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
