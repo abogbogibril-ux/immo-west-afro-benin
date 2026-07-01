@@ -117,14 +117,24 @@ export default function InscriptionPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7"/>
             </svg>
           </div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Compte cree avec succes !</h2>
-          <p className="text-gray-500 text-sm mb-2">Bienvenue sur Immo West Afro.</p>
-          <p className="text-gray-400 text-xs mb-6">
-            Vous pouvez maintenant publier vos biens et gerer vos annonces.
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Verifiez votre email !</h2>
+          <p className="text-gray-600 text-sm mb-2">
+            Un email de confirmation a ete envoye a <span className="font-semibold text-gray-900">{form.email}</span>
           </p>
+          <p className="text-gray-400 text-xs mb-6">
+            Cliquez sur le lien dans l email pour activer votre compte. Verifiez aussi vos spams.
+          </p>
+          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6 text-left">
+            <p className="text-xs text-blue-700 font-semibold mb-1">Apres confirmation :</p>
+            <ul className="text-xs text-blue-600 space-y-1">
+              <li>Connectez-vous avec votre email et mot de passe</li>
+              <li>Publiez vos premieres annonces</li>
+              <li>Gerez vos biens depuis votre dashboard</li>
+            </ul>
+          </div>
           <Link href="/connexion"
             className="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white font-bold text-sm rounded-xl hover:bg-green-700 transition-colors">
-            Se connecter
+            Aller a la page de connexion
           </Link>
         </div>
       </div>
