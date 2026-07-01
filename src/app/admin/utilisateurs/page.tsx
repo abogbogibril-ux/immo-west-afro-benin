@@ -150,14 +150,28 @@ export default function UtilisateursAdmin() {
                   </td>
                   <td style={{ padding: '1rem' }}>
                     {u.role !== 'admin' && (
-                      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+                      <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+                        {/* Suspendre / Reactiver */}
                         <button onClick={() => toggleSuspendre(u.id, u.suspendu, u.nom_complet || u.email)}
-                          style={{ padding: '0.35rem 0.65rem', backgroundColor: u.suspendu ? '#dcfce7' : '#fef9c3', color: u.suspendu ? '#16a34a' : '#ca8a04', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: '600', whiteSpace: 'nowrap' }}>
-                          {u.suspendu ? 'Reactiver' : 'Suspendre'}
+                          title={u.suspendu ? 'Reactiver le compte' : 'Suspendre le compte'}
+                          style={{ padding: '0.4rem', backgroundColor: u.suspendu ? '#dcfce7' : '#fef9c3', color: u.suspendu ? '#16a34a' : '#ca8a04', border: 'none', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          {u.suspendu ? (
+                            <svg width='16' height='16' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'/>
+                            </svg>
+                          ) : (
+                            <svg width='16' height='16' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z'/>
+                            </svg>
+                          )}
                         </button>
+                        {/* Supprimer */}
                         <button onClick={() => supprimerUser(u.id, u.nom_complet || u.email)}
-                          style={{ padding: '0.35rem 0.65rem', backgroundColor: '#fee2e2', color: '#ef4444', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: '600', whiteSpace: 'nowrap' }}>
-                          Supprimer
+                          title='Supprimer definitivement'
+                          style={{ padding: '0.4rem', backgroundColor: '#fee2e2', color: '#ef4444', border: 'none', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <svg width='16' height='16' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'/>
+                          </svg>
                         </button>
                       </div>
                     )}
