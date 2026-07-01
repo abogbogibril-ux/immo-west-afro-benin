@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
@@ -80,6 +80,8 @@ export default function AnnoncesPage() {
   }
 
   const handleArchive = async (id: string, currentStatut: string) => {
+    const action = currentStatut === 'publi\u00e9' ? 'archiver' : 'republier'
+    if (!confirm("Etes-vous sur de vouloir " + action + " cette annonce ?")) return
     const newStatut = currentStatut === 'publié' ? 'archivé' : 'publié'
     const { error } = await supabase.from('biens').update({ statut: newStatut }).eq('id', id)
     if (!error) {
