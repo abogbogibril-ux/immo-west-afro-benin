@@ -137,14 +137,14 @@ export default function AdminAnnoncesPage() {
           placeholder="Titre, ville ou reference..."
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="flex-1 min-w-36 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/30"
+          className="flex-1 min-w-36 px-3 py-2 border border-[#334155] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/30 bg-[#0f172a] text-white"
         />
         <select value={filtreStatut} onChange={e => setFiltreStatut(e.target.value)}
-          className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none bg-white min-w-32">
+          className="px-3 py-2 border border-[#334155] rounded-lg text-sm focus:outline-none bg-[#0f172a] text-white min-w-32">
           {STATUTS.map(s => <option key={s} value={s}>{s === 'Tous' ? 'Tous statuts' : s}</option>)}
         </select>
         <select value={tri} onChange={e => setTri(e.target.value)}
-          className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none bg-white min-w-36">
+          className="px-3 py-2 border border-[#334155] rounded-lg text-sm focus:outline-none bg-[#0f172a] text-white min-w-36">
           {TRIS.map(t => <option key={t.val} value={t.val}>{t.label}</option>)}
         </select>
       </div>
@@ -157,7 +157,7 @@ export default function AdminAnnoncesPage() {
       ) : (
         <div className="space-y-2">
           {biensFiltres.map(b => (
-            <div key={b.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-3 md:p-4 flex items-center gap-3 flex-wrap">
+            <div key={b.id} className="bg-[#1e293b] rounded-xl border border-[#334155] shadow-sm p-3 md:p-4 flex items-center gap-3 flex-wrap">
 
               {/* Ref + Statut */}
               <div className="flex items-center gap-2 flex-shrink-0">
@@ -171,8 +171,8 @@ export default function AdminAnnoncesPage() {
 
               {/* Infos principales */}
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-gray-900 text-sm truncate">{b.titre}</p>
-                <p className="text-xs text-gray-400 flex flex-wrap gap-2 mt-0.5">
+                <p className="font-semibold text-white text-sm truncate">{b.titre}</p>
+                <p className="text-xs text-slate-400 flex flex-wrap gap-2 mt-0.5">
                   <span>{b.ville || '-'}</span>
                   <span className="capitalize">{b.type_bien} · {b.transaction}</span>
                   <span className="text-green-600 font-medium">{b.prix ? new Intl.NumberFormat('fr-FR').format(b.prix) + ' FCFA' : '-'}</span>

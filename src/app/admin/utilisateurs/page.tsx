@@ -75,7 +75,7 @@ export default function UtilisateursAdmin() {
       )}
 
       <div style={{ marginBottom: '1.5rem' }}>
-        <h1 style={{ color: '#0f172a', fontSize: '1.5rem', fontWeight: '800', margin: 0 }}>Gestion des utilisateurs</h1>
+        <h1 style={{ color: '#fff', fontSize: '1.5rem', fontWeight: '800', margin: 0 }}>Gestion des utilisateurs</h1>
         <p style={{ color: '#64748b', margin: '0.25rem 0 0' }}>{users.length} utilisateur(s) enregistre(s)</p>
       </div>
 
@@ -88,7 +88,7 @@ export default function UtilisateursAdmin() {
           { label: 'Clients', value: stats.clients, color: '#1d4ed8', bg: '#eff6ff' },
           { label: 'Suspendus', value: stats.suspendus, color: '#ef4444', bg: '#fef2f2' },
         ].map(s => (
-          <div key={s.label} style={{ backgroundColor: s.bg, borderRadius: '10px', padding: '1rem', textAlign: 'center', border: '1px solid ' + s.color + '20' }}>
+          <div key={s.label} style={{ backgroundColor: '#1e293b', borderRadius: '10px', padding: '1rem', textAlign: 'center', border: '1px solid ' + s.color + '40' }}>
             <div style={{ color: s.color, fontSize: '1.8rem', fontWeight: '800' }}>{s.value}</div>
             <div style={{ color: '#64748b', fontSize: '0.8rem', marginTop: '0.2rem' }}>{s.label}</div>
           </div>
@@ -96,14 +96,14 @@ export default function UtilisateursAdmin() {
       </div>
 
       {/* FILTRES */}
-      <div style={{ backgroundColor: '#fff', borderRadius: '12px', padding: '1.25rem', marginBottom: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      <div style={{ backgroundColor: '#1e293b', borderRadius: '12px', padding: '1.25rem', marginBottom: '1.5rem', boxShadow: '0 4px 12px rgba(0,0,0,0.3)', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         <input
           value={recherche} onChange={e => setRecherche(e.target.value)}
           placeholder="Rechercher par nom ou email..."
-          style={{ flex: 1, minWidth: '200px', padding: '0.6rem 1rem', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '0.9rem', outline: 'none' }}
+          style={{ flex: 1, minWidth: '200px', padding: '0.6rem 1rem', border: '1px solid #334155', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', backgroundColor: '#0f172a', color: '#fff' }}
         />
         <select value={filtreRole} onChange={e => setFiltreRole(e.target.value)}
-          style={{ padding: '0.6rem 1rem', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', color: '#374151' }}>
+          style={{ padding: '0.6rem 1rem', border: '1px solid #334155', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', color: '#fff', backgroundColor: '#0f172a' }}>
           <option value="">Tous les roles</option>
           {ROLES.map(r => <option key={r} value={r}>{r}</option>)}
         </select>
@@ -113,10 +113,10 @@ export default function UtilisateursAdmin() {
       {loading ? (
         <div style={{ textAlign: 'center', padding: '4rem', color: '#94a3b8' }}>Chargement...</div>
       ) : (
-        <div style={{ backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', overflowX: 'auto' }}>
+        <div style={{ backgroundColor: '#1e293b', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.3)', overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '700px' }}>
             <thead>
-              <tr style={{ backgroundColor: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
+              <tr style={{ backgroundColor: '#0f172a', borderBottom: '2px solid #334155' }}>
                 {['Avatar', 'Nom', 'Email', 'Telephone', 'Role', 'Inscription', 'Actions'].map(h => (
                   <th key={h} style={{ padding: '1rem', color: '#64748b', textAlign: 'left', fontSize: '0.8rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>{h}</th>
                 ))}
@@ -124,7 +124,7 @@ export default function UtilisateursAdmin() {
             </thead>
             <tbody>
               {usersFiltres.map((u) => (
-                <tr key={u.id} style={{ borderBottom: '1px solid #f1f5f9', opacity: u.suspendu ? 0.7 : 1 }}>
+                <tr key={u.id} style={{ borderBottom: '1px solid #334155', opacity: u.suspendu ? 0.7 : 1 }}>
                   <td style={{ padding: '1rem' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: (ROLE_COLORS[u.role] || '#64748b') + '20', display: 'flex', alignItems: 'center', justifyContent: 'center', color: ROLE_COLORS[u.role] || '#64748b', fontWeight: '700', fontSize: '1rem' }}>
                       {(u.nom_complet || u.email || '?')[0].toUpperCase()}
@@ -132,7 +132,7 @@ export default function UtilisateursAdmin() {
                   </td>
                   <td style={{ padding: '1rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                      <p style={{ color: '#0f172a', fontWeight: '600', margin: 0, fontSize: '0.9rem' }}>{u.nom_complet || 'Sans nom'}</p>
+                      <p style={{ color: '#fff', fontWeight: '600', margin: 0, fontSize: '0.9rem' }}>{u.nom_complet || 'Sans nom'}</p>
                       {u.suspendu && <span style={{ backgroundColor: '#fee2e2', color: '#ef4444', fontSize: '0.65rem', fontWeight: '700', padding: '1px 6px', borderRadius: '999px' }}>SUSPENDU</span>}
                     </div>
                     {u.nom_agence && <p style={{ color: '#94a3b8', fontSize: '0.75rem', margin: '0.2rem 0 0' }}>{u.nom_agence}</p>}

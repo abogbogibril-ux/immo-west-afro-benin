@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
@@ -50,7 +50,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   )
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f1f5f9' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#0f172a' }}>
 
       {/* SIDEBAR */}
       <aside style={{
@@ -122,7 +122,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           position: 'sticky', top: 0, zIndex: 100,
         }}>
-          <div style={{ color: '#0f172a', fontWeight: '600', fontSize: '1rem' }}>
+          <div style={{ color: '#fff', fontWeight: '600', fontSize: '1rem' }}>
             {menuItems.find(m => m.href === pathname)?.icon}{' '}
             {menuItems.find(m => m.href === pathname)?.label || 'Admin'}
           </div>

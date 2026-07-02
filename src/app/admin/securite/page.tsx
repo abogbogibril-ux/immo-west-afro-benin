@@ -39,7 +39,7 @@ export default function SecuriteAdmin() {
       )}
 
       <div style={{ marginBottom: '1.5rem' }}>
-        <h1 style={{ color: '#0f172a', fontSize: '1.5rem', fontWeight: '800', margin: 0 }}>Securite</h1>
+        <h1 style={{ color: '#fff', fontSize: '1.5rem', fontWeight: '800', margin: 0 }}>Securite</h1>
         <p style={{ color: '#64748b', margin: '0.25rem 0 0' }}>Gestion des acces et de la securite du compte admin</p>
       </div>
 
@@ -77,8 +77,8 @@ export default function SecuriteAdmin() {
             { label: 'Row Level Security (RLS)', status: 'Active', ok: true },
             { label: 'Protection admin par role', status: 'Active', ok: true },
           ].map(item => (
-            <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem', backgroundColor: '#f8fafc', borderRadius: '8px', marginBottom: '0.5rem' }}>
-              <span style={{ color: '#374151', fontSize: '0.875rem' }}>{item.label}</span>
+            <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem', backgroundColor: '#0f172a', borderRadius: '8px', marginBottom: '0.5rem' }}>
+              <span style={{ color: '#cbd5e1', fontSize: '0.875rem' }}>{item.label}</span>
               <span style={{ backgroundColor: '#dcfce7', color: '#16a34a', padding: '0.2rem 0.6rem', borderRadius: '999px', fontSize: '0.75rem', fontWeight: '600' }}>
                 Active
               </span>
@@ -87,7 +87,7 @@ export default function SecuriteAdmin() {
           {/* 2FA */}
           <div style={{ padding: '0.75rem', backgroundColor: '#fef3c7', borderRadius: '8px', marginBottom: '0.5rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ color: '#374151', fontSize: '0.875rem' }}>Double authentification (2FA)</span>
+              <span style={{ color: '#cbd5e1', fontSize: '0.875rem' }}>Double authentification (2FA)</span>
               <span style={{ backgroundColor: '#fef3c7', color: '#d97706', padding: '0.2rem 0.6rem', borderRadius: '999px', fontSize: '0.75rem', fontWeight: '600' }}>
                 Non configure
               </span>
@@ -116,7 +116,7 @@ export default function SecuriteAdmin() {
   )
 }
 
-const cardStyle: React.CSSProperties = { backgroundColor: '#fff', borderRadius: '12px', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }
-const sectionTitle: React.CSSProperties = { color: '#0f172a', fontSize: '1rem', fontWeight: '700', marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f1f5f9' }
-const labelStyle: React.CSSProperties = { display: 'block', color: '#374151', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.4rem' }
-const inputStyle: React.CSSProperties = { width: '100%', padding: '0.6rem 0.75rem', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', color: '#0f172a', fontSize: '0.875rem', outline: 'none', boxSizing: 'border-box' }
+const cardStyle: React.CSSProperties = { backgroundColor: '#1e293b', borderRadius: '12px', padding: '1.5rem', boxShadow: '0 4px 12px rgba(0,0,0,0.3)' }
+const sectionTitle: React.CSSProperties = { color: '#fff', fontSize: '1rem', fontWeight: '700', marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #334155' }
+const labelStyle: React.CSSProperties = { display: 'block', color: '#94a3b8', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.4rem' }
+const inputStyle: React.CSSProperties = { width: '100%', padding: '0.6rem 0.75rem', backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '8px', color: '#fff', fontSize: '0.875rem', outline: 'none', boxSizing: 'border-box' }
