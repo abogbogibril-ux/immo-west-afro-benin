@@ -316,6 +316,9 @@ export default function RecherchePage() {
                   {biens.map((bien, i) => (
                     <BienCard key={bien.id} bien={bien} priority={i < 3} />
                   ))}
+                  {page === 1 && besoins.map((b: any) => (
+                    <BesoinCard key={b.id} besoin={b} />
+                  ))}
                 </div>
 
                 {/* Pagination */}
