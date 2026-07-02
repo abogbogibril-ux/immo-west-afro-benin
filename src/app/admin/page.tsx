@@ -38,6 +38,7 @@ export default function AdminPage() {
     loadUtilisateurs()
     loadBiens()
     loadBesoins()
+    loadSignalements()
   }
 
   const loadStats = async () => {
@@ -140,6 +141,7 @@ export default function AdminPage() {
   const changerStatutBesoin = async (id: string, nouveauStatut: string) => {
     await supabase.from('besoins').update({ statut: nouveauStatut }).eq('id', id)
     loadBesoins()
+    loadSignalements()
   }
 
   const handleLogout = async () => {
