@@ -1,6 +1,7 @@
 ﻿'use client'
 
 import Link from 'next/link'
+import { useFavoris } from '@/hooks/useFavoris'
 import OptimizedImage from './OptimizedImage'
 
 interface Props {
