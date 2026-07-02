@@ -158,8 +158,8 @@ export default function Navbar() {
             ) : (
               <div className="hidden sm:flex items-center gap-2">
                 <Link href="/inscription"
-                  className="px-3 py-2 bg-green-600 text-white text-sm font-semibold rounded-xl hover:bg-green-700 transition-colors">
-                  S inscrire
+                  className="px-4 py-2 bg-[#00bcd4] text-white text-sm font-bold rounded-xl hover:bg-[#0097a7] transition-colors shadow-sm">
+                  S'inscrire
                 </Link>
                 <Link href="/connexion"
                   className={`px-3 py-2 rounded-xl text-sm font-medium border transition-all ${
@@ -225,7 +225,7 @@ export default function Navbar() {
                 <>
                   <Link href="/inscription" onClick={() => setMenuOpen(false)}
                     className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-green-600 hover:bg-green-50 transition-colors">
-                    S inscrire
+                    S'inscrire
                   </Link>
                   <Link href="/connexion" onClick={() => setMenuOpen(false)}
                     className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">

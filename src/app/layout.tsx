@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from 'next'
+﻿import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
@@ -23,6 +23,11 @@ export const metadata: Metadata = {
   creator: 'Immo West Afro',
   publisher: 'Immo West Afro',
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
+  manifest: '/manifest.json',
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
   openGraph: {
     type: 'website',
     locale: 'fr_BJ',
