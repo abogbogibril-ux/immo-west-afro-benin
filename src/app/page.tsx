@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import HeroSearch from '@/components/HeroSearch'
 import BienCard from '@/components/BienCard'
+import BesoinCard from '@/components/BesoinCard'
 import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
@@ -159,19 +160,21 @@ export default async function HomePage() {
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7"/></svg>
             </Link>
           </div>
-          {bienVedettes && bienVedettes.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-              {bienVedettes.map((bien, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+              {bienVedettes && bienVedettes.slice(0, 4).map((bien, i) => (
                 <BienCard key={bien.id} bien={bien as any} priority={i < 3} />
               ))}
+              {besoinsRecents.slice(0, 2).map((b: any) => (
+                <BesoinCard key={b.id} besoin={b} />
+              ))}
+              {(!bienVedettes || bienVedettes.length === 0) && besoinsRecents.length === 0 && (
+                <div className="col-span-3 text-center py-16 text-gray-400">
+                  <p className="text-4xl mb-3">🏠</p>
+                  <p className="font-medium">Aucune annonce disponible pour le moment</p>
+                  <Link href="/publier" className="mt-4 inline-block text-green-600 font-semibold hover:underline">Publier la première annonce →</Link>
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="text-center py-16 text-gray-400">
-              <p className="text-4xl mb-3">🏠</p>
-              <p className="font-medium">Aucune annonce disponible pour le moment</p>
-              <Link href="/publier" className="mt-4 inline-block text-green-600 font-semibold hover:underline">Publier la première annonce →</Link>
-            </div>
-          )}
           <div className="text-center mt-8 sm:hidden">
             <Link href="/recherche" className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 text-white font-semibold text-sm rounded-xl hover:bg-green-700 transition-colors">
               Voir toutes les annonces
