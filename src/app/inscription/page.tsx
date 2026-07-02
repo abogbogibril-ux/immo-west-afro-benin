@@ -134,9 +134,9 @@ export default function InscriptionPage() {
               <li>Gerez vos biens depuis votre dashboard</li>
             </ul>
           </div>
-          <Link href="/connexion"
+          <Link href="/"
             className="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white font-bold text-sm rounded-xl hover:bg-green-700 transition-colors">
-            Aller a la page de connexion
+            Retour a l accueil
           </Link>
         </div>
       </div>
