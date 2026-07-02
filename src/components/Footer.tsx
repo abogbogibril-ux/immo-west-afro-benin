@@ -92,20 +92,20 @@ export default function Footer() {
                 marginBottom: '1rem',
               }}
             >
-              <div
-                style={{
-                  backgroundColor: '#0099CC',
-                  width: 40,
-                  height: 40,
-                  borderRadius: 8,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '1.2rem',
-                }}
-              >
-                🏗️
-              </div>
+              <img src="/logo.png" alt="Immo West Afro" style={{ width: 40, height: 40, objectFit: 'contain' }} />
+
+
+
+
+
+
+
+
+
+
+
+
+
               <span style={{ color: '#FFFFFF', fontWeight: 700, fontSize: '1rem' }}>
                 Immo West Afro
               </span>
