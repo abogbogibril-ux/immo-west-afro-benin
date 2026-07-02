@@ -294,7 +294,7 @@ export default function AdminPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '480px' }}>
                 <thead>
                   <tr style={{ backgroundColor: '#0f172a' }}>
-                    {['Titre', 'Agent', 'Ville', 'Prix', 'Statut', 'Action'].map(h => (
+                    {['Titre', 'Ville', 'Prix', 'Statut', 'Actions'].map(h => (
                       <th key={h} style={{ padding: '0.6rem 0.75rem', color: '#94a3b8', textAlign: 'left', fontSize: '0.75rem', whiteSpace: 'nowrap' }}>{h}</th>
                     ))}
                   </tr>
@@ -302,20 +302,20 @@ export default function AdminPage() {
                 <tbody>
                   {biensFiltres.map((b) => (
                     <tr key={b.id} style={{ borderTop: '1px solid #334155', verticalAlign: 'middle' }}>
-                      <td style={{ padding: '1rem', color: '#fff', maxWidth: '250px' }}>{b.titre}</td>
-                      <td style={{ padding: '1rem', color: '#cbd5e1' }}>
-                        {b.profiles?.nom_complet || `${b.profiles?.prenom ?? ''} ${b.profiles?.nom ?? ''}`.trim() || '-'}
-                      </td>
-                      <td style={{ padding: '1rem', color: '#cbd5e1' }}>{b.ville || '-'}</td>
-                      <td style={{ padding: '1rem', color: '#10b981' }}>{b.prix ? `${b.prix.toLocaleString()} FCFA` : '-'}</td>
-                      <td style={{ padding: '1rem' }}>
+                      <td style={{ padding: '0.6rem 0.75rem', color: '#f1f5f9', fontSize: '0.82rem', maxWidth: '180px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.titre}</td>
+
+
+
+                      <td style={{ padding: '0.6rem 0.75rem', color: '#cbd5e1', fontSize: '0.82rem', whiteSpace: 'nowrap' }}>{b.ville || '-'}</td>
+                      <td style={{ padding: '0.6rem 0.75rem', color: '#34d399', fontSize: '0.82rem', whiteSpace: 'nowrap' }}>{b.prix ? new Intl.NumberFormat('fr-FR').format(b.prix) + ' F' : '-'}</td>
+                      <td style={{ padding: '0.6rem 0.75rem' }}>
                         <span style={{
                           padding: '0.25rem 0.75rem', borderRadius: '999px', fontSize: '0.8rem',
                           backgroundColor: b.statut === 'publié' ? '#059669' : b.statut === 'brouillon' ? '#d97706' : '#6b7280',
                           color: '#fff',
                         }}>{b.statut}</span>
                       </td>
-                      <td style={{ padding: '1rem', display: 'flex', gap: '0.4rem' }}>
+                      <td style={{ padding: '0.6rem 0.75rem' }}><div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
                         {b.statut === 'brouillon' && (
                           <button onClick={() => changerStatutBien(b.id, 'publié')} style={{
                             padding: '0.35rem', backgroundColor: '#dcfce7', color: '#059669', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex' }}><svg width='14' height='14' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'/></svg></button>
@@ -326,11 +326,11 @@ export default function AdminPage() {
                         )}
                         <button onClick={() => supprimerBien(b.id)} style={{
                           padding: '0.35rem', backgroundColor: '#fee2e2', color: '#ef4444', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex' }}><svg width='14' height='14' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'/></svg></button>
-                      </td>
+                      </div></td>
                     </tr>
                   ))}
                   {biensFiltres.length === 0 && (
-                    <tr><td colSpan={6} style={{ padding: '2rem', textAlign: 'center', color: '#475569' }}>Aucun bien</td></tr>
+                    <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: '#475569' }}>Aucun bien</td></tr>
                   )}
                 </tbody>
               </table>
