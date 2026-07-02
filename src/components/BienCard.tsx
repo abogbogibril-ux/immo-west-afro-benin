@@ -25,6 +25,7 @@ const TYPE_LABELS: Record<string, string> = {
 }
 
 export default function BienCard({ bien, priority = false }: Props) {
+  const { toggleFavori, isFavori } = useFavoris()
   const imgs = [...(bien.images_biens ?? [])].sort((a, b) => a.ordre - b.ordre)
   const photo = imgs[0]?.url
   const ville = bien.localites?.ville ?? bien.ville ?? ''
