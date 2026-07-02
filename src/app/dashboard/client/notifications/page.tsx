@@ -49,7 +49,7 @@ const NOTIFS_DEMO: Notif[] = [
 ]
 
 const TYPE_CONFIG = {
-  message:  { icon: '💬', color: 'bg-[#00bcd4]/20 text-[#00bcd4]' },
+  message:  { icon: '💬', color: 'bg-green-100 text-green-600' },
   visite:   { icon: '🗓', color: 'bg-purple-100 text-purple-600' },
   prix:     { icon: '💰', color: 'bg-amber-100 text-amber-600' },
   demande:  { icon: '📋', color: 'bg-blue-100 text-blue-600' },
@@ -101,7 +101,7 @@ export default function NotificationsPage() {
   const markRead = (id: string) => setNotifs(prev => prev.map(n => n.id === id ? { ...n, lu: true } : n))
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 bg-[#0f172a] min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-2xl space-y-5">
 
       {/* En-tête */}
       <div className="flex items-center justify-between">
@@ -113,7 +113,7 @@ export default function NotificationsPage() {
         </div>
         {unreadCount > 0 && (
           <button onClick={markAllRead}
-            className="text-sm text-[#00bcd4] font-medium hover:underline">
+            className="text-sm text-green-600 font-medium hover:underline">
             Tout marquer comme lu
           </button>
         )}
@@ -135,7 +135,7 @@ export default function NotificationsPage() {
       {loading ? (
         <div className="space-y-3">
           {[1,2,3].map(i => (
-            <div key={i} className="bg-[#1e293b] rounded-2xl border border-[#334155] p-4 animate-pulse flex gap-3">
+            <div key={i} className="bg-white rounded-2xl border border-gray-100 p-4 animate-pulse flex gap-3">
               <div className="w-10 h-10 bg-gray-200 rounded-xl flex-shrink-0"/>
               <div className="flex-1 space-y-2">
                 <div className="h-4 bg-gray-200 rounded w-1/2"/>
@@ -145,10 +145,10 @@ export default function NotificationsPage() {
           ))}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm p-10 text-center">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-10 text-center">
           <p className="text-4xl mb-3">🔔</p>
           <p className="font-semibold text-gray-700 mb-1">Aucune notification</p>
-          <p className="text-sm text-gray-400">Vous êtes à jour !</p>
+          <p className="text-sm text-slate-400">Vous êtes à jour !</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -157,7 +157,7 @@ export default function NotificationsPage() {
             return (
               <div key={notif.id}
                 className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition-all ${
-                  !notif.lu ? 'border-green-100' : 'border-[#334155]'
+                  !notif.lu ? 'border-green-100' : 'border-gray-100'
                 }`}>
                 <div className="flex items-start gap-4 p-4">
 
@@ -183,7 +183,7 @@ export default function NotificationsPage() {
                       {notif.lien && (
                         <Link href={notif.lien}
                           onClick={() => markRead(notif.id)}
-                          className="text-xs text-[#00bcd4] font-semibold hover:underline">
+                          className="text-xs text-green-600 font-semibold hover:underline">
                           {notif.type === 'message' && 'Lire le message →'}
                           {notif.type === 'visite' && 'Voir les détails →'}
                           {notif.type === 'prix' && 'Voir le bien →'}
@@ -202,7 +202,7 @@ export default function NotificationsPage() {
 
                   {/* Point non lu */}
                   {!notif.lu && (
-                    <div className="w-2 h-2 bg-[#00bcd4] rounded-full flex-shrink-0 mt-2"/>
+                    <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0 mt-2"/>
                   )}
                 </div>
               </div>
@@ -212,13 +212,13 @@ export default function NotificationsPage() {
       )}
 
       {/* Paramètres notifications */}
-      <div className="bg-[#0f172a] rounded-2xl border border-[#334155] p-4 flex items-center justify-between">
+      <div className="bg-gray-50 rounded-2xl border border-gray-100 p-4 flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-gray-700">Préférences de notifications</p>
           <p className="text-xs text-gray-400 mt-0.5">Gérez vos alertes email et messages</p>
         </div>
         <Link href="/dashboard/client/parametres"
-          className="px-3 py-1.5 border border-[#334155] text-gray-600 text-sm rounded-lg hover:border-green-300 hover:text-[#00bcd4] transition-all">
+          className="px-3 py-1.5 border border-gray-200 text-gray-600 text-sm rounded-lg hover:border-green-300 hover:text-green-600 transition-all">
           Configurer →
         </Link>
       </div>
