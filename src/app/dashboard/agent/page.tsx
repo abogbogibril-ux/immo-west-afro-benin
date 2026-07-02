@@ -32,6 +32,7 @@ export default function AgentDashboardPage() {
   const [annonces, setAnnonces] = useState<Annonce[]>([])
   const [kpis, setKpis] = useState({ total: 0, vues: 0, messages: 0, favoris: 0 })
   const [loading, setLoading] = useState(true)
+  const [showAll, setShowAll] = useState(false)
   const [tasks, setTasks] = useState([
     { id: 1, label: 'Répondre aux demandes en attente', done: false },
     { id: 2, label: 'Mettre à jour les photos de l\'annonce', done: false },
@@ -52,7 +53,7 @@ export default function AgentDashboardPage() {
         .select('id, titre, ville, vues, statut, created_at, prix')
         .eq('agent_id', user.id)
         .order('created_at', { ascending: false })
-        .limit(5)
+        .limit(50)
 
       setAnnonces(biens ?? [])
 
@@ -187,10 +188,10 @@ export default function AgentDashboardPage() {
         <div className="lg:col-span-2 bg-[#1e293b] rounded-2xl shadow-sm border border-[#334155] overflow-hidden">
           <div className="flex items-center justify-between px-5 py-4 border-b border-[#334155]">
             <h2 className="font-semibold text-white">Annonces récentes</h2>
-            <Link href="/dashboard/agent/annonces"
+            <button onClick={() => setShowAll(prev => !prev)}
               className="text-sm text-[#00bcd4] font-medium hover:underline">
-              Voir toutes →
-            </Link>
+              {showAll ? 'Voir moins ↑' : 'Voir toutes →'}
+            </button>
           </div>
 
           {loading ? (
@@ -224,7 +225,7 @@ export default function AgentDashboardPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#334155]">
-                  {annonces.map(a => (
+                  {(showAll ? annonces : annonces.slice(0, 5)).map(a => (
                     <tr key={a.id} className="hover:bg-[#0f172a] transition-colors">
                       <td className="px-5 py-3.5">
                         <span className="font-mono text-xs text-slate-300 bg-[#0f172a] px-1.5 py-0.5 rounded">
