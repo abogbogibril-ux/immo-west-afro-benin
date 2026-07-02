@@ -89,13 +89,13 @@ export default function ParametresPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin w-8 h-8 border-2 border-[#FF6B35] border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-2 border-[#00bcd4] border-t-transparent rounded-full" />
       </div>
     )
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-4xl">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-4xl bg-[#0f172a] min-h-screen">
 
       {/* Toast */}
       {toast && (
@@ -111,8 +111,8 @@ export default function ParametresPage() {
 
       {/* En-tête */}
       <div className="mb-6">
-        <h1 className="text-xl font-bold text-gray-900">Paramètres</h1>
-        <p className="text-sm text-gray-400 mt-0.5">Gérez votre profil et vos préférences</p>
+        <h1 className="text-xl font-bold text-white">Paramètres</h1>
+        <p className="text-sm text-slate-400 mt-0.5">Gérez votre profil et vos préférences</p>
       </div>
 
       {/* Tabs */}
@@ -120,7 +120,7 @@ export default function ParametresPage() {
         {TABS.map(t => (
           <button key={t} onClick={() => setTab(t)}
             className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all ${
-              tab === t ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+              tab === t ? 'bg-[#0f172a] text-white shadow-sm' : 'text-slate-400 hover:text-white'
             }`}>
             {t}
           </button>
@@ -132,16 +132,16 @@ export default function ParametresPage() {
         <div className="space-y-5">
 
           {/* Avatar */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-            <h2 className="font-semibold text-gray-900 mb-4">Photo de profil</h2>
+          <div className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm p-5">
+            <h2 className="font-semibold text-white mb-4">Photo de profil</h2>
             <div className="flex items-center gap-4">
-              <div className="w-20 h-20 rounded-2xl bg-[#FF6B35]/15 text-[#FF6B35] flex items-center justify-center text-2xl font-bold flex-shrink-0">
+              <div className="w-20 h-20 rounded-2xl bg-[#00bcd4]/15 text-[#00bcd4] flex items-center justify-center text-2xl font-bold flex-shrink-0">
                 {(form.prenom?.[0] ?? '').toUpperCase()}{(form.nom?.[0] ?? '').toUpperCase()}
               </div>
               <div>
-                <p className="text-sm font-semibold text-gray-900">{form.prenom} {form.nom}</p>
-                <p className="text-xs text-gray-400 mt-0.5">Agent immobilier</p>
-                <p className="text-xs text-gray-400 mt-2">
+                <p className="text-sm font-semibold text-white">{form.prenom} {form.nom}</p>
+                <p className="text-xs text-slate-400 mt-0.5">Agent immobilier</p>
+                <p className="text-xs text-slate-400 mt-2">
                   La photo de profil sera disponible prochainement.
                 </p>
               </div>
@@ -149,8 +149,8 @@ export default function ParametresPage() {
           </div>
 
           {/* Infos personnelles */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-            <h2 className="font-semibold text-gray-900 mb-4">Informations personnelles</h2>
+          <div className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm p-5">
+            <h2 className="font-semibold text-white mb-4">Informations personnelles</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
                 { label: 'Prénom', name: 'prenom', type: 'text', placeholder: 'Votre prénom' },
@@ -169,7 +169,7 @@ export default function ParametresPage() {
                     value={form[f.name as keyof typeof form]}
                     onChange={handleChange}
                     disabled={f.disabled}
-                    className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/30 bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="w-full px-3.5 py-2.5 border border-[#334155] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#00bcd4]/30 bg-[#0f172a] text-white disabled:opacity-60 disabled:cursor-not-allowed"
                   />
                 </div>
               ))}
@@ -177,8 +177,8 @@ export default function ParametresPage() {
           </div>
 
           {/* Infos agence */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-            <h2 className="font-semibold text-gray-900 mb-4">Informations agence</h2>
+          <div className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm p-5">
+            <h2 className="font-semibold text-white mb-4">Informations agence</h2>
             <div className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
@@ -186,7 +186,7 @@ export default function ParametresPage() {
                 </label>
                 <input name="nom_agence" type="text" placeholder="Nom de votre agence"
                   value={form.nom_agence} onChange={handleChange}
-                  className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/30 bg-gray-50"
+                  className="w-full px-3.5 py-2.5 border border-[#334155] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#00bcd4]/30 bg-[#0f172a] text-white"
                 />
               </div>
               <div>
@@ -195,7 +195,7 @@ export default function ParametresPage() {
                 </label>
                 <textarea name="biographie" rows={4} placeholder="Décrivez votre expérience et vos spécialités..."
                   value={form.biographie} onChange={handleChange}
-                  className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/30 bg-gray-50 resize-none"
+                  className="w-full px-3.5 py-2.5 border border-[#334155] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#00bcd4]/30 bg-[#0f172a] text-white resize-none"
                 />
                 <p className="text-right text-xs text-gray-400 mt-1">{form.biographie.length}/500</p>
               </div>
@@ -204,7 +204,7 @@ export default function ParametresPage() {
 
           {/* Bouton sauvegarder */}
           <button onClick={saveProfil} disabled={saving}
-            className="flex items-center gap-2 px-6 py-3 bg-[#FF6B35] text-white font-semibold text-sm rounded-xl hover:bg-[#e55c2a] transition-colors disabled:opacity-60">
+            className="flex items-center gap-2 px-6 py-3 bg-[#00bcd4] text-white font-semibold text-sm rounded-xl hover:bg-[#0097a7] transition-colors disabled:opacity-60">
             {saving ? (
               <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
@@ -223,8 +223,8 @@ export default function ParametresPage() {
       {/* ── Onglet Notifications ── */}
       {tab === 'Notifications' && (
         <div className="space-y-5">
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-            <h2 className="font-semibold text-gray-900 mb-5">Préférences de notifications</h2>
+          <div className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm p-5">
+            <h2 className="font-semibold text-white mb-5">Préférences de notifications</h2>
             <div className="space-y-4">
               {[
                 { key: 'email_messages', label: 'Nouveaux messages clients', sub: 'Recevoir un email pour chaque nouveau message' },
@@ -233,15 +233,15 @@ export default function ParametresPage() {
                 { key: 'newsletter', label: 'Newsletter Immo West Afro', sub: 'Actualités immobilières et conseils' },
                 { key: 'silencieux', label: 'Mode silencieux (20h–7h)', sub: 'Aucune notification pendant ces heures' },
               ].map(item => (
-                <div key={item.key} className="flex items-start justify-between gap-4 py-3 border-b border-gray-50 last:border-0">
+                <div key={item.key} className="flex items-start justify-between gap-4 py-3 border-b border-[#334155] last:border-0">
                   <div>
-                    <p className="text-sm font-medium text-gray-900">{item.label}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{item.sub}</p>
+                    <p className="text-sm font-medium text-white">{item.label}</p>
+                    <p className="text-xs text-slate-400 mt-0.5">{item.sub}</p>
                   </div>
                   <button
                     onClick={() => setNotifForm(p => ({ ...p, [item.key]: !p[item.key as keyof typeof p] }))}
                     className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 ${
-                      notifForm[item.key as keyof typeof notifForm] ? 'bg-[#FF6B35]' : 'bg-gray-200'
+                      notifForm[item.key as keyof typeof notifForm] ? 'bg-[#00bcd4]' : 'bg-[#334155]'
                     }`}
                   >
                     <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform ${
@@ -252,7 +252,7 @@ export default function ParametresPage() {
               ))}
             </div>
             <button onClick={() => showToast('Préférences sauvegardées')}
-              className="mt-5 px-6 py-2.5 bg-[#FF6B35] text-white text-sm font-semibold rounded-xl hover:bg-[#e55c2a] transition-colors">
+              className="mt-5 px-6 py-2.5 bg-[#00bcd4] text-white text-sm font-semibold rounded-xl hover:bg-[#0097a7] transition-colors">
               Enregistrer
             </button>
           </div>
@@ -264,13 +264,13 @@ export default function ParametresPage() {
         <div className="space-y-5">
 
           {/* Mot de passe */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-            <h2 className="font-semibold text-gray-900 mb-2">Mot de passe</h2>
-            <p className="text-sm text-gray-400 mb-4">
+          <div className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm p-5">
+            <h2 className="font-semibold text-white mb-2">Mot de passe</h2>
+            <p className="text-sm text-slate-400 mb-4">
               Un email de réinitialisation sera envoyé à <strong>{form.email}</strong>
             </p>
             <button onClick={changePassword}
-              className="flex items-center gap-2 px-4 py-2.5 border border-gray-200 text-gray-700 text-sm font-semibold rounded-xl hover:border-[#FF6B35] hover:text-[#FF6B35] transition-all">
+              className="flex items-center gap-2 px-4 py-2.5 border border-[#334155] text-gray-700 text-sm font-semibold rounded-xl hover:border-[#00bcd4] hover:text-[#00bcd4] transition-all">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
@@ -280,14 +280,14 @@ export default function ParametresPage() {
           </div>
 
           {/* Sessions */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-            <h2 className="font-semibold text-gray-900 mb-4">Session active</h2>
-            <div className="flex items-center justify-between p-3.5 bg-green-50 border border-green-100 rounded-xl">
+          <div className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm p-5">
+            <h2 className="font-semibold text-white mb-4">Session active</h2>
+            <div className="flex items-center justify-between p-3.5 bg-green-900/20 border border-green-900/30 rounded-xl">
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-green-500 rounded-full" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900">Session en cours</p>
-                  <p className="text-xs text-gray-400">Cotonou, Bénin · Navigateur web</p>
+                  <p className="text-sm font-medium text-white">Session en cours</p>
+                  <p className="text-xs text-slate-400">Cotonou, Bénin · Navigateur web</p>
                 </div>
               </div>
               <span className="text-xs text-green-600 font-medium bg-green-100 px-2 py-0.5 rounded-full">Active</span>
@@ -295,9 +295,9 @@ export default function ParametresPage() {
           </div>
 
           {/* Zone danger */}
-          <div className="bg-white rounded-2xl border border-red-100 shadow-sm p-5">
+          <div className="bg-[#1e293b] rounded-2xl border border-red-900/30 shadow-sm p-5">
             <h2 className="font-semibold text-red-600 mb-2">Zone de danger</h2>
-            <p className="text-sm text-gray-400 mb-4">
+            <p className="text-sm text-slate-400 mb-4">
               La suppression de votre compte est irréversible. Toutes vos annonces seront supprimées.
             </p>
             <button

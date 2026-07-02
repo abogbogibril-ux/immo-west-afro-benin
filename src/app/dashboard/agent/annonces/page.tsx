@@ -109,7 +109,7 @@ export default function AnnoncesPage() {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-5">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-5 bg-[#0f172a] min-h-screen">
 
       {/* Toast */}
       {toast && (
@@ -124,11 +124,11 @@ export default function AnnoncesPage() {
       {/* En-tête */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Mes annonces</h1>
-          <p className="text-sm text-gray-400 mt-0.5">{stats.total} annonce{stats.total > 1 ? 's' : ''} au total</p>
+          <h1 className="text-xl font-bold text-white">Mes annonces</h1>
+          <p className="text-sm text-slate-400 mt-0.5">{stats.total} annonce{stats.total > 1 ? 's' : ''} au total</p>
         </div>
         <Link href="/publier"
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#FF6B35] text-white text-sm font-semibold rounded-xl hover:bg-[#e55c2a] transition-colors self-start">
+          className="flex items-center gap-2 px-4 py-2.5 bg-[#00bcd4] text-white text-sm font-semibold rounded-xl hover:bg-[#0097a7] transition-colors self-start">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
           </svg>
@@ -139,20 +139,20 @@ export default function AnnoncesPage() {
       {/* Stats rapides */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label: 'Total', value: stats.total, color: 'text-gray-900', bg: 'bg-white' },
+          { label: 'Total', value: stats.total, color: 'text-white', bg: 'bg-[#1e293b]' },
           { label: 'Actives', value: stats.actives, color: 'text-green-600', bg: 'bg-green-50' },
-          { label: 'Archivées', value: stats.archivees, color: 'text-gray-500', bg: 'bg-gray-50' },
+          { label: 'Archivées', value: stats.archivees, color: 'text-slate-400', bg: 'bg-[#0f172a]' },
           { label: 'Vendus/Loués', value: stats.vendues, color: 'text-blue-600', bg: 'bg-blue-50' },
         ].map(s => (
-          <div key={s.label} className={`${s.bg} rounded-xl border border-gray-100 p-3.5 text-center`}>
+          <div key={s.label} className={`${s.bg} rounded-xl border border-[#334155] p-3.5 text-center`}>
             <div className={`text-2xl font-bold ${s.color}`}>{s.value}</div>
-            <div className="text-xs text-gray-400 mt-0.5 font-medium">{s.label}</div>
+            <div className="text-xs text-slate-400 mt-0.5 font-medium">{s.label}</div>
           </div>
         ))}
       </div>
 
       {/* Filtres */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+      <div className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm p-4">
         <div className="flex flex-col sm:flex-row gap-3">
           {/* Recherche */}
           <div className="relative flex-1">
@@ -162,22 +162,22 @@ export default function AnnoncesPage() {
             <input
               type="text" placeholder="Rechercher une annonce..."
               value={search} onChange={e => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/30 bg-gray-50"
+              className="w-full pl-9 pr-3 py-2.5 border border-[#334155] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#00bcd4]/30 bg-[#0f172a] text-white"
             />
           </div>
 
           <select value={statut} onChange={e => setStatut(e.target.value)}
-            className="px-3 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-600 focus:outline-none bg-gray-50">
+            className="px-3 py-2.5 border border-[#334155] rounded-xl text-sm text-gray-600 focus:outline-none bg-gray-50">
             {STATUTS.map(s => <option key={s} value={s}>{s === 'Tous' ? 'Tous les statuts' : s}</option>)}
           </select>
 
           <select value={type} onChange={e => setType(e.target.value)}
-            className="px-3 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-600 focus:outline-none bg-gray-50">
+            className="px-3 py-2.5 border border-[#334155] rounded-xl text-sm text-gray-600 focus:outline-none bg-gray-50">
             {TYPES.map(t => <option key={t} value={t}>{t === 'Tous' ? 'Tous les types' : t}</option>)}
           </select>
 
           <select value={sortBy} onChange={e => setSortBy(e.target.value)}
-            className="px-3 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-600 focus:outline-none bg-gray-50">
+            className="px-3 py-2.5 border border-[#334155] rounded-xl text-sm text-gray-600 focus:outline-none bg-gray-50">
             <option value="recent">Plus récent</option>
             <option value="vues">Plus vues</option>
             <option value="prix_asc">Prix croissant</option>
@@ -187,18 +187,18 @@ export default function AnnoncesPage() {
       </div>
 
       {/* Tableau */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm overflow-hidden">
         {loading ? (
           <div className="p-8 text-center text-gray-400">
-            <div className="animate-spin w-8 h-8 border-2 border-[#FF6B35] border-t-transparent rounded-full mx-auto mb-3" />
+            <div className="animate-spin w-8 h-8 border-2 border-[#00bcd4] border-t-transparent rounded-full mx-auto mb-3" />
             Chargement...
           </div>
         ) : filtered.length === 0 ? (
           <div className="p-10 text-center">
             <p className="text-4xl mb-3">🏠</p>
-            <p className="text-gray-500 font-medium">Aucune annonce trouvée</p>
-            <p className="text-sm text-gray-400 mt-1">Modifiez vos filtres ou publiez une nouvelle annonce</p>
-            <Link href="/publier" className="mt-4 inline-block px-4 py-2 bg-[#FF6B35] text-white text-sm font-semibold rounded-xl hover:bg-[#e55c2a] transition-colors">
+            <p className="text-slate-400 font-medium">Aucune annonce trouvée</p>
+            <p className="text-sm text-slate-400 mt-1">Modifiez vos filtres ou publiez une nouvelle annonce</p>
+            <Link href="/publier" className="mt-4 inline-block px-4 py-2 bg-[#00bcd4] text-white text-sm font-semibold rounded-xl hover:bg-[#0097a7] transition-colors">
               Publier une annonce
             </Link>
           </div>
@@ -206,9 +206,9 @@ export default function AnnoncesPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-100">
+                <tr className="bg-[#0f172a] border-b border-[#334155]">
                   {['Référence', 'Bien', 'Type', 'Prix', 'Vues', 'Statut', 'Date', 'Actions'].map(h => (
-                    <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide whitespace-nowrap">
+                    <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
                       {h}
                     </th>
                   ))}
@@ -216,15 +216,15 @@ export default function AnnoncesPage() {
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {filtered.map(a => (
-                  <tr key={a.id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={a.id} className="hover:bg-[#0f172a] transition-colors">
                     <td className="px-4 py-3.5">
-                      <span className="font-mono text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">
+                      <span className="font-mono text-xs text-slate-400 bg-[#0f172a] px-1.5 py-0.5 rounded">
                         {a.id.slice(0, 8).toUpperCase()}
                       </span>
                     </td>
                     <td className="px-4 py-3.5 min-w-[160px]">
-                      <p className="font-medium text-gray-900 truncate max-w-[160px]">{a.titre}</p>
-                      <p className="text-xs text-gray-400">{a.ville}{a.arrondissement ? `, ${a.arrondissement}` : ''}</p>
+                      <p className="font-medium text-white truncate max-w-[160px]">{a.titre}</p>
+                      <p className="text-xs text-slate-400">{a.ville}{a.arrondissement ? `, ${a.arrondissement}` : ''}</p>
                     </td>
                     <td className="px-4 py-3.5 text-gray-500 whitespace-nowrap">{a.type_bien}</td>
                     <td className="px-4 py-3.5 font-semibold text-gray-900 whitespace-nowrap">{formatPrice(a.prix)}</td>
@@ -234,7 +234,7 @@ export default function AnnoncesPage() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                         </svg>
-                        <span className="font-semibold text-gray-900">{a.vues ?? 0}</span>
+                        <span className="font-semibold text-white">{a.vues ?? 0}</span>
                       </div>
                     </td>
                     <td className="px-4 py-3.5">
@@ -305,9 +305,9 @@ export default function AnnoncesPage() {
 
         {/* Footer table */}
         {filtered.length > 0 && (
-          <div className="px-4 py-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
+          <div className="px-4 py-3 border-t border-[#334155] flex items-center justify-between text-xs text-slate-400">
             <span>{filtered.length} annonce{filtered.length > 1 ? 's' : ''} affichée{filtered.length > 1 ? 's' : ''}</span>
-            <span>Total vues : <strong className="text-gray-600">{filtered.reduce((s, a) => s + (a.vues ?? 0), 0)}</strong></span>
+            <span>Total vues : <strong className="text-slate-300">{filtered.reduce((s, a) => s + (a.vues ?? 0), 0)}</strong></span>
           </div>
         )}
       </div>
