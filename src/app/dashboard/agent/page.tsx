@@ -33,6 +33,7 @@ export default function AgentDashboardPage() {
   const [kpis, setKpis] = useState({ total: 0, vues: 0, messages: 0, favoris: 0 })
   const [loading, setLoading] = useState(true)
   const [showAll, setShowAll] = useState(false)
+  const [guideOpen, setGuideOpen] = useState(true)
   const [tasks, setTasks] = useState([
     { id: 1, label: 'Répondre aux demandes en attente', done: false },
     { id: 2, label: 'Mettre à jour les photos de l\'annonce', done: false },
@@ -128,6 +129,77 @@ export default function AgentDashboardPage() {
           </div>
         ))}
       </div>
+
+      {/* GUIDE DE DEMARRAGE */}
+      <div className="bg-gradient-to-br from-[#0f3460] to-[#1e293b] rounded-2xl border border-[#00bcd4]/30 overflow-hidden">
+        <button onClick={() => setGuideOpen(prev => !prev)}
+          className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/5 transition-colors">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">🚀</span>
+            <div className="text-left">
+              <p className="font-bold text-white text-sm">Guide de demarrage rapide</p>
+              <p className="text-xs text-slate-400">Apprenez a utiliser votre dashboard en quelques etapes</p>
+            </div>
+          </div>
+          <svg className={`w-5 h-5 text-slate-400 transition-transform ${guideOpen ? 'rotate-180' : ''}`}
+            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        {guideOpen && (
+          <div className="px-5 pb-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {[
+                {
+                  num: '1', icon: '📸', titre: 'Publiez votre premier bien',
+                  desc: 'Cliquez sur + Publier, remplissez les details et ajoutez des photos. Utilisez l IA pour generer titre et description.',
+                  lien: '/publier', labelLien: 'Publier maintenant'
+                },
+                {
+                  num: '2', icon: '✏️', titre: 'Gerez vos annonces',
+                  desc: 'Dans Mes annonces, modifiez, archivez ou depubliez vos biens. Suivez les vues et les statistiques.',
+                  lien: '/dashboard/agent/annonces', labelLien: 'Voir mes annonces'
+                },
+                {
+                  num: '3', icon: '💬', titre: 'Repondez aux messages',
+                  desc: 'Les acheteurs et locataires vous contactent via la messagerie. Repondez rapidement pour maximiser vos chances.',
+                  lien: '/dashboard/agent/messages', labelLien: 'Voir les messages'
+                },
+                {
+                  num: '4', icon: '⚙️', titre: 'Completez votre profil',
+                  desc: 'Ajoutez votre photo, numero WhatsApp et informations d agence pour inspirer confiance aux clients.',
+                  lien: '/dashboard/agent/parametres', labelLien: 'Mon profil'
+                },
+              ].map(step => (
+                <div key={step.num} className="bg-white/5 rounded-xl p-4 border border-white/10 hover:border-[#00bcd4]/50 transition-colors">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="w-6 h-6 rounded-full bg-[#00bcd4] text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
+                      {step.num}
+                    </span>
+                    <span className="text-lg">{step.icon}</span>
+                  </div>
+                  <p className="font-semibold text-white text-sm mb-1">{step.titre}</p>
+                  <p className="text-xs text-slate-400 leading-relaxed mb-3">{step.desc}</p>
+                  <a href={step.lien}
+                    className="inline-flex items-center gap-1 text-xs text-[#00bcd4] font-semibold hover:underline">
+                    {step.labelLien}
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
+                    </svg>
+                  </a>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 p-3 bg-[#00bcd4]/10 rounded-xl border border-[#00bcd4]/20">
+              <p className="text-xs text-[#00bcd4] font-semibold mb-1">💡 Conseil du jour</p>
+              <p className="text-xs text-slate-300">
+                Les annonces avec au moins 3 photos recevant 3x plus de contacts. Utilisez l IA pour generer des descriptions professionnelles et optimisees SEO.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+
 
       {/* Graphique + Répartition */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
