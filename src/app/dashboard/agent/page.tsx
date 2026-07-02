@@ -123,7 +123,7 @@ export default function AgentDashboardPage() {
             <div className="text-2xl md:text-3xl font-bold text-white mb-0.5">
               {loading ? <span className="animate-pulse bg-gray-200 rounded h-8 w-16 inline-block"/> : kpi.value}
             </div>
-            <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">{kpi.label}</p>
+            <p className="text-xs text-slate-300 font-medium uppercase tracking-wide">{kpi.label}</p>
           </div>
         ))}
       </div>
@@ -151,7 +151,7 @@ export default function AgentDashboardPage() {
               </div>
             ))}
           </div>
-          <div className="flex justify-between text-[10px] text-gray-400 mt-2">
+          <div className="flex justify-between text-[10px] text-slate-400 mt-2">
             {['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'].map(m => (
               <span key={m}>{m}</span>
             ))}
@@ -170,7 +170,7 @@ export default function AgentDashboardPage() {
               <div key={item.label}>
                 <div className="flex items-center justify-between text-sm mb-1">
                   <span className="text-slate-400">{item.label}</span>
-                  <span className="font-semibold text-white">{item.pct}%</span>
+                  <span className="font-semibold text-slate-200">{item.pct}%</span>
                 </div>
                 <div className="h-2 bg-[#334155] rounded-full overflow-hidden">
                   <div className={`h-full ${item.color} rounded-full`} style={{ width: `${item.pct}%` }}/>
@@ -227,13 +227,13 @@ export default function AgentDashboardPage() {
                   {annonces.map(a => (
                     <tr key={a.id} className="hover:bg-[#0f172a] transition-colors">
                       <td className="px-5 py-3.5">
-                        <span className="font-mono text-xs text-slate-400 bg-[#0f172a] px-1.5 py-0.5 rounded">
+                        <span className="font-mono text-xs text-slate-300 bg-[#0f172a] px-1.5 py-0.5 rounded">
                           {a.id.slice(0, 8).toUpperCase()}
                         </span>
                       </td>
                       <td className="px-3 py-3.5">
                         <p className="font-medium text-white truncate max-w-[160px]">{a.titre}</p>
-                        <p className="text-xs text-slate-400">{formatPrice(a.prix)}</p>
+                        <p className="text-xs text-[#00bcd4]">{formatPrice(a.prix)}</p>
                       </td>
                       <td className="px-3 py-3.5 text-gray-500 hidden sm:table-cell">{a.ville}</td>
                       <td className="px-3 py-3.5 font-semibold text-gray-900">{a.vues ?? 0}</td>
@@ -306,7 +306,7 @@ export default function AgentDashboardPage() {
                     </svg>
                   )}
                 </div>
-                <span className={`text-sm ${task.done ? 'line-through text-slate-500' : 'text-slate-200'}`}>
+                <span className={`text-sm ${task.done ? 'line-through text-slate-500' : 'text-slate-100'}`}>
                   {task.label}
                 </span>
               </div>

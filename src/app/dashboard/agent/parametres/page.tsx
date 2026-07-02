@@ -235,8 +235,8 @@ export default function ParametresPage() {
               ].map(item => (
                 <div key={item.key} className="flex items-start justify-between gap-4 py-3 border-b border-[#334155] last:border-0">
                   <div>
-                    <p className="text-sm font-medium text-white">{item.label}</p>
-                    <p className="text-xs text-slate-400 mt-0.5">{item.sub}</p>
+                    <p className="text-sm font-medium text-slate-100">{item.label}</p>
+                    <p className="text-xs text-slate-300 mt-0.5">{item.sub}</p>
                   </div>
                   <button
                     onClick={() => setNotifForm(p => ({ ...p, [item.key]: !p[item.key as keyof typeof p] }))}
@@ -266,7 +266,7 @@ export default function ParametresPage() {
           {/* Mot de passe */}
           <div className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm p-5">
             <h2 className="font-semibold text-white mb-2">Mot de passe</h2>
-            <p className="text-sm text-slate-400 mb-4">
+            <p className="text-sm text-slate-300 mb-4">
               Un email de réinitialisation sera envoyé à <strong>{form.email}</strong>
             </p>
             <button onClick={changePassword}
@@ -286,8 +286,8 @@ export default function ParametresPage() {
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-green-500 rounded-full" />
                 <div>
-                  <p className="text-sm font-medium text-white">Session en cours</p>
-                  <p className="text-xs text-slate-400">Cotonou, Bénin · Navigateur web</p>
+                  <p className="text-sm font-medium text-slate-100">Session en cours</p>
+                  <p className="text-xs text-slate-300">Cotonou, Bénin · Navigateur web</p>
                 </div>
               </div>
               <span className="text-xs text-green-600 font-medium bg-green-100 px-2 py-0.5 rounded-full">Active</span>
@@ -297,7 +297,7 @@ export default function ParametresPage() {
           {/* Zone danger */}
           <div className="bg-[#1e293b] rounded-2xl border border-red-900/30 shadow-sm p-5">
             <h2 className="font-semibold text-red-600 mb-2">Zone de danger</h2>
-            <p className="text-sm text-slate-400 mb-4">
+            <p className="text-sm text-slate-300 mb-4">
               La suppression de votre compte est irréversible. Toutes vos annonces seront supprimées.
             </p>
             <button

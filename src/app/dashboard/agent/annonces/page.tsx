@@ -140,13 +140,13 @@ export default function AnnoncesPage() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
           { label: 'Total', value: stats.total, color: 'text-white', bg: 'bg-[#1e293b]' },
-          { label: 'Actives', value: stats.actives, color: 'text-green-600', bg: 'bg-green-50' },
-          { label: 'Archivées', value: stats.archivees, color: 'text-slate-400', bg: 'bg-[#0f172a]' },
-          { label: 'Vendus/Loués', value: stats.vendues, color: 'text-blue-600', bg: 'bg-blue-50' },
+          { label: 'Actives', value: stats.actives, color: 'text-green-400', bg: 'bg-green-900/20' },
+          { label: 'Archivées', value: stats.archivees, color: 'text-slate-300', bg: 'bg-[#0f172a]' },
+          { label: 'Vendus/Loués', value: stats.vendues, color: 'text-blue-400', bg: 'bg-blue-900/20' },
         ].map(s => (
           <div key={s.label} className={`${s.bg} rounded-xl border border-[#334155] p-3.5 text-center`}>
             <div className={`text-2xl font-bold ${s.color}`}>{s.value}</div>
-            <div className="text-xs text-slate-400 mt-0.5 font-medium">{s.label}</div>
+            <div className="text-xs text-slate-300 mt-0.5 font-medium">{s.label}</div>
           </div>
         ))}
       </div>
@@ -162,22 +162,22 @@ export default function AnnoncesPage() {
             <input
               type="text" placeholder="Rechercher une annonce..."
               value={search} onChange={e => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-2.5 border border-[#334155] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#00bcd4]/30 bg-[#0f172a] text-white"
+              className="w-full pl-9 pr-3 py-2.5 border border-[#334155] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#00bcd4]/30 bg-[#0f172a] text-white placeholder-slate-500"
             />
           </div>
 
           <select value={statut} onChange={e => setStatut(e.target.value)}
-            className="px-3 py-2.5 border border-[#334155] rounded-xl text-sm text-gray-600 focus:outline-none bg-gray-50">
+            className="px-3 py-2.5 border border-[#334155] rounded-xl text-sm text-slate-200 focus:outline-none bg-[#0f172a]">
             {STATUTS.map(s => <option key={s} value={s}>{s === 'Tous' ? 'Tous les statuts' : s}</option>)}
           </select>
 
           <select value={type} onChange={e => setType(e.target.value)}
-            className="px-3 py-2.5 border border-[#334155] rounded-xl text-sm text-gray-600 focus:outline-none bg-gray-50">
+            className="px-3 py-2.5 border border-[#334155] rounded-xl text-sm text-slate-200 focus:outline-none bg-[#0f172a]">
             {TYPES.map(t => <option key={t} value={t}>{t === 'Tous' ? 'Tous les types' : t}</option>)}
           </select>
 
           <select value={sortBy} onChange={e => setSortBy(e.target.value)}
-            className="px-3 py-2.5 border border-[#334155] rounded-xl text-sm text-gray-600 focus:outline-none bg-gray-50">
+            className="px-3 py-2.5 border border-[#334155] rounded-xl text-sm text-slate-200 focus:outline-none bg-[#0f172a]">
             <option value="recent">Plus récent</option>
             <option value="vues">Plus vues</option>
             <option value="prix_asc">Prix croissant</option>
@@ -208,7 +208,7 @@ export default function AnnoncesPage() {
               <thead>
                 <tr className="bg-[#0f172a] border-b border-[#334155]">
                   {['Référence', 'Bien', 'Type', 'Prix', 'Vues', 'Statut', 'Date', 'Actions'].map(h => (
-                    <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
+                    <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide whitespace-nowrap">
                       {h}
                     </th>
                   ))}
@@ -224,7 +224,7 @@ export default function AnnoncesPage() {
                     </td>
                     <td className="px-4 py-3.5 min-w-[160px]">
                       <p className="font-medium text-white truncate max-w-[160px]">{a.titre}</p>
-                      <p className="text-xs text-slate-400">{a.ville}{a.arrondissement ? `, ${a.arrondissement}` : ''}</p>
+                      <p className="text-xs text-slate-300">{a.ville}{a.arrondissement ? `, ${a.arrondissement}` : ''}</p>
                     </td>
                     <td className="px-4 py-3.5 text-gray-500 whitespace-nowrap">{a.type_bien}</td>
                     <td className="px-4 py-3.5 font-semibold text-gray-900 whitespace-nowrap">{formatPrice(a.prix)}</td>
@@ -234,7 +234,7 @@ export default function AnnoncesPage() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                         </svg>
-                        <span className="font-semibold text-white">{a.vues ?? 0}</span>
+                        <span className="font-semibold text-slate-200">{a.vues ?? 0}</span>
                       </div>
                     </td>
                     <td className="px-4 py-3.5">
@@ -305,7 +305,7 @@ export default function AnnoncesPage() {
 
         {/* Footer table */}
         {filtered.length > 0 && (
-          <div className="px-4 py-3 border-t border-[#334155] flex items-center justify-between text-xs text-slate-400">
+          <div className="px-4 py-3 border-t border-[#334155] flex items-center justify-between text-xs text-slate-300">
             <span>{filtered.length} annonce{filtered.length > 1 ? 's' : ''} affichée{filtered.length > 1 ? 's' : ''}</span>
             <span>Total vues : <strong className="text-slate-300">{filtered.reduce((s, a) => s + (a.vues ?? 0), 0)}</strong></span>
           </div>
