@@ -73,7 +73,7 @@ export default function InscriptionPage() {
       email: form.email,
       password: form.password,
       options: {
-        emailRedirectTo: 'https://benin.immowestafro.com',
+        emailRedirectTo: 'https://benin.immowestafro.com/auth/confirm',
         data: {
           prenom: form.prenom,
           nom: form.nom,
