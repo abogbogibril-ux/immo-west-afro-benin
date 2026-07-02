@@ -85,18 +85,18 @@ export default function AgentDashboardPage() {
   })
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-6 bg-[#0f172a] min-h-screen">
 
       {/* En-tête */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-xl md:text-2xl font-bold text-gray-900">
+          <h1 className="text-xl md:text-2xl font-bold text-white">
             Bonjour, {agent?.prenom ?? '...'} 👋
           </h1>
-          <p className="text-sm text-gray-400 mt-0.5 capitalize">{today}</p>
+          <p className="text-sm text-slate-400 mt-0.5 capitalize">{today}</p>
         </div>
         <Link href="/publier"
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#FF6B35] text-white text-sm font-semibold rounded-xl hover:bg-[#e55c2a] transition-colors self-start">
+          className="flex items-center gap-2 px-4 py-2.5 bg-[#00bcd4] text-white text-sm font-semibold rounded-xl hover:bg-[#0097a7] transition-colors self-start">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
           </svg>
@@ -107,7 +107,7 @@ export default function AgentDashboardPage() {
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {KPI_CARDS.map(kpi => (
-          <div key={kpi.label} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-5">
+          <div key={kpi.label} className="bg-[#1e293b] rounded-2xl shadow-sm border border-[#334155] p-4 md:p-5">
             <div className="flex items-start justify-between mb-3">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl ${kpi.color}`}>
                 {kpi.icon}
@@ -120,10 +120,10 @@ export default function AgentDashboardPage() {
                 {kpi.trend} {kpi.trendVal}
               </span>
             </div>
-            <div className="text-2xl md:text-3xl font-bold text-gray-900 mb-0.5">
+            <div className="text-2xl md:text-3xl font-bold text-white mb-0.5">
               {loading ? <span className="animate-pulse bg-gray-200 rounded h-8 w-16 inline-block"/> : kpi.value}
             </div>
-            <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">{kpi.label}</p>
+            <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">{kpi.label}</p>
           </div>
         ))}
       </div>
@@ -131,10 +131,10 @@ export default function AgentDashboardPage() {
       {/* Graphique + Répartition */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
-        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+        <div className="lg:col-span-2 bg-[#1e293b] rounded-2xl shadow-sm border border-[#334155] p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-gray-900">Tendance des vues</h2>
-            <select className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 text-gray-500 focus:outline-none">
+            <h2 className="font-semibold text-white">Tendance des vues</h2>
+            <select className="text-xs border border-[#334155] rounded-lg px-2 py-1.5 text-slate-400 focus:outline-none bg-[#0f172a]">
               <option>Ce mois</option>
               <option>3 derniers mois</option>
               <option>Cette année</option>
@@ -158,21 +158,21 @@ export default function AgentDashboardPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-          <h2 className="font-semibold text-gray-900 mb-4">Répartition par type</h2>
+        <div className="bg-[#1e293b] rounded-2xl shadow-sm border border-[#334155] p-5">
+          <h2 className="font-semibold text-white mb-4">Répartition par type</h2>
           <div className="space-y-3">
             {[
-              { label: 'Villa', pct: 35, color: 'bg-[#2D5016]' },
+              { label: 'Villa', pct: 35, color: 'bg-[#00bcd4]' },
               { label: 'Terrain', pct: 28, color: 'bg-[#FF6B35]' },
               { label: 'Appartement', pct: 25, color: 'bg-blue-500' },
               { label: 'Bureau', pct: 12, color: 'bg-purple-500' },
             ].map(item => (
               <div key={item.label}>
                 <div className="flex items-center justify-between text-sm mb-1">
-                  <span className="text-gray-600">{item.label}</span>
-                  <span className="font-semibold text-gray-900">{item.pct}%</span>
+                  <span className="text-slate-400">{item.label}</span>
+                  <span className="font-semibold text-white">{item.pct}%</span>
                 </div>
-                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-2 bg-[#334155] rounded-full overflow-hidden">
                   <div className={`h-full ${item.color} rounded-full`} style={{ width: `${item.pct}%` }}/>
                 </div>
               </div>
@@ -184,11 +184,11 @@ export default function AgentDashboardPage() {
       {/* Annonces récentes + Tâches */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
-        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-900">Annonces récentes</h2>
+        <div className="lg:col-span-2 bg-[#1e293b] rounded-2xl shadow-sm border border-[#334155] overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-[#334155]">
+            <h2 className="font-semibold text-white">Annonces récentes</h2>
             <Link href="/dashboard/agent/annonces"
-              className="text-sm text-[#FF6B35] font-medium hover:underline">
+              className="text-sm text-[#00bcd4] font-medium hover:underline">
               Voir toutes →
             </Link>
           </div>
@@ -214,7 +214,7 @@ export default function AgentDashboardPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-gray-50">
+                  <tr className="bg-[#0f172a]">
                     <th className="text-left px-5 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Référence</th>
                     <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Titre</th>
                     <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide hidden sm:table-cell">Ville</th>
@@ -223,17 +223,17 @@ export default function AgentDashboardPage() {
                     <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-50">
+                <tbody className="divide-y divide-[#334155]">
                   {annonces.map(a => (
-                    <tr key={a.id} className="hover:bg-gray-50 transition-colors">
+                    <tr key={a.id} className="hover:bg-[#0f172a] transition-colors">
                       <td className="px-5 py-3.5">
-                        <span className="font-mono text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">
+                        <span className="font-mono text-xs text-slate-400 bg-[#0f172a] px-1.5 py-0.5 rounded">
                           {a.id.slice(0, 8).toUpperCase()}
                         </span>
                       </td>
                       <td className="px-3 py-3.5">
-                        <p className="font-medium text-gray-900 truncate max-w-[160px]">{a.titre}</p>
-                        <p className="text-xs text-gray-400">{formatPrice(a.prix)}</p>
+                        <p className="font-medium text-white truncate max-w-[160px]">{a.titre}</p>
+                        <p className="text-xs text-slate-400">{formatPrice(a.prix)}</p>
                       </td>
                       <td className="px-3 py-3.5 text-gray-500 hidden sm:table-cell">{a.ville}</td>
                       <td className="px-3 py-3.5 font-semibold text-gray-900">{a.vues ?? 0}</td>
@@ -263,7 +263,7 @@ export default function AgentDashboardPage() {
                             </button>
                           )}
                           <Link href={`/dashboard/agent/annonces?edit=${a.id}`}
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-[#FF6B35] hover:bg-orange-50 transition-colors">
+                            className="p-1.5 rounded-lg text-gray-400 hover:text-[#00bcd4] hover:bg-[#00bcd4]/10 transition-colors">
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                             </svg>
@@ -279,10 +279,10 @@ export default function AgentDashboardPage() {
         </div>
 
         {/* Tâches */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+        <div className="bg-[#1e293b] rounded-2xl shadow-sm border border-[#334155] p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-gray-900">À faire</h2>
-            <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+            <h2 className="font-semibold text-white">À faire</h2>
+            <span className="text-xs text-slate-400 bg-[#0f172a] px-2 py-0.5 rounded-full">
               {tasks.filter(t => !t.done).length} restantes
             </span>
           </div>
@@ -290,7 +290,7 @@ export default function AgentDashboardPage() {
             {tasks.map(task => (
               <div key={task.id}
                 className={`flex items-start gap-3 p-3 rounded-xl border transition-all cursor-pointer ${
-                  task.done ? 'bg-gray-50 border-gray-100 opacity-60' : 'bg-white border-gray-200 hover:border-[#FF6B35]/30'
+                  task.done ? 'bg-[#0f172a] border-[#334155] opacity-60' : 'bg-[#1e293b] border-[#334155] hover:border-[#00bcd4]/30'
                 }`}
                 onClick={() => setTasks(prev => prev.map(t => t.id === task.id ? { ...t, done: !t.done } : t))}>
                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
@@ -302,14 +302,14 @@ export default function AgentDashboardPage() {
                     </svg>
                   )}
                 </div>
-                <span className={`text-sm ${task.done ? 'line-through text-gray-400' : 'text-gray-700'}`}>
+                <span className={`text-sm ${task.done ? 'line-through text-slate-500' : 'text-slate-200'}`}>
                   {task.label}
                 </span>
               </div>
             ))}
           </div>
           <Link href="/dashboard/agent/messages"
-            className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 border border-dashed border-gray-200 rounded-xl text-sm text-gray-400 hover:border-[#FF6B35] hover:text-[#FF6B35] transition-colors">
+            className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 border border-dashed border-[#334155] rounded-xl text-sm text-slate-400 hover:border-[#00bcd4] hover:text-[#00bcd4] transition-colors">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
             </svg>

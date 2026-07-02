@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
@@ -67,10 +67,10 @@ export default function ClientDashboardPage() {
   ]
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-6 bg-[#0f172a] min-h-screen">
 
       {/* Bienvenue */}
-      <div className="bg-gradient-to-br from-green-600 to-emerald-700 rounded-2xl p-5 md:p-6 text-white">
+      <div className="bg-gradient-to-br from-[#0f3460] to-[#00bcd4]/80 rounded-2xl p-5 md:p-6 text-white">
         <p className="text-green-200 text-sm mb-1 capitalize">{today}</p>
         <h1 className="text-xl md:text-2xl font-bold mb-2">
           Bonjour, {client?.prenom ?? '...'} 👋
@@ -81,7 +81,7 @@ export default function ClientDashboardPage() {
             : 'Bienvenue sur votre espace personnel Immo West Afro.'}
         </p>
         <Link href="/recherche"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-white text-green-700 text-sm font-semibold rounded-xl hover:bg-green-50 transition-colors">
+          className="inline-flex items-center gap-2 px-4 py-2 bg-white text-[#0f172a] text-sm font-semibold rounded-xl hover:bg-slate-100 transition-colors">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
@@ -93,14 +93,14 @@ export default function ClientDashboardPage() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         {KPI.map(k => (
           <Link key={k.label} href={k.href}
-            className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 hover:shadow-md hover:-translate-y-0.5 transition-all">
+            className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm p-4 hover:shadow-md hover:-translate-y-0.5 transition-all">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl mb-3 ${k.color}`}>
               {k.icon}
             </div>
-            <div className="text-2xl font-bold text-gray-900 mb-0.5">
+            <div className="text-2xl font-bold text-white mb-0.5">
               {loading ? <span className="animate-pulse bg-gray-200 rounded h-7 w-10 inline-block"/> : k.value}
             </div>
-            <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">{k.label}</p>
+            <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">{k.label}</p>
           </Link>
         ))}
       </div>
@@ -130,10 +130,10 @@ export default function ClientDashboardPage() {
           </div>
         </div>
       ) : (
-        <div className="bg-white border border-gray-100 rounded-2xl p-5 text-center shadow-sm">
+        <div className="bg-[#1e293b] border border-[#334155] rounded-2xl p-5 text-center shadow-sm">
           <p className="text-3xl mb-2">🗓</p>
-          <p className="font-semibold text-gray-700 mb-1">Aucune visite programmée</p>
-          <p className="text-sm text-gray-400 mb-4">Contactez un agent pour planifier une visite</p>
+          <p className="font-semibold text-white mb-1">Aucune visite programmée</p>
+          <p className="text-sm text-slate-400 mb-4">Contactez un agent pour planifier une visite</p>
           <Link href="/recherche"
             className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-xl hover:bg-green-700 transition-colors">
             Parcourir les annonces
@@ -145,13 +145,13 @@ export default function ClientDashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
         {/* Activité récente */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-50">
-            <h2 className="font-semibold text-gray-900">Activité récente</h2>
+        <div className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-[#334155]">
+            <h2 className="font-semibold text-white">Activité récente</h2>
             <Link href="/dashboard/client/messages"
-              className="text-sm text-green-600 font-medium hover:underline">Voir tout →</Link>
+              className="text-sm text-[#00bcd4] font-medium hover:underline">Voir tout →</Link>
           </div>
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-[#334155]">
             {loading ? (
               <div className="p-4 space-y-3">
                 {[1,2,3].map(i => (
@@ -172,11 +172,11 @@ export default function ClientDashboardPage() {
             ) : (
               activite.map(a => (
                 <div key={a.id} className="flex items-start gap-3 px-5 py-3.5">
-                  <div className="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-sm flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-[#00bcd4]/20 text-[#00bcd4] flex items-center justify-center text-sm flex-shrink-0">
                     💬
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-800 truncate">{a.sujet}</p>
+                    <p className="text-sm font-medium text-white truncate">{a.sujet}</p>
                     {a.biens?.titre && (
                       <p className="text-xs text-green-600 mt-0.5 truncate">🏠 {a.biens.titre}</p>
                     )}
@@ -191,13 +191,13 @@ export default function ClientDashboardPage() {
         </div>
 
         {/* Biens suggérés */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-50">
-            <h2 className="font-semibold text-gray-900">Biens suggérés</h2>
+        <div className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-[#334155]">
+            <h2 className="font-semibold text-white">Biens suggérés</h2>
             <Link href="/recherche"
-              className="text-sm text-green-600 font-medium hover:underline">Voir tout →</Link>
+              className="text-sm text-[#00bcd4] font-medium hover:underline">Voir tout →</Link>
           </div>
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-[#334155]">
             {loading ? (
               <div className="p-4 space-y-3">
                 {[1,2,3].map(i => (
@@ -220,7 +220,7 @@ export default function ClientDashboardPage() {
                 const photo = bien.images?.find((i: any) => i.is_principale)?.url ?? bien.images?.[0]?.url
                 return (
                   <Link key={bien.id} href={`/bien/${bien.id}`}
-                    className="flex items-center gap-3 px-5 py-3.5 hover:bg-gray-50 transition-colors">
+                    className="flex items-center gap-3 px-5 py-3.5 hover:bg-[#0f172a] transition-colors">
                     <div className="relative w-16 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
                       <OptimizedImage
                         src={photo}
@@ -231,8 +231,8 @@ export default function ClientDashboardPage() {
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-800 truncate">{bien.titre}</p>
-                      <p className="text-xs text-gray-400 mt-0.5">{bien.ville}</p>
+                      <p className="text-sm font-medium text-white truncate">{bien.titre}</p>
+                      <p className="text-xs text-slate-400 mt-0.5">{bien.ville}</p>
                     </div>
                     <div className="text-right flex-shrink-0">
                       <p className="text-sm font-bold text-green-600">
