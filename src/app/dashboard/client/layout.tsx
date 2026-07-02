@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -97,11 +97,11 @@ const NAV = [
 // Bottom nav mobile (5 items max)
 const BOTTOM_NAV = [
   { href: '/dashboard/client', label: 'Accueil', badge: '', icon: '🏠' },
-  { href: '/dashboard/client/demandes', label: 'Demandes', badge: 'demandes', icon: '📋' },
-  { href: '/dashboard/client/visites', label: 'Visites', badge: 'visites', icon: '🗓' },
   { href: '/dashboard/client/messages', label: 'Messages', badge: 'messages', icon: '💬' },
   { href: '/dashboard/client/favoris', label: 'Favoris', badge: 'favoris', icon: '❤️' },
+  { href: '/dashboard/client/parametres', label: 'Parametres', badge: '', icon: '⚙️' },
 ]
+
 
 export default function ClientDashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()

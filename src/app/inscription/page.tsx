@@ -26,14 +26,14 @@ const ROLES = [
   {
     val: 'agent',
     label: 'Agent immobilier',
-    desc: 'Agence ou professionnel de l immobilier',
+    desc: 'Agence, professionnel ou proprietaire qui publie ses biens',
     icon: '🏢',
   },
   {
-    val: 'proprietaire',
-    label: 'Proprietaire particulier',
-    desc: 'Je veux publier mon bien en direct',
-    icon: '🏠',
+    val: 'client',
+    label: 'Client',
+    desc: 'Je cherche un bien a louer ou acheter',
+    icon: '🔍',
   },
 ]
 
