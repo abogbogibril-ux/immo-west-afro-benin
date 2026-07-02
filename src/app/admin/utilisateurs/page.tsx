@@ -82,15 +82,15 @@ export default function UtilisateursAdmin() {
       {/* STATS RAPIDES */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
         {[
-          { label: 'Total', value: stats.total, color: '#0f172a', bg: '#f8fafc' },
-          { label: 'Admins', value: stats.admins, color: '#7c3aed', bg: '#f5f3ff' },
-          { label: 'Agents', value: stats.agents, color: '#059669', bg: '#f0fdf4' },
-          { label: 'Clients', value: stats.clients, color: '#1d4ed8', bg: '#eff6ff' },
-          { label: 'Suspendus', value: stats.suspendus, color: '#ef4444', bg: '#fef2f2' },
+          { label: 'Total', value: stats.total, color: '#ffffff', bg: '#1e293b' },
+          { label: 'Admins', value: stats.admins, color: '#a78bfa', bg: '#1e293b' },
+          { label: 'Agents', value: stats.agents, color: '#34d399', bg: '#1e293b' },
+          { label: 'Clients', value: stats.clients, color: '#60a5fa', bg: '#1e293b' },
+          { label: 'Suspendus', value: stats.suspendus, color: '#f87171', bg: '#1e293b' },
         ].map(s => (
           <div key={s.label} style={{ backgroundColor: '#1e293b', borderRadius: '10px', padding: '1rem', textAlign: 'center', border: '1px solid ' + s.color + '40' }}>
             <div style={{ color: s.color, fontSize: '1.8rem', fontWeight: '800' }}>{s.value}</div>
-            <div style={{ color: '#64748b', fontSize: '0.8rem', marginTop: '0.2rem' }}>{s.label}</div>
+            <div style={{ color: '#94a3b8', fontSize: '0.8rem', marginTop: '0.2rem' }}>{s.label}</div>
           </div>
         ))}
       </div>
