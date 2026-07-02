@@ -247,7 +247,7 @@ export default function AdminPage() {
               </thead>
               <tbody>
                 {utilisateurs.map((u) => (
-                  <tr key={u.id} style={{ borderTop: '1px solid #334155' }}>
+                  <tr key={u.id} style={{ borderTop: '1px solid #334155', verticalAlign: 'middle' }}>
                     <td style={{ padding: '1rem', color: '#fff' }}>{u.nom_complet || `${u.prenom ?? ''} ${u.nom ?? ''}`.trim() || '-'}</td>
                     <td style={{ padding: '1rem', color: '#cbd5e1' }}>{u.email}</td>
                     <td style={{ padding: '1rem' }}>
@@ -299,7 +299,7 @@ export default function AdminPage() {
                 </thead>
                 <tbody>
                   {biensFiltres.map((b) => (
-                    <tr key={b.id} style={{ borderTop: '1px solid #334155' }}>
+                    <tr key={b.id} style={{ borderTop: '1px solid #334155', verticalAlign: 'middle' }}>
                       <td style={{ padding: '1rem', color: '#fff', maxWidth: '250px' }}>{b.titre}</td>
                       <td style={{ padding: '1rem', color: '#cbd5e1' }}>
                         {b.profiles?.nom_complet || `${b.profiles?.prenom ?? ''} ${b.profiles?.nom ?? ''}`.trim() || '-'}
@@ -350,7 +350,7 @@ export default function AdminPage() {
                 </thead>
                 <tbody>
                   {besoins.map((b) => (
-                    <tr key={b.id} style={{ borderTop: '1px solid #334155' }}>
+                    <tr key={b.id} style={{ borderTop: '1px solid #334155', verticalAlign: 'middle' }}>
                       <td style={{ padding: '0.6rem 0.75rem', color: '#fff', fontSize: '0.82rem', whiteSpace: 'nowrap' }}>
                         <span style={{ textTransform: 'capitalize' }}>{b.type_besoin}</span>
                         <br/>
@@ -407,12 +407,12 @@ export default function AdminPage() {
               </thead>
               <tbody>
                 {signalements.map((s) => (
-                  <tr key={s.id} style={{ borderTop: '1px solid #334155' }}>
-                    <td style={{ padding: '1rem', color: '#fff', maxWidth: '200px' }}>{s.biens?.titre || 'Bien supprimé'}</td>
-                    <td style={{ padding: '1rem', color: '#fca5a5', fontWeight: '600', fontSize: '0.85rem' }}>{s.motif}</td>
-                    <td style={{ padding: '1rem', color: '#94a3b8', fontSize: '0.8rem', maxWidth: '220px' }}>{s.description || '-'}</td>
-                    <td style={{ padding: '1rem', color: '#cbd5e1', fontSize: '0.8rem' }}>{s.email_signaleur || '-'}</td>
-                    <td style={{ padding: '1rem' }}>
+                  <tr key={s.id} style={{ borderTop: '1px solid #334155', verticalAlign: 'middle' }}>
+                    <td style={{ padding: '0.6rem 0.75rem', color: '#fff', fontSize: '0.8rem', maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.biens?.titre || 'Bien supprime'}</td>
+                    <td style={{ padding: '0.6rem 0.75rem', color: '#fca5a5', fontWeight: '600', fontSize: '0.78rem', whiteSpace: 'nowrap' }}>{s.motif}</td>
+                    <td style={{ padding: '0.6rem 0.75rem', color: '#94a3b8', fontSize: '0.78rem', maxWidth: '200px' }}><div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{s.description || '-'}</div></td>
+                    <td style={{ padding: '0.6rem 0.75rem', color: '#cbd5e1', fontSize: '0.78rem', whiteSpace: 'nowrap' }}>{s.email_signaleur || '-'}</td>
+                    <td style={{ padding: '0.6rem 0.75rem' }}>
                       <select value={s.statut} onChange={e => changerStatutSignalement(s.id, e.target.value)} style={{
                         backgroundColor: s.statut === 'nouveau' ? '#dc2626' : '#059669',
                         color: '#fff', border: 'none', borderRadius: '6px', padding: '0.3rem 0.5rem', fontSize: '0.75rem',
@@ -421,11 +421,11 @@ export default function AdminPage() {
                         <option value="traite">Traité</option>
                       </select>
                     </td>
-                    <td style={{ padding: '1rem' }}>
-                      <button onClick={() => supprimerSignalement(s.id)} style={{
-                        padding: '0.4rem 0.75rem', backgroundColor: '#ef4444', color: '#fff',
-                        border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem',
-                      }}>Suppr.</button>
+                    <td style={{ padding: '0.6rem 0.75rem' }}>
+                      <button onClick={() => supprimerSignalement(s.id)} title='Supprimer'
+                        style={{ padding: '0.35rem', backgroundColor: '#fee2e210', color: '#ef4444', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                        <svg width='14' height='14' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'/></svg>
+                      </button>
                     </td>
                   </tr>
                 ))}

@@ -1,42 +1,52 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 
 export default function SeoAdmin() {
   const [form, setForm] = useState({
-    titre: 'Immo West Afro Bénin | Location Immobilière au Bénin',
-    description: 'Trouvez votre bien immobilier idéal au Bénin. Maisons, appartements, villas à louer à Cotonou, Abomey-Calavi, Porto-Novo.',
-    keywords: 'immobilier Bénin, location maison Cotonou, appartement à louer Bénin',
+    titre: 'Immo West Afro Benin | Location Immobiliere au Benin',
+    description: 'Trouvez votre bien immobilier ideal au Benin. Maisons, appartements, villas a louer a Cotonou, Abomey-Calavi, Porto-Novo.',
+    keywords: 'immobilier Benin, location maison Cotonou, appartement a louer Benin',
     og_image: '',
   })
-  const [sauvegarde, setSauvegarde] = useState(false)
+  const [toast, setToast] = useState(false)
+
+  const sauvegarder = () => {
+    setToast(true)
+    setTimeout(() => setToast(false), 3000)
+  }
 
   return (
     <div>
+      {/* Toast */}
+      {toast && (
+        <div style={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 50, backgroundColor: '#16a34a', color: '#fff', padding: '0.75rem 1.25rem', borderRadius: '10px', fontSize: '0.9rem', fontWeight: '600', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
+          SEO sauvegarde avec succes !
+        </div>
+      )}
+
       <div style={{ marginBottom: '1.5rem' }}>
-        <h1 style={{ color: '#0f172a', fontSize: '1.5rem', fontWeight: '800', margin: 0 }}>SEO & Référencement</h1>
+        <h1 style={{ color: '#0f172a', fontSize: '1.5rem', fontWeight: '800', margin: 0 }}>SEO et Referencement</h1>
         <p style={{ color: '#64748b', margin: '0.25rem 0 0' }}>Optimisation pour les moteurs de recherche</p>
       </div>
-
-      {sauvegarde && <div style={{ backgroundColor: '#dcfce7', color: '#16a34a', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem', fontWeight: '600' }}>✅ SEO mis à jour !</div>}
 
       <div style={{ display: 'grid', gap: '1.5rem' }}>
 
         <div style={cardStyle}>
-          <h2 style={sectionTitle}>🔍 Métadonnées principales</h2>
+          <h2 style={sectionTitle}>Metadonnees principales</h2>
           <div style={{ marginBottom: '1rem' }}>
-            <label style={labelStyle}>Titre du site (60 caractères max)</label>
+            <label style={labelStyle}>Titre du site (60 caracteres max)</label>
             <input value={form.titre} onChange={e => setForm({...form, titre: e.target.value})} style={inputStyle} />
-            <p style={{ color: form.titre.length > 60 ? '#ef4444' : '#94a3b8', fontSize: '0.75rem', margin: '0.25rem 0 0' }}>{form.titre.length}/60 caractères</p>
+            <p style={{ color: form.titre.length > 60 ? '#ef4444' : '#94a3b8', fontSize: '0.75rem', margin: '0.25rem 0 0' }}>{form.titre.length}/60 caracteres</p>
           </div>
           <div style={{ marginBottom: '1rem' }}>
-            <label style={labelStyle}>Description (160 caractères max)</label>
+            <label style={labelStyle}>Description (160 caracteres max)</label>
             <textarea value={form.description} onChange={e => setForm({...form, description: e.target.value})}
               style={{ ...inputStyle, height: '80px', resize: 'vertical' }} />
-            <p style={{ color: form.description.length > 160 ? '#ef4444' : '#94a3b8', fontSize: '0.75rem', margin: '0.25rem 0 0' }}>{form.description.length}/160 caractères</p>
+            <p style={{ color: form.description.length > 160 ? '#ef4444' : '#94a3b8', fontSize: '0.75rem', margin: '0.25rem 0 0' }}>{form.description.length}/160 caracteres</p>
           </div>
           <div style={{ marginBottom: '1rem' }}>
-            <label style={labelStyle}>Mots-clés (séparés par des virgules)</label>
+            <label style={labelStyle}>Mots-cles (separes par des virgules)</label>
             <input value={form.keywords} onChange={e => setForm({...form, keywords: e.target.value})} style={inputStyle} />
           </div>
           <div style={{ marginBottom: '1rem' }}>
@@ -46,16 +56,16 @@ export default function SeoAdmin() {
         </div>
 
         <div style={cardStyle}>
-          <h2 style={sectionTitle}>🗺️ Sitemap & Indexation</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <h2 style={sectionTitle}>Sitemap et Indexation</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
             {[
-              { label: '✅ Sitemap XML', desc: 'Généré automatiquement', url: '/sitemap.xml', color: '#dcfce7', textColor: '#16a34a' },
-              { label: '✅ Robots.txt', desc: 'Configuré', url: '/robots.txt', color: '#dcfce7', textColor: '#16a34a' },
-              { label: '✅ Google Search Console', desc: 'Propriété vérifiée', url: '#', color: '#dcfce7', textColor: '#16a34a' },
-              { label: '🔄 Données structurées', desc: 'Schema.org — À implémenter', url: '#', color: '#fef3c7', textColor: '#d97706' },
+              { label: 'Sitemap XML', desc: 'Genere automatiquement', url: '/sitemap.xml', ok: true },
+              { label: 'Robots.txt', desc: 'Configure', url: '/robots.txt', ok: true },
+              { label: 'Google Search Console', desc: 'Propriete verifiee', url: '#', ok: true },
+              { label: 'Donnees structurees', desc: 'Schema.org JSON-LD implemente', url: '#', ok: true },
             ].map(item => (
-              <div key={item.label} style={{ backgroundColor: item.color, borderRadius: '10px', padding: '1rem' }}>
-                <p style={{ color: item.textColor, fontWeight: '700', margin: 0, fontSize: '0.9rem' }}>{item.label}</p>
+              <div key={item.label} style={{ backgroundColor: '#dcfce7', borderRadius: '10px', padding: '1rem' }}>
+                <p style={{ color: '#16a34a', fontWeight: '700', margin: 0, fontSize: '0.9rem' }}>✅ {item.label}</p>
                 <p style={{ color: '#64748b', fontSize: '0.8rem', margin: '0.25rem 0 0' }}>{item.desc}</p>
               </div>
             ))}
@@ -63,11 +73,11 @@ export default function SeoAdmin() {
         </div>
       </div>
 
-      <button onClick={() => { setSauvegarde(true); setTimeout(() => setSauvegarde(false), 3000) }} style={{
+      <button onClick={sauvegarder} style={{
         marginTop: '1.5rem', padding: '1rem 2rem', backgroundColor: '#00bcd4',
         color: '#fff', border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: '700', cursor: 'pointer',
       }}>
-        💾 Sauvegarder le SEO
+        Sauvegarder le SEO
       </button>
     </div>
   )
