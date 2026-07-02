@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import AIGenerateur from '@/components/AIGenerateur'
 
 const VILLES = ['Cotonou','Abomey-Calavi','Porto-Novo','Sème-Kpodji','Parakou','Bohicon','Ouidah','Lokossa','Abomey','Djougou','Comè','Azovè','Natitingou']
 const TYPES = ['Maison','Appartement','Villa','Terrain','Bureau','Studio','Chambre']
@@ -25,6 +26,10 @@ export default function PublierPage() {
   const [existingPhotos, setExistingPhotos] = useState<{url: string, ordre: number}[]>([])
   const [uploadProgress, setUploadProgress] = useState(0)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleAIGenerated = (titre: string, description: string) => {
+    setForm(prev => ({ ...prev, titre, description }))
+  }
   const [form, setForm] = useState({
     titre: '', description: '', type_bien: '', transaction: 'vente', prix: '',
     ville: '', arrondissement: '', quartier: '', surface: '',
@@ -262,6 +267,7 @@ export default function PublierPage() {
           <h2 style={sectionTitle}>Informations principales</h2>
           <div style={gridTwo}>
             <div style={{ gridColumn: '1/-1' }}>
+              <AIGenerateur form={form} previews={previews} onGenerated={handleAIGenerated} />
               <label style={labelStyle}>Titre du bien *</label>
               <input name="titre" type="text" placeholder="Ex: Belle villa 4 chambres à Cotonou"
                 value={form.titre} onChange={handleChange} style={inputStyle} />
