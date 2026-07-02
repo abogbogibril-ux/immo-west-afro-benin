@@ -139,7 +139,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
 
         {/* PAGE */}
-        <div style={{ padding: '2rem' }}>
+        <div style={{ padding: '2rem', backgroundColor: '#0f172a', minHeight: 'calc(100vh - 60px)' }}>
           {children}
         </div>
       </main>

@@ -144,7 +144,7 @@ export default function AgentDashboardPage() {
             {[40, 65, 45, 80, 60, 90, 75, 55, 85, 70, 95, 88].map((h, i) => (
               <div key={i} className="flex-1 flex flex-col items-center gap-1">
                 <div
-                  className="w-full bg-[#2D5016] rounded-t-sm hover:bg-[#FF6B35] transition-colors cursor-pointer"
+                  className="w-full bg-[#2D5016] rounded-t-sm hover:bg-[#00bcd4] transition-colors cursor-pointer"
                   style={{ height: `${h}%`, opacity: 0.7 + i * 0.025 }}
                   title={`${Math.round(h * kpis.vues / 100)} vues`}
                 />
@@ -163,7 +163,7 @@ export default function AgentDashboardPage() {
           <div className="space-y-3">
             {[
               { label: 'Villa', pct: 35, color: 'bg-[#00bcd4]' },
-              { label: 'Terrain', pct: 28, color: 'bg-[#FF6B35]' },
+              { label: 'Terrain', pct: 28, color: 'bg-[#00bcd4]' },
               { label: 'Appartement', pct: 25, color: 'bg-blue-500' },
               { label: 'Bureau', pct: 12, color: 'bg-purple-500' },
             ].map(item => (
@@ -206,7 +206,7 @@ export default function AgentDashboardPage() {
             <div className="p-8 text-center text-gray-400">
               <p className="text-4xl mb-2">🏠</p>
               <p className="text-sm">Aucune annonce publiée</p>
-              <Link href="/publier" className="mt-3 inline-block text-sm text-[#FF6B35] font-medium hover:underline">
+              <Link href="/publier" className="mt-3 inline-block text-sm text-[#00bcd4] font-medium hover:underline">
                 Publier votre première annonce →
               </Link>
             </div>

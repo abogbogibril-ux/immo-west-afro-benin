@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -106,7 +106,7 @@ export default function AgentDashboardLayout({ children }: { children: React.Rea
 
       {/* ── Sidebar ── */}
       <aside className={`
-        fixed top-0 left-0 h-full w-60 bg-[#1a2e0f] z-30 flex flex-col
+        fixed top-0 left-0 h-full w-60 bg-[#0f172a] z-30 flex flex-col
         transform transition-transform duration-300 ease-in-out
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         lg:translate-x-0 lg:static lg:h-screen
@@ -114,7 +114,7 @@ export default function AgentDashboardLayout({ children }: { children: React.Rea
         {/* Logo */}
         <div className="px-5 py-5 border-b border-white/10">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-[#FF6B35] rounded-lg flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 bg-[#00bcd4] rounded-lg flex items-center justify-center flex-shrink-0">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -122,7 +122,7 @@ export default function AgentDashboardLayout({ children }: { children: React.Rea
             </div>
             <div>
               <p className="text-white font-bold text-sm leading-tight">Immo West Afro</p>
-              <p className="text-green-400 text-[10px] font-medium">Espace Agent</p>
+              <p className="text-[#00bcd4] text-[10px] font-medium">Espace Agent</p>
             </div>
           </Link>
         </div>
@@ -133,9 +133,9 @@ export default function AgentDashboardLayout({ children }: { children: React.Rea
             <div className="flex items-center gap-3">
               {agent.avatar_url ? (
                 <img src={agent.avatar_url} alt=""
-                  className="w-10 h-10 rounded-full object-cover ring-2 ring-[#FF6B35]/40" />
+                  className="w-10 h-10 rounded-full object-cover ring-2 ring-[#00bcd4]/40" />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-[#FF6B35]/20 flex items-center justify-center text-[#FF6B35] font-bold text-sm flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-[#00bcd4]/20 flex items-center justify-center text-[#00bcd4] font-bold text-sm flex-shrink-0">
                   {(agent.prenom?.[0] ?? '').toUpperCase()}{(agent.nom?.[0] ?? '').toUpperCase()}
                 </div>
               )}
@@ -143,7 +143,7 @@ export default function AgentDashboardLayout({ children }: { children: React.Rea
                 <p className="text-white text-sm font-semibold truncate">
                   {agent.prenom} {agent.nom}
                 </p>
-                <p className="text-green-400 text-xs capitalize">{agent.role}</p>
+                <p className="text-[#00bcd4] text-xs capitalize">{agent.role}</p>
               </div>
             </div>
           </div>
@@ -158,7 +158,7 @@ export default function AgentDashboardLayout({ children }: { children: React.Rea
               onClick={() => setSidebarOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
                 item.accent
-                  ? 'bg-[#FF6B35] text-white hover:bg-[#e55c2a]'
+                  ? 'bg-[#00bcd4] text-white hover:bg-[#0097a7]'
                   : isActive(item.href)
                   ? 'bg-white/15 text-white'
                   : 'text-white/60 hover:bg-white/8 hover:text-white'
@@ -232,7 +232,7 @@ export default function AgentDashboardLayout({ children }: { children: React.Rea
 
             {/* Publier */}
             <Link href="/publier"
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#FF6B35] text-white text-sm font-semibold rounded-lg hover:bg-[#e55c2a] transition-colors">
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#00bcd4] text-white text-sm font-semibold rounded-lg hover:bg-[#0097a7] transition-colors">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
@@ -242,7 +242,7 @@ export default function AgentDashboardLayout({ children }: { children: React.Rea
             {/* Avatar */}
             {agent && (
               <Link href="/dashboard/agent/parametres"
-                className="w-8 h-8 rounded-full bg-[#FF6B35]/20 flex items-center justify-center text-[#FF6B35] font-bold text-xs hover:ring-2 hover:ring-[#FF6B35]/40 transition-all">
+                className="w-8 h-8 rounded-full bg-[#00bcd4]/20 flex items-center justify-center text-[#00bcd4] font-bold text-xs hover:ring-2 hover:ring-[#00bcd4]/40 transition-all">
                 {(agent.prenom?.[0] ?? '').toUpperCase()}{(agent.nom?.[0] ?? '').toUpperCase()}
               </Link>
             )}

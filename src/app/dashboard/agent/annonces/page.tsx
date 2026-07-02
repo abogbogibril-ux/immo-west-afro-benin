@@ -226,8 +226,8 @@ export default function AnnoncesPage() {
                       <p className="font-medium text-white truncate max-w-[160px]">{a.titre}</p>
                       <p className="text-xs text-slate-300">{a.ville}{a.arrondissement ? `, ${a.arrondissement}` : ''}</p>
                     </td>
-                    <td className="px-4 py-3.5 text-gray-500 whitespace-nowrap">{a.type_bien}</td>
-                    <td className="px-4 py-3.5 font-semibold text-gray-900 whitespace-nowrap">{formatPrice(a.prix)}</td>
+                    <td className="px-4 py-3.5 text-slate-300 whitespace-nowrap">{a.type_bien}</td>
+                    <td className="px-4 py-3.5 font-semibold text-[#00bcd4] whitespace-nowrap">{formatPrice(a.prix)}</td>
                     <td className="px-4 py-3.5">
                       <div className="flex items-center gap-1.5">
                         <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
