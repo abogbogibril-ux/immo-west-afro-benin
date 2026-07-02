@@ -99,8 +99,8 @@ export default async function HomePage() {
       {/* HERO */}
       <section className="relative overflow-hidden min-h-[500px] md:min-h-[600px]">
         <div className="absolute inset-0 z-0">
-          <img src="/hero-bg.jpg" alt="Immobilier Bénin" className="w-full h-full object-cover object-center scale-105" style={{ filter: 'brightness(0.6) saturate(0.9)' }} />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(0,80,160,0.55) 0%, rgba(16,100,60,0.50) 60%, rgba(0,40,80,0.65) 100%)' }} />
+          <img src="/hero-bg.jpg" alt="Immobilier Bénin" className="w-full h-full object-cover object-center scale-105" style={{ filter: 'brightness(0.85) saturate(1.0)' }} />
+          <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.35)' }} />
           <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 20% 80%, rgba(0,170,255,0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(0,200,100,0.2) 0%, transparent 50%)' }} />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 md:pt-24 md:pb-28">
