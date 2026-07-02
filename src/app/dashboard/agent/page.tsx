@@ -219,7 +219,7 @@ export default function AgentDashboardPage() {
                     <th className="text-left px-5 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Référence</th>
                     <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Titre</th>
                     <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide hidden sm:table-cell">Ville</th>
-                    <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Vues</th>
+                    <th className="text-left px-3 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Vues</th>
                     <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide hidden md:table-cell">Statut</th>
                     <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Actions</th>
                   </tr>
@@ -237,7 +237,7 @@ export default function AgentDashboardPage() {
                         <p className="text-xs text-[#00bcd4]">{formatPrice(a.prix)}</p>
                       </td>
                       <td className="px-3 py-3.5 text-gray-500 hidden sm:table-cell">{a.ville}</td>
-                      <td className="px-3 py-3.5 font-semibold text-gray-900">{a.vues ?? 0}</td>
+                      <td className="px-3 py-3.5 font-semibold text-white">{a.vues ?? 0}</td>
                       <td className="px-3 py-3.5 hidden md:table-cell">
                         <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUT_COLORS[a.statut] ?? 'bg-gray-100 text-gray-600'}`}>
                           {a.statut}
