@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
@@ -82,20 +82,20 @@ export default function ClientMessagesPage() {
     <div className="h-[calc(100vh-57px)] flex flex-col lg:flex-row">
 
       {/* ── Liste ── */}
-      <div className={`${selected ? 'hidden lg:flex' : 'flex'} flex-col w-full lg:w-80 xl:w-96 border-r border-gray-100 bg-white`}>
+      <div className={`${selected ? 'hidden lg:flex' : 'flex'} flex-col w-full lg:w-80 xl:w-96 border-r border-[#334155] bg-white`}>
 
-        <div className="px-4 py-4 border-b border-gray-100">
+        <div className="px-4 py-4 border-b border-[#334155]">
           <div className="flex items-center justify-between mb-3">
-            <h1 className="font-bold text-gray-900">Messages</h1>
+            <h1 className="font-bold text-white">Messages</h1>
             <div className="flex items-center gap-2">
               {unreadCount > 0 && (
-                <span className="bg-green-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                <span className="bg-[#00bcd4] text-white text-xs font-bold px-2 py-0.5 rounded-full">
                   {unreadCount}
                 </span>
               )}
               {/* Indicateur temps réel */}
               <span className="flex items-center gap-1 text-[10px] text-green-500 font-medium">
-                <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"/>
+                <span className="w-1.5 h-1.5 bg-[#00bcd4] rounded-full animate-pulse"/>
                 Live
               </span>
             </div>
@@ -104,7 +104,7 @@ export default function ClientMessagesPage() {
             {(['tous', 'recus', 'envoyes'] as const).map(val => (
               <button key={val} onClick={() => setFilter(val)}
                 className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                  filter === val ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500'
+                  filter === val ? 'bg-[#0f172a] text-white shadow-sm' : 'text-gray-500'
                 }`}>
                 {val === 'tous' ? 'Tous' : val === 'recus' ? 'Reçus' : 'Envoyés'}
               </button>
@@ -129,7 +129,7 @@ export default function ClientMessagesPage() {
             <div className="p-8 text-center text-gray-400">
               <p className="text-3xl mb-2">💬</p>
               <p className="text-sm">Aucun message</p>
-              <Link href="/recherche" className="mt-3 inline-block text-sm text-green-600 hover:underline">
+              <Link href="/recherche" className="mt-3 inline-block text-sm text-[#00bcd4] hover:underline">
                 Parcourir les annonces →
               </Link>
             </div>
@@ -139,12 +139,12 @@ export default function ClientMessagesPage() {
             const isUnread = !msg.lu && msg._type === 'recu'
             return (
               <button key={msg.id} onClick={() => handleSelect(msg)}
-                className={`w-full text-left px-4 py-3.5 border-b border-gray-50 hover:bg-gray-50 transition-colors ${
-                  isSelected ? 'bg-green-50 border-l-2 border-l-green-600' : ''
+                className={`w-full text-left px-4 py-3.5 border-b border-[#334155] hover:bg-[#0f172a] transition-colors ${
+                  isSelected ? 'bg-[#00bcd4]/10 border-l-2 border-l-green-600' : ''
                 }`}>
                 <div className="flex items-start gap-3">
                   <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
-                    msg._type === 'recu' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
+                    msg._type === 'recu' ? 'bg-[#00bcd4]/20 text-[#00bcd4]' : 'bg-gray-100 text-gray-500'
                   }`}>
                     {getInitiales(contact)}
                   </div>
@@ -160,10 +160,10 @@ export default function ClientMessagesPage() {
                       {msg.sujet}
                     </p>
                     {msg.biens?.titre && (
-                      <p className="text-[10px] text-green-600 mt-0.5 truncate">🏠 {msg.biens.titre}</p>
+                      <p className="text-[10px] text-[#00bcd4] mt-0.5 truncate">🏠 {msg.biens.titre}</p>
                     )}
                   </div>
-                  {isUnread && <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0 mt-2"/>}
+                  {isUnread && <div className="w-2 h-2 bg-[#00bcd4] rounded-full flex-shrink-0 mt-2"/>}
                 </div>
               </button>
             )
@@ -185,28 +185,28 @@ export default function ClientMessagesPage() {
         ) : (
           <>
             {/* Header */}
-            <div className="bg-white border-b border-gray-100 px-5 py-4 flex items-center gap-3">
-              <button onClick={() => setSelected(null)} className="lg:hidden p-1.5 rounded-lg text-gray-400 hover:bg-gray-100">
+            <div className="bg-[#1e293b] border-b border-[#334155] px-5 py-4 flex items-center gap-3">
+              <button onClick={() => setSelected(null)} className="lg:hidden p-1.5 rounded-lg text-gray-400 hover:bg-[#334155]">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
                 </svg>
               </button>
               <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold flex-shrink-0 ${
-                (selected as any)._type === 'recu' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
+                (selected as any)._type === 'recu' ? 'bg-[#00bcd4]/20 text-[#00bcd4]' : 'bg-gray-100 text-gray-500'
               }`}>
                 {getInitiales(getContact(selected))}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-gray-900 text-sm">
+                <p className="font-semibold text-white text-sm">
                   {getContact(selected) ? `${getContact(selected)?.prenom} ${getContact(selected)?.nom}` : 'Inconnu'}
                 </p>
                 {getContact(selected)?.telephone && (
                   <a href={`tel:${getContact(selected)?.telephone}`}
-                    className="text-xs text-green-600 hover:underline">{getContact(selected)?.telephone}</a>
+                    className="text-xs text-[#00bcd4] hover:underline">{getContact(selected)?.telephone}</a>
                 )}
               </div>
               <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                (selected as any)._type === 'recu' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-500'
+                (selected as any)._type === 'recu' ? 'bg-[#00bcd4]/20 text-[#00bcd4]' : 'bg-gray-100 text-gray-500'
               }`}>
                 {(selected as any)._type === 'recu' ? '↙ Reçu' : '↗ Envoyé'}
               </span>
@@ -214,11 +214,11 @@ export default function ClientMessagesPage() {
 
             {/* Corps */}
             <div className="flex-1 overflow-y-auto p-5">
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 max-w-2xl">
-                <div className="mb-4 pb-4 border-b border-gray-100">
-                  <h2 className="font-bold text-gray-900 text-base">{selected.sujet}</h2>
+              <div className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm p-5 max-w-2xl">
+                <div className="mb-4 pb-4 border-b border-[#334155]">
+                  <h2 className="font-bold text-white text-base">{selected.sujet}</h2>
                   {selected.biens?.titre && (
-                    <p className="text-sm text-green-600 mt-1">🏠 {selected.biens.titre}</p>
+                    <p className="text-sm text-[#00bcd4] mt-1">🏠 {selected.biens.titre}</p>
                   )}
                   <p className="text-xs text-gray-400 mt-1">
                     {new Date(selected.created_at).toLocaleDateString('fr-FR', {
@@ -226,21 +226,21 @@ export default function ClientMessagesPage() {
                     })}
                   </p>
                 </div>
-                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap text-sm">{selected.contenu}</p>
+                <p className="text-slate-200 leading-relaxed whitespace-pre-wrap text-sm">{selected.contenu}</p>
               </div>
             </div>
 
             {/* Zone réponse */}
-            <div className="bg-white border-t border-gray-100 p-4">
+            <div className="bg-[#1e293b] border-t border-[#334155] p-4">
               <div className="flex gap-3 items-end max-w-2xl">
                 <textarea rows={3} value={reply}
                   onChange={e => setReply(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() } }}
                   placeholder="Écrire une réponse... (Entrée pour envoyer)"
-                  className="flex-1 px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-50"
+                  className="flex-1 px-3.5 py-2.5 border border-[#334155] rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-50"
                 />
                 <button onClick={handleSend} disabled={sending || !reply.trim()}
-                  className="w-10 h-10 bg-green-600 text-white rounded-xl flex items-center justify-center hover:bg-green-700 transition-colors disabled:opacity-50 flex-shrink-0">
+                  className="w-10 h-10 bg-[#00bcd4] text-white rounded-xl flex items-center justify-center hover:bg-[#0097a7] transition-colors disabled:opacity-50 flex-shrink-0">
                   {sending ? (
                     <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>

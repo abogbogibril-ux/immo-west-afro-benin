@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
@@ -77,18 +77,18 @@ export default function FavorisPage() {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-5">
+    <div className="p-4 sm:p-6 lg:p-8 bg-[#0f172a] min-h-screen">
 
       {/* En-tête */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Mes favoris</h1>
+          <h1 className="text-xl font-bold text-white">Mes favoris</h1>
           <p className="text-sm text-gray-400 mt-0.5">
             {favoris.length} bien{favoris.length > 1 ? 's' : ''} sauvegardé{favoris.length > 1 ? 's' : ''}
           </p>
         </div>
         <Link href="/recherche"
-          className="flex items-center gap-2 px-4 py-2.5 bg-green-600 text-white text-sm font-semibold rounded-xl hover:bg-green-700 transition-colors">
+          className="flex items-center gap-2 px-4 py-2.5 bg-[#00bcd4] text-white text-sm font-semibold rounded-xl hover:bg-[#0097a7] transition-colors">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
@@ -102,8 +102,8 @@ export default function FavorisPage() {
           <button key={f} onClick={() => setFilter(f)}
             className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-all ${
               filter === f
-                ? 'bg-green-600 text-white'
-                : 'bg-white border border-gray-200 text-gray-500 hover:border-green-300 hover:text-green-600'
+                ? 'bg-[#00bcd4] text-white'
+                : 'bg-[#0f172a] border border-[#334155] text-gray-500 hover:border-green-300 hover:text-[#00bcd4]'
             }`}>
             {f}
           </button>
@@ -112,9 +112,9 @@ export default function FavorisPage() {
 
       {/* Contenu */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className= text-white"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1,2,3,4,5,6].map(i => (
-            <div key={i} className="bg-white rounded-2xl border border-gray-100 overflow-hidden animate-pulse">
+            <div key={i} className="bg-[#1e293b] rounded-2xl border border-[#334155] overflow-hidden animate-pulse">
               <div className="h-48 bg-gray-200"/>
               <div className="p-4 space-y-2">
                 <div className="h-4 bg-gray-200 rounded w-3/4"/>
@@ -125,7 +125,7 @@ export default function FavorisPage() {
           ))}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center">
+        <div className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm p-12 text-center">
           <p className="text-5xl mb-4">❤️</p>
           <p className="font-semibold text-gray-700 mb-1">
             {filter === 'Tous' ? 'Aucun favori sauvegardé' : `Aucun bien "${filter}" en favori`}
@@ -134,7 +134,7 @@ export default function FavorisPage() {
             Parcourez nos annonces et cliquez sur ❤️ pour sauvegarder un bien
           </p>
           <Link href="/recherche"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-600 text-white text-sm font-semibold rounded-xl hover:bg-green-700 transition-colors">
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#00bcd4] text-white text-sm font-semibold rounded-xl hover:bg-[#0097a7] transition-colors">
             Parcourir les annonces
           </Link>
         </div>
@@ -147,7 +147,7 @@ export default function FavorisPage() {
 
             return (
               <div key={favori.id}
-                className={`group bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden transition-all ${
+                className={`group bg-white rounded-2xl border border-[#334155] shadow-sm overflow-hidden transition-all ${
                   isVendu ? 'opacity-60' : 'hover:shadow-md hover:-translate-y-0.5'
                 }`}>
 
@@ -164,7 +164,7 @@ export default function FavorisPage() {
                   {/* Badges */}
                   <div className="absolute top-3 left-3 z-10 flex gap-2">
                     <span className={`px-2 py-0.5 rounded-lg text-xs font-bold ${
-                      bien.transaction === 'vente' ? 'bg-blue-600 text-white' : 'bg-green-600 text-white'
+                      bien.transaction === 'vente' ? 'bg-blue-600 text-white' : 'bg-[#00bcd4] text-white'
                     }`}>
                       {bien.transaction === 'vente' ? 'Vente' : 'Location'}
                     </span>
@@ -197,7 +197,7 @@ export default function FavorisPage() {
                 {/* Infos */}
                 <div className="p-4">
                   <p className="text-xs text-gray-400 mb-1">{TYPE_LABELS[bien.type_bien] ?? bien.type_bien}</p>
-                  <h3 className="font-semibold text-gray-900 text-sm leading-snug mb-1 line-clamp-2">{bien.titre}</h3>
+                  <h3 className="font-semibold text-white text-sm leading-snug mb-1 line-clamp-2">{bien.titre}</h3>
                   <p className="text-xs text-gray-400 mb-3 flex items-center gap-1">
                     <svg className="w-3 h-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -215,7 +215,7 @@ export default function FavorisPage() {
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-base font-bold text-green-600">
+                      <p className="text-base font-bold text-[#00bcd4]">
                         {new Intl.NumberFormat('fr-FR').format(bien.prix)} FCFA
                       </p>
                       {bien.transaction === 'location' && (
@@ -231,11 +231,11 @@ export default function FavorisPage() {
                       ) : (
                         <>
                           <Link href={`/bien/${bien.id}`}
-                            className="px-2.5 py-1.5 bg-green-600 text-white text-xs font-semibold rounded-lg hover:bg-green-700 transition-colors">
+                            className="px-2.5 py-1.5 bg-[#00bcd4] text-white text-xs font-semibold rounded-lg hover:bg-[#0097a7] transition-colors">
                             Voir →
                           </Link>
                           <Link href={`/bien/${bien.id}`}
-                            className="px-2.5 py-1.5 border border-gray-200 text-gray-600 text-xs rounded-lg hover:border-green-300 hover:text-green-600 transition-all">
+                            className="px-2.5 py-1.5 border border-[#334155] text-gray-600 text-xs rounded-lg hover:border-green-300 hover:text-[#00bcd4] transition-all">
                             Contacter
                           </Link>
                         </>

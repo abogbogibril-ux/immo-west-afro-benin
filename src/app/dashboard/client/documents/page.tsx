@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 
@@ -49,7 +49,7 @@ const AUTRES_DOCS = [
 ]
 
 const STATUT_DOC = {
-  ok: { label: '✅ Fourni', color: 'text-green-600 bg-green-50' },
+  ok: { label: '✅ Fourni', color: 'text-[#00bcd4] bg-[#00bcd4]/10' },
   manquant: { label: '⚠️ Manquant', color: 'text-amber-600 bg-amber-50' },
   en_attente: { label: '⏳ En attente', color: 'text-blue-600 bg-blue-50' },
 }
@@ -67,7 +67,7 @@ export default function DocumentsPage() {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-5">
+    <div className="p-4 sm:p-6 lg:p-8 bg-[#0f172a] min-h-screen">
 
       {/* Toast */}
       {uploadMsg && (
@@ -79,11 +79,11 @@ export default function DocumentsPage() {
       {/* En-tête */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Documents & Dossiers</h1>
+          <h1 className="text-xl font-bold text-white">Documents & Dossiers</h1>
           <p className="text-sm text-gray-400 mt-0.5">Gérez vos documents immobiliers</p>
         </div>
         <button onClick={handleUpload}
-          className="flex items-center gap-2 px-4 py-2.5 bg-green-600 text-white text-sm font-semibold rounded-xl hover:bg-green-700 transition-colors">
+          className="flex items-center gap-2 px-4 py-2.5 bg-[#00bcd4] text-white text-sm font-semibold rounded-xl hover:bg-[#0097a7] transition-colors">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
               d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
@@ -95,21 +95,21 @@ export default function DocumentsPage() {
       {/* Dossiers en cours */}
       {dossiers.length > 0 && (
         <div className="space-y-5">
-          <h2 className="font-semibold text-gray-900 flex items-center gap-2">
-            <span className="w-1 h-5 bg-green-500 rounded-full inline-block"/>
+          <h2 className="font-semibold text-white flex items-center gap-2">
+            <span className="w-1 h-5 bg-[#00bcd4] rounded-full inline-block"/>
             Dossiers en cours
           </h2>
 
           {dossiers.map(d => (
-            <div key={d.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div key={d.id} className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm overflow-hidden">
 
               {/* Header dossier */}
-              <div className="p-5 border-b border-gray-50">
+              <div className="p-5 border-b border-[#334155]">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-lg">📁</span>
-                      <h3 className="font-semibold text-gray-900">{d.bien}</h3>
+                      <h3 className="font-semibold text-white">{d.bien}</h3>
                     </div>
                     <p className="text-sm text-gray-400">📍 {d.ville} · 👤 Agent : {d.agent}</p>
                   </div>
@@ -122,10 +122,10 @@ export default function DocumentsPage() {
                 <div className="mt-4">
                   <div className="flex items-center justify-between mb-1.5">
                     <span className="text-xs text-gray-500 font-medium">Progression du dossier</span>
-                    <span className="text-xs font-bold text-green-600">{d.progression}%</span>
+                    <span className="text-xs font-bold text-[#00bcd4]">{d.progression}%</span>
                   </div>
                   <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-green-600 rounded-full transition-all duration-700"
+                    <div className="h-full bg-[#00bcd4] rounded-full transition-all duration-700"
                       style={{ width: `${d.progression}%` }}/>
                   </div>
                 </div>
@@ -155,7 +155,7 @@ export default function DocumentsPage() {
                         </span>
                         {doc.statut === 'manquant' && (
                           <button onClick={handleUpload}
-                            className="px-2.5 py-1 bg-green-600 text-white text-xs font-semibold rounded-lg hover:bg-green-700 transition-colors">
+                            className="px-2.5 py-1 bg-[#00bcd4] text-white text-xs font-semibold rounded-lg hover:bg-[#0097a7] transition-colors">
                             Ajouter →
                           </button>
                         )}
@@ -193,10 +193,10 @@ export default function DocumentsPage() {
                         </span>
                         {doc.statut === 'ok' && (
                           <div className="flex gap-1">
-                            <button className="px-2.5 py-1 border border-gray-200 text-gray-600 text-xs rounded-lg hover:border-green-300 hover:text-green-600 transition-all">
+                            <button className="px-2.5 py-1 border border-[#334155] text-gray-600 text-xs rounded-lg hover:border-green-300 hover:text-[#00bcd4] transition-all">
                               Consulter
                             </button>
-                            <button className="px-2.5 py-1 bg-green-600 text-white text-xs font-semibold rounded-lg hover:bg-green-700 transition-colors">
+                            <button className="px-2.5 py-1 bg-[#00bcd4] text-white text-xs font-semibold rounded-lg hover:bg-[#0097a7] transition-colors">
                               Signer
                             </button>
                           </div>
@@ -207,11 +207,11 @@ export default function DocumentsPage() {
                 </div>
 
                 {/* Actions dossier */}
-                <div className="flex flex-wrap gap-2 mt-5 pt-4 border-t border-gray-100">
-                  <button className="flex items-center gap-1.5 px-3 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors">
+                <div className="flex flex-wrap gap-2 mt-5 pt-4 border-t border-[#334155]">
+                  <button className="flex items-center gap-1.5 px-3 py-2 bg-[#00bcd4] text-white text-sm font-medium rounded-lg hover:bg-[#0097a7] transition-colors">
                     📧 Envoyer à l'agent
                   </button>
-                  <button className="flex items-center gap-1.5 px-3 py-2 border border-gray-200 text-gray-600 text-sm rounded-lg hover:border-green-300 hover:text-green-600 transition-all">
+                  <button className="flex items-center gap-1.5 px-3 py-2 border border-[#334155] text-gray-600 text-sm rounded-lg hover:border-green-300 hover:text-[#00bcd4] transition-all">
                     📥 Télécharger le dossier
                   </button>
                 </div>
@@ -223,11 +223,11 @@ export default function DocumentsPage() {
 
       {/* Autres documents */}
       <div>
-        <h2 className="font-semibold text-gray-900 flex items-center gap-2 mb-3">
-          <span className="w-1 h-5 bg-green-500 rounded-full inline-block"/>
+        <h2 className="font-semibold text-white flex items-center gap-2 mb-3">
+          <span className="w-1 h-5 bg-[#00bcd4] rounded-full inline-block"/>
           Autres documents
         </h2>
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm divide-y divide-gray-50">
+        <div className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm divide-y divide-[#334155]">
           {AUTRES_DOCS.map(doc => (
             <div key={doc.id} className="flex items-center justify-between px-5 py-4">
               <div className="flex items-center gap-3">
@@ -239,7 +239,7 @@ export default function DocumentsPage() {
                   <p className="text-xs text-gray-400">{doc.date}</p>
                 </div>
               </div>
-              <button className="p-2 text-gray-400 hover:text-green-600 transition-colors" title="Télécharger">
+              <button className="p-2 text-gray-400 hover:text-[#00bcd4] transition-colors" title="Télécharger">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                     d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
