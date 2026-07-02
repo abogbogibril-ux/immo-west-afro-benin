@@ -46,14 +46,14 @@ export default function BesoinCard({ besoin }: Props) {
             🔍 Recherche
           </span>
         </div>
-        {/* Icone */}
-        <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mb-3 flex-shrink-0">
-          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {/* Icone recherche haut droite */}
+        <div className="absolute top-3 right-3 z-10 w-9 h-9 bg-white/20 rounded-full flex items-center justify-center">
+          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
         </div>
         {/* Texte urgent */}
-        <p className="text-white text-sm font-semibold text-center leading-snug line-clamp-4">
+        <p className="text-white text-base font-bold text-center leading-snug line-clamp-4 px-2">
           {texteUrgent}
         </p>
       </div>

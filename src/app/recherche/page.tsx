@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import BienCard from '@/components/BienCard'
+import BesoinCard from '@/components/BesoinCard'
 import Link from 'next/link'
 
 const TYPES   = ['Maison', 'Appartement', 'Villa', 'Terrain', 'Bureau', 'Studio']
@@ -28,6 +29,7 @@ export default function RecherchePage() {
   const [prixMax,     setPrixMax]     = useState(searchParams.get('prix_max') ?? '')
   const [tri,         setTri]         = useState('recent')
   const [page,        setPage]        = useState(1)
+  const [besoins,      setBesoins]      = useState<any[]>([])
   const [drawerOpen,  setDrawerOpen]  = useState(false)
 
   // ── Résultats ────────────────────────────────────────────────────────────
@@ -73,6 +75,10 @@ export default function RecherchePage() {
     setTotal(count ?? 0)
     setLoading(false)
   }, [transaction, type, ville, prixMin, prixMax, tri, page])
+
+  useEffect(() => {
+    supabase.from('besoins').select('id, type_besoin, transaction, ville, budget_min, budget_max, surface_min, nb_chambres, created_at').order('created_at', { ascending: false }).limit(4).then(({ data }) => setBesoins(data || []))
+  }, [])
 
   useEffect(() => { fetchBiens() }, [fetchBiens])
 
