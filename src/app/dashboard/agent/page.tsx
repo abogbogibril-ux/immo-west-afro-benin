@@ -265,8 +265,9 @@ export default function AgentDashboardPage() {
                               Publier
                             </button>
                           )}
-                          <Link href={`/dashboard/agent/annonces?edit=${a.id}`}
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-[#00bcd4] hover:bg-[#00bcd4]/10 transition-colors">
+                          <Link href={`/publier?edit=${a.id}`}
+                            title="Modifier l'annonce" className="relative group p-1.5 rounded-lg text-slate-400 hover:text-[#00bcd4] hover:bg-[#00bcd4]/10 transition-colors">
+                            <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">Modifier</span>
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                             </svg>
