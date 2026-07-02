@@ -1,4 +1,4 @@
-import { MetadataRoute } from 'next'
+﻿import { MetadataRoute } from 'next'
 import { supabase } from '@/lib/supabase'
 
 const BASE = 'https://benin.immowestafro.com'
