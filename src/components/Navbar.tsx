@@ -98,6 +98,23 @@ export default function Navbar() {
             </div>
           </Link>
 
+          {/* Toggle Dark/Light mode */}
+          <button onClick={toggleTheme}
+            title={theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
+            className="flex items-center p-1 rounded-full transition-all duration-300 mx-3"
+            style={{ backgroundColor: theme === "dark" ? "#1e293b" : "#e2e8f0", border: "2px solid", borderColor: theme === "dark" ? "#334155" : "#cbd5e1", minWidth: 52 }}>
+            <span style={{
+              width: 22, height: 22, borderRadius: "50%",
+              backgroundColor: theme === "dark" ? "#00bcd4" : "#f59e0b",
+              transform: theme === "dark" ? "translateX(0)" : "translateX(24px)",
+              transition: "all 0.3s ease",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 12
+            }}>
+              {theme === "dark" ? "🌙" : "☀️"}
+            </span>
+          </button>
+
           {/* Nav desktop */}
           <nav className="hidden lg:flex items-center gap-1">
             {NAV_LINKS.map(link => (
@@ -124,20 +141,20 @@ export default function Navbar() {
               Deposer un besoin
             </Link>
 
-            <button onClick={toggleTheme} title={theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
-              className="hidden sm:flex items-center p-1 rounded-full transition-all duration-300"
-              style={{ backgroundColor: theme === "dark" ? "#1e293b" : "#e2e8f0", border: "2px solid", borderColor: theme === "dark" ? "#334155" : "#cbd5e1", minWidth: 52 }}>
-              <span style={{
-                width: 22, height: 22, borderRadius: "50%",
-                backgroundColor: theme === "dark" ? "#00bcd4" : "#f59e0b",
-                transform: theme === "dark" ? "translateX(0)" : "translateX(24px)",
-                transition: "all 0.3s ease",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 12
-              }}>
-                {theme === "dark" ? "🌙" : "☀️"}
-              </span>
-            </button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             {user ? (
               <div className="relative group">
                 <button className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
@@ -173,20 +190,20 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="hidden sm:flex items-center gap-2">
-                <button onClick={toggleTheme} title={theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
-                  className="flex items-center gap-1.5 p-1 rounded-full transition-all duration-300"
-                  style={{ backgroundColor: theme === "dark" ? "#1e293b" : "#e2e8f0", border: "2px solid", borderColor: theme === "dark" ? "#334155" : "#cbd5e1", minWidth: 52 }}>
-                  <span style={{
-                    width: 22, height: 22, borderRadius: "50%",
-                    backgroundColor: theme === "dark" ? "#00bcd4" : "#f59e0b",
-                    transform: theme === "dark" ? "translateX(0)" : "translateX(24px)",
-                    transition: "all 0.3s ease",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 12
-                  }}>
-                    {theme === "dark" ? "🌙" : "☀️"}
-                  </span>
-                </button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 <Link href="/inscription"
                   className="px-4 py-2 bg-[#00bcd4] text-white text-sm font-bold rounded-xl hover:bg-[#0097a7] transition-colors shadow-sm">
                   S'inscrire

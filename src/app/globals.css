@@ -146,24 +146,53 @@ select option {
 }
 
 
-/* Light mode */
+/* Theme variables */
+:root {
+  --bg-page: #0f172a;
+  --bg-card: #1e293b;
+  --bg-card2: #0f172a;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border: #334155;
+}
+
+/* Light mode overrides */
 html.light-mode {
-  --bg-primary: #f8fafc;
-  --bg-secondary: #ffffff;
+  --bg-page: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-card2: #f1f5f9;
   --text-primary: #0f172a;
   --text-secondary: #475569;
-  --border-color: #e2e8f0;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
 }
 
-html.light-mode body {
-  background-color: #f8fafc;
-  color: #0f172a;
-}
-
-html.light-mode .bg-gray-50 { background-color: #f1f5f9 !important; }
+html.light-mode body { background-color: #f8fafc !important; color: #0f172a !important; }
+html.light-mode .min-h-screen { background-color: #f8fafc !important; }
 html.light-mode .bg-\[#0f172a\] { background-color: #f8fafc !important; }
 html.light-mode .bg-\[#1e293b\] { background-color: #ffffff !important; }
+html.light-mode .bg-\[#0D1117\] { background-color: #f1f5f9 !important; }
+html.light-mode .bg-\[#0f3460\] { background-color: #eff6ff !important; }
+html.light-mode .bg-gray-50 { background-color: #f1f5f9 !important; }
+html.light-mode .bg-blue-50 { background-color: #eff6ff !important; }
 html.light-mode .text-white { color: #0f172a !important; }
-html.light-mode .text-slate-400 { color: #64748b !important; }
+html.light-mode .text-slate-100 { color: #1e293b !important; }
+html.light-mode .text-slate-200 { color: #334155 !important; }
 html.light-mode .text-slate-300 { color: #475569 !important; }
+html.light-mode .text-slate-400 { color: #64748b !important; }
+html.light-mode .text-\[#f1f5f9\] { color: #0f172a !important; }
+html.light-mode .text-\[#cbd5e1\] { color: #475569 !important; }
 html.light-mode .border-\[#334155\] { border-color: #e2e8f0 !important; }
+html.light-mode .border-white\/10 { border-color: #e2e8f0 !important; }
+html.light-mode .divide-\[#334155\] > * { border-color: #e2e8f0 !important; }
+html.light-mode .divide-gray-50 > * { border-color: #e2e8f0 !important; }
+html.light-mode .shadow-sm { box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important; }
+html.light-mode table { background-color: #ffffff !important; }
+html.light-mode th { background-color: #f8fafc !important; color: #475569 !important; }
+html.light-mode td { color: #0f172a !important; border-color: #e2e8f0 !important; }
+html.light-mode input, html.light-mode textarea, html.light-mode select {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+}
