@@ -1,7 +1,5 @@
 ﻿'use client'
-
 import { useState, useCallback, useEffect } from 'react'
-import ReportButton from './ReportButton'
 
 interface Photo {
   id: string
@@ -9,7 +7,6 @@ interface Photo {
   ordre?: number
   is_principale?: boolean
 }
-
 interface Props {
   images: Photo[]
   titre: string
@@ -22,41 +19,31 @@ export default function PropertyGallery({ images, titre, bienId }: Props) {
   const [lbIndex, setLbIndex] = useState(0)
   const [broken, setBroken] = useState<Record<string, boolean>>({})
 
-  const hasImages = images.length > 0
-  const go = useCallback((idx: number) => setCurrent((idx + images.length) % images.length), [images.length])
+  const go = useCallback((n: number) => {
+    setCurrent((n + images.length) % images.length)
+  }, [images.length])
 
-  const openLb = (idx: number) => {
-    setLbIndex(idx)
-    setLightbox(true)
-    document.body.style.overflow = 'hidden'
-  }
-  const closeLb = () => {
-    setLightbox(false)
-    document.body.style.overflow = ''
-  }
+  const openLb = (i: number) => { setLbIndex(i); setLightbox(true) }
+  const closeLb = () => setLightbox(false)
 
   useEffect(() => {
-    if (!lightbox) return
-    const fn = (e: KeyboardEvent) => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!lightbox) return
+      if (e.key === 'Escape') closeLb()
+      if (e.key === 'ArrowLeft') setLbIndex(i => (i - 1 + images.length) % images.length)
       if (e.key === 'ArrowRight') setLbIndex(i => (i + 1) % images.length)
-      if (e.key === 'ArrowLeft')  setLbIndex(i => (i - 1 + images.length) % images.length)
-      if (e.key === 'Escape')     closeLb()
     }
-    window.addEventListener('keydown', fn)
-    return () => window.removeEventListener('keydown', fn)
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
   }, [lightbox, images.length])
 
-  if (!hasImages) {
-    return (
-      <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 h-[320px] sm:h-[400px] lg:h-[480px] flex flex-col items-center justify-center text-gray-400">
-        <svg className="w-16 h-16 mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
-        <p className="text-sm font-medium">Aucune photo disponible</p>
-        {bienId && <ReportButton bienId={bienId} floating />}
-      </div>
-    )
-  }
+  if (!images.length) return (
+    <div className="relative rounded-2xl overflow-hidden bg-gray-100 h-[260px] sm:h-[360px] lg:h-[440px] flex items-center justify-center">
+      <svg className="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+    </div>
+  )
 
   const img = images[current]
 
@@ -81,36 +68,18 @@ export default function PropertyGallery({ images, titre, bienId }: Props) {
               </svg>
             </div>
           )}
+
+          {/* Gradient bas */}
           <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+
+          {/* Compteur photos */}
           <div className="absolute bottom-3 left-4">
             <span className="bg-black/60 backdrop-blur-sm text-white text-xs font-medium px-2.5 py-1 rounded-lg">
               📷 {current + 1} / {images.length}
             </span>
           </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          {/* Navigation */}
           {images.length > 1 && (
             <>
               <button onClick={e => { e.stopPropagation(); go(current - 1) }}
@@ -132,32 +101,36 @@ export default function PropertyGallery({ images, titre, bienId }: Props) {
         </div>
 
         {/* Barre actions sous l image */}
-        <div className="flex items-center justify-end gap-2 mt-2 px-1">
+        <div className="flex items-center justify-end gap-2 px-1">
           {/* Favori */}
-          <button onClick={e => { e.stopPropagation() }}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded-lg transition-colors">
-            <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button onClick={e => e.stopPropagation()}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-red-50 text-gray-600 hover:text-red-500 text-xs font-medium rounded-lg transition-colors">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
             </svg>
             Favori
           </button>
           {/* Partager */}
           <button onClick={e => { e.stopPropagation(); if (navigator.share) { navigator.share({ title: titre, url: window.location.href }) } else { navigator.clipboard.writeText(window.location.href) } }}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded-lg transition-colors">
-            <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-blue-50 text-gray-600 hover:text-blue-500 text-xs font-medium rounded-lg transition-colors">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
             </svg>
             Partager
           </button>
           {/* Signaler */}
           {bienId && (
-            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded-lg transition-colors cursor-pointer">
-              <ReportButton bienId={bienId} floating />
-              <span className="text-gray-700 text-xs font-medium">Signaler</span>
-            </div>
+            <button onClick={e => { e.stopPropagation(); document.getElementById('report-modal-' + bienId)?.click() }}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-red-50 text-gray-600 hover:text-red-500 text-xs font-medium rounded-lg transition-colors">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/>
+              </svg>
+              Signaler
+            </button>
           )}
         </div>
 
+        {/* Miniatures */}
         {images.length > 1 && (
           <div className="flex gap-2 overflow-x-auto pb-1">
             {images.map((ph, i) => (
@@ -181,6 +154,7 @@ export default function PropertyGallery({ images, titre, bienId }: Props) {
         )}
       </div>
 
+      {/* Lightbox */}
       {lightbox && (
         <div className="fixed inset-0 z-50 bg-black/96 flex items-center justify-center" onClick={closeLb}>
           <button onClick={closeLb}
