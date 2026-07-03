@@ -268,18 +268,18 @@ export default async function BienDetailPage({ params }: Props) {
 
           <div className="hidden lg:block">
             <div className="sticky top-4 space-y-4">
-              <AgentContactCard
-                prix={bien.prix}
-                transaction={bien.transaction}
-                surface={bien.surface}
-                statut={bien.statut}
-                agent={bien.profiles}
-                bienId={params.id}
-                bienTitre={bien.titre}
-                userId={session?.user?.id}
-                isFavorited={isFavorited}
-                compact
-              />
+
+
+
+
+
+
+
+
+
+
+
+
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm px-4 py-4 space-y-2 text-xs text-gray-400">
                 <div className="flex justify-between">
                   <span>Référence</span>
