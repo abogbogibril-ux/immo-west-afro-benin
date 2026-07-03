@@ -14,26 +14,35 @@ export function useTheme() {
 
   const applyTheme = (t: 'dark' | 'light') => {
     const root = document.documentElement
+    const body = document.body
+
     if (t === 'light') {
-      root.style.setProperty('--bg-page', '#f8fafc')
-      root.style.setProperty('--bg-card', '#ffffff')
-      root.style.setProperty('--bg-card2', '#f1f5f9')
-      root.style.setProperty('--text-primary', '#0f172a')
-      root.style.setProperty('--text-secondary', '#475569')
-      root.style.setProperty('--text-muted', '#64748b')
-      root.style.setProperty('--border', '#e2e8f0')
       root.classList.add('light-mode')
       root.classList.remove('dark-mode')
+      body.setAttribute('data-theme', 'light')
+      body.style.backgroundColor = '#f8fafc'
+      body.style.color = '#0f172a'
+
+      // Surcharger tous les elements avec fond sombre
+      document.querySelectorAll<HTMLElement>('[style*="background-color: rgb(15, 23, 42)"], [style*="backgroundColor"]').forEach(el => {
+        const bg = el.style.backgroundColor
+        if (bg === 'rgb(15, 23, 42)' || bg === '#0f172a') el.style.backgroundColor = '#f8fafc'
+        if (bg === 'rgb(30, 41, 59)' || bg === '#1e293b') el.style.backgroundColor = '#ffffff'
+        if (bg === 'rgb(13, 17, 23)' || bg === '#0D1117') el.style.backgroundColor = '#f1f5f9'
+      })
     } else {
-      root.style.setProperty('--bg-page', '#0f172a')
-      root.style.setProperty('--bg-card', '#1e293b')
-      root.style.setProperty('--bg-card2', '#0f172a')
-      root.style.setProperty('--text-primary', '#f1f5f9')
-      root.style.setProperty('--text-secondary', '#cbd5e1')
-      root.style.setProperty('--text-muted', '#94a3b8')
-      root.style.setProperty('--border', '#334155')
       root.classList.add('dark-mode')
       root.classList.remove('light-mode')
+      body.setAttribute('data-theme', 'dark')
+      body.style.backgroundColor = '#0f172a'
+      body.style.color = '#f1f5f9'
+
+      document.querySelectorAll<HTMLElement>('[style*="background-color"]').forEach(el => {
+        const bg = el.style.backgroundColor
+        if (bg === 'rgb(248, 250, 252)' || bg === '#f8fafc') el.style.backgroundColor = '#0f172a'
+        if (bg === 'rgb(255, 255, 255)' || bg === '#ffffff') el.style.backgroundColor = '#1e293b'
+        if (bg === 'rgb(241, 245, 249)' || bg === '#f1f5f9') el.style.backgroundColor = '#0f172a'
+      })
     }
   }
 
