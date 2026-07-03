@@ -99,7 +99,7 @@ export default async function HomePage() {
       {/* HERO */}
       <section className="relative overflow-hidden min-h-[500px] md:min-h-[600px]">
         <div className="absolute inset-0 z-0">
-          <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1920&q=80&auto=format&fit=crop" alt="Immobilier Benin" className="w-full h-full object-cover object-center scale-105" style={{ filter: "brightness(0.85) saturate(1.0)" }} />
+          <img src="https://images.unsplash.com/photo-1706164971302-e30c0640cc3b?q=80&w=1920&auto=format&fit=crop" alt="Immobilier Benin" className="w-full h-full object-cover object-center scale-105" style={{ filter: "brightness(0.85) saturate(1.0)" }} />
           <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.35)' }} />
           <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 20% 80%, rgba(0,170,255,0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(0,200,100,0.2) 0%, transparent 50%)' }} />
         </div>
