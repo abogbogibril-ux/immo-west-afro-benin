@@ -196,3 +196,52 @@ html.light-mode input, html.light-mode textarea, html.light-mode select {
   color: #0f172a !important;
   border-color: #e2e8f0 !important;
 }
+/* ===== DARK MODE (defaut) ===== */
+:root {
+  color-scheme: dark;
+}
+
+html.dark {
+  background-color: #0f172a;
+  color: #f1f5f9;
+}
+
+html.dark body {
+  background-color: #0f172a !important;
+  color: #f1f5f9 !important;
+}
+
+html.dark .bg-\[#0f172a\] { background-color: #0f172a !important; }
+html.dark .bg-\[#1e293b\] { background-color: #1e293b !important; }
+
+/* ===== LIGHT MODE ===== */
+html.light {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+html.light body {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+html.light .bg-\[#0f172a\] { background-color: #f8fafc !important; }
+html.light .bg-\[#1e293b\] { background-color: #ffffff !important; }
+html.light .bg-\[#0D1117\] { background-color: #f1f5f9 !important; }
+html.light .text-white { color: #0f172a !important; }
+html.light .text-slate-100 { color: #1e293b !important; }
+html.light .text-slate-200 { color: #334155 !important; }
+html.light .text-slate-300 { color: #475569 !important; }
+html.light .text-slate-400 { color: #64748b !important; }
+html.light .border-\[#334155\] { border-color: #e2e8f0 !important; }
+html.light .divide-\[#334155\] > * { border-color: #e2e8f0 !important; }
+html.light .bg-gray-50 { background-color: #f1f5f9 !important; }
+html.light table { background-color: #ffffff !important; }
+html.light th { background-color: #f8fafc !important; color: #475569 !important; }
+html.light td { color: #0f172a !important; }
+html.light input, html.light textarea, html.light select {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+}
+html.light .min-h-screen { background-color: #f8fafc !important; }
