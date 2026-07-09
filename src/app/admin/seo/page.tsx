@@ -13,7 +13,6 @@ export default function SeoAdmin() {
   const [aiLoading, setAiLoading] = useState(false)
   const [aiSuggestions, setAiSuggestions] = useState<any>(null)
   const [aiQuery, setAiQuery] = useState('')
-  const [aiResponse, setAiResponse] = useState('')
   const [aiChatLoading, setAiChatLoading] = useState(false)
   const [chatHistory, setChatHistory] = useState<{role: string, content: string}[]>([])
 
@@ -83,7 +82,7 @@ export default function SeoAdmin() {
       const data = await response.json()
       const reply = data.content?.[0]?.text || 'Desolee, une erreur est survenue.'
       setChatHistory([...newHistory, { role: 'assistant', content: reply }])
-    } catch (err) {
+    } catch {
       setChatHistory([...newHistory, { role: 'assistant', content: 'Erreur de connexion. Reessayez.' }])
     } finally {
       setAiChatLoading(false)
@@ -92,40 +91,36 @@ export default function SeoAdmin() {
 
   return (
     <div>
+      {/* Toast */}
       {toast && (
-        <div style={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 50, backgroundColor: '#16a34a', color: '#fff', padding: '0.75rem 1.25rem', borderRadius: '10px', fontSize: '0.9rem', fontWeight: '600', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
-          Sauvegarde avec succes !
+        <div className="fixed top-4 right-4 z-50 bg-green-600 text-white px-5 py-3 rounded-xl font-semibold shadow-lg text-sm">
+          ✅ SEO sauvegarde avec succes !
         </div>
       )}
 
-      <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+      <div className="mb-6 flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 style={{ color: '#f1f5f9', fontSize: '1.5rem', fontWeight: '800', margin: 0 }}>SEO et Referencement</h1>
-          <p style={{ color: '#94a3b8', margin: '0.25rem 0 0' }}>Optimisation pour les moteurs de recherche</p>
+          <h1 className="text-2xl font-extrabold text-white m-0">SEO et Referencement</h1>
+          <p className="text-slate-400 mt-1">Optimisation pour les moteurs de recherche</p>
         </div>
-        <button onClick={generateSEO} disabled={aiLoading} style={{
-          display: 'flex', alignItems: 'center', gap: '0.5rem',
-          padding: '0.75rem 1.25rem',
-          background: aiLoading ? '#334155' : 'linear-gradient(135deg, #00bcd4, #0097a7)',
-          color: '#fff', border: 'none', borderRadius: '10px',
-          cursor: aiLoading ? 'not-allowed' : 'pointer',
-          fontSize: '0.9rem', fontWeight: '600',
-          boxShadow: '0 2px 8px rgba(0,188,212,0.3)',
-        }}>
+        <button onClick={generateSEO} disabled={aiLoading}
+          className={`flex items-center gap-2 px-5 py-3 rounded-xl text-white font-semibold text-sm border-none cursor-pointer transition-all shadow-md ${
+            aiLoading ? 'bg-slate-600 cursor-not-allowed' : 'bg-gradient-to-r from-[#00bcd4] to-[#0097a7] hover:opacity-90'
+          }`}>
           {aiLoading ? (
             <>
-              <svg style={{ width: 18, height: 18 }} className="animate-spin" fill="none" viewBox="0 0 24 24">
-                <circle style={{ opacity: 0.25 }} cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                <path style={{ opacity: 0.75 }} fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+              <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
               </svg>
               Analyse SEO en cours...
             </>
           ) : (
             <>
-              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
               </svg>
-              Generer avec l IA
+              Generer avec l IA ✨
             </>
           )}
         </button>
@@ -133,39 +128,41 @@ export default function SeoAdmin() {
 
       {/* Suggestions IA */}
       {aiSuggestions && (
-        <div style={{ backgroundColor: '#0f3460', borderRadius: '12px', padding: '1.5rem', marginBottom: '1.5rem', border: '1px solid #00bcd4' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <h2 style={{ color: '#00bcd4', fontWeight: '700', margin: 0 }}>Suggestions IA</h2>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <button onClick={applySuggestions} style={{ padding: '0.5rem 1rem', backgroundColor: '#00bcd4', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.85rem' }}>
+        <div className="bg-[#0f3460] rounded-xl p-6 mb-6 border border-[#00bcd4]">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-[#00bcd4] font-bold m-0">Suggestions IA</h2>
+            <div className="flex gap-2">
+              <button onClick={applySuggestions}
+                className="px-4 py-2 bg-[#00bcd4] text-white rounded-lg font-semibold text-sm border-none cursor-pointer hover:bg-[#0097a7] transition-colors">
                 Appliquer tout
               </button>
-              <button onClick={() => setAiSuggestions(null)} style={{ padding: '0.5rem 1rem', backgroundColor: '#334155', color: '#94a3b8', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem' }}>
+              <button onClick={() => setAiSuggestions(null)}
+                className="px-4 py-2 bg-[#334155] text-slate-400 rounded-lg text-sm border-none cursor-pointer hover:bg-[#475569] transition-colors">
                 Ignorer
               </button>
             </div>
           </div>
-          <div style={{ display: 'grid', gap: '0.75rem' }}>
+          <div className="space-y-3">
             <div>
-              <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginBottom: '0.25rem' }}>Titre suggere ({aiSuggestions.titre?.length || 0}/60)</p>
-              <p style={{ color: '#f1f5f9', backgroundColor: '#1e293b', padding: '0.75rem', borderRadius: '8px', fontSize: '0.9rem', margin: 0 }}>{aiSuggestions.titre}</p>
+              <p className="text-slate-400 text-xs mb-1">Titre suggere ({aiSuggestions.titre?.length || 0}/60)</p>
+              <p className="text-white bg-[#1e293b] p-3 rounded-lg text-sm m-0">{aiSuggestions.titre}</p>
             </div>
             <div>
-              <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginBottom: '0.25rem' }}>Description suggeree ({aiSuggestions.description?.length || 0}/160)</p>
-              <p style={{ color: '#f1f5f9', backgroundColor: '#1e293b', padding: '0.75rem', borderRadius: '8px', fontSize: '0.9rem', margin: 0 }}>{aiSuggestions.description}</p>
+              <p className="text-slate-400 text-xs mb-1">Description suggeree ({aiSuggestions.description?.length || 0}/160)</p>
+              <p className="text-white bg-[#1e293b] p-3 rounded-lg text-sm m-0">{aiSuggestions.description}</p>
             </div>
             <div>
-              <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginBottom: '0.25rem' }}>Mots-cles suggeres</p>
-              <p style={{ color: '#f1f5f9', backgroundColor: '#1e293b', padding: '0.75rem', borderRadius: '8px', fontSize: '0.9rem', margin: 0 }}>{aiSuggestions.keywords}</p>
+              <p className="text-slate-400 text-xs mb-1">Mots-cles suggeres</p>
+              <p className="text-white bg-[#1e293b] p-3 rounded-lg text-sm m-0">{aiSuggestions.keywords}</p>
             </div>
             {aiSuggestions.conseils && (
               <div>
-                <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginBottom: '0.5rem' }}>Conseils SEO</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <p className="text-slate-400 text-xs mb-2">Conseils SEO</p>
+                <div className="space-y-2">
                   {aiSuggestions.conseils.map((c: string, i: number) => (
-                    <div key={i} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
-                      <span style={{ color: '#00bcd4', flexShrink: 0 }}>💡</span>
-                      <p style={{ color: '#cbd5e1', fontSize: '0.85rem', margin: 0 }}>{c}</p>
+                    <div key={i} className="flex gap-2 items-start">
+                      <span className="text-[#00bcd4] flex-shrink-0">💡</span>
+                      <p className="text-slate-300 text-sm m-0">{c}</p>
                     </div>
                   ))}
                 </div>
@@ -175,125 +172,106 @@ export default function SeoAdmin() {
         </div>
       )}
 
-      <div style={{ display: 'grid', gap: '1.5rem' }}>
+      <div className="space-y-6">
 
         {/* Metadonnees */}
-        <div style={cardStyle}>
-          <h2 style={sectionTitle}>Metadonnees principales</h2>
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={labelStyle}>Titre du site (60 caracteres max)</label>
-            <input value={form.titre} onChange={e => setForm({...form, titre: e.target.value})} style={inputStyle} />
-            <p style={{ color: form.titre.length > 60 ? '#ef4444' : '#64748b', fontSize: '0.75rem', margin: '0.25rem 0 0' }}>{form.titre.length}/60 caracteres</p>
+        <div className="bg-[#1e293b] rounded-xl p-6 shadow-lg border border-[#334155]">
+          <h2 className="text-white font-bold text-base mb-5 pb-3 border-b-2 border-[#334155]">Metadonnees principales</h2>
+          <div className="mb-4">
+            <label className="block text-slate-400 text-sm font-medium mb-1.5">Titre du site (60 caracteres max)</label>
+            <input value={form.titre} onChange={e => setForm({...form, titre: e.target.value})}
+              className="w-full px-3 py-2.5 bg-[#0f172a] border border-[#334155] rounded-lg text-white text-sm outline-none focus:border-[#00bcd4] transition-colors" />
+            <p className={`text-xs mt-1 ${form.titre.length > 60 ? 'text-red-400' : 'text-slate-500'}`}>{form.titre.length}/60 caracteres</p>
           </div>
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={labelStyle}>Description (160 caracteres max)</label>
+          <div className="mb-4">
+            <label className="block text-slate-400 text-sm font-medium mb-1.5">Description (160 caracteres max)</label>
             <textarea value={form.description} onChange={e => setForm({...form, description: e.target.value})}
-              style={{ ...inputStyle, height: '80px', resize: 'vertical' }} />
-            <p style={{ color: form.description.length > 160 ? '#ef4444' : '#64748b', fontSize: '0.75rem', margin: '0.25rem 0 0' }}>{form.description.length}/160 caracteres</p>
+              className="w-full px-3 py-2.5 bg-[#0f172a] border border-[#334155] rounded-lg text-white text-sm outline-none focus:border-[#00bcd4] transition-colors resize-vertical h-20" />
+            <p className={`text-xs mt-1 ${form.description.length > 160 ? 'text-red-400' : 'text-slate-500'}`}>{form.description.length}/160 caracteres</p>
           </div>
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={labelStyle}>Mots-cles (separes par des virgules)</label>
-            <input value={form.keywords} onChange={e => setForm({...form, keywords: e.target.value})} style={inputStyle} />
+          <div className="mb-4">
+            <label className="block text-slate-400 text-sm font-medium mb-1.5">Mots-cles (separes par des virgules)</label>
+            <input value={form.keywords} onChange={e => setForm({...form, keywords: e.target.value})}
+              className="w-full px-3 py-2.5 bg-[#0f172a] border border-[#334155] rounded-lg text-white text-sm outline-none focus:border-[#00bcd4] transition-colors" />
           </div>
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={labelStyle}>Image Open Graph (URL)</label>
-            <input value={form.og_image} placeholder="https://..." onChange={e => setForm({...form, og_image: e.target.value})} style={inputStyle} />
+          <div>
+            <label className="block text-slate-400 text-sm font-medium mb-1.5">Image Open Graph (URL)</label>
+            <input value={form.og_image} placeholder="https://..." onChange={e => setForm({...form, og_image: e.target.value})}
+              className="w-full px-3 py-2.5 bg-[#0f172a] border border-[#334155] rounded-lg text-white text-sm outline-none focus:border-[#00bcd4] transition-colors placeholder-slate-600" />
           </div>
         </div>
 
         {/* Sitemap */}
-        <div style={cardStyle}>
-          <h2 style={sectionTitle}>Sitemap et Indexation</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+        <div className="bg-[#1e293b] rounded-xl p-6 shadow-lg border border-[#334155]">
+          <h2 className="text-white font-bold text-base mb-5 pb-3 border-b-2 border-[#334155]">Sitemap et Indexation</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
               { label: 'Sitemap XML', desc: 'Genere automatiquement', ok: true },
               { label: 'Robots.txt', desc: 'Configure', ok: true },
-              { label: 'Google Search Console', desc: 'A configurer', ok: false },
+              { label: 'Google Search Console', desc: 'Propriete verifiee', ok: true },
               { label: 'Donnees structurees', desc: 'Schema.org JSON-LD implemente', ok: true },
             ].map(item => (
-              <div key={item.label} style={{ backgroundColor: item.ok ? '#064e3b20' : '#7c2d1220', borderRadius: '10px', padding: '1rem', border: '1px solid ' + (item.ok ? '#059669' : '#dc2626') + '30' }}>
-                <p style={{ color: item.ok ? '#34d399' : '#f87171', fontWeight: '700', margin: 0, fontSize: '0.9rem' }}>{item.ok ? '✅' : '⚠️'} {item.label}</p>
-                <p style={{ color: '#64748b', fontSize: '0.8rem', margin: '0.25rem 0 0' }}>{item.desc}</p>
+              <div key={item.label} className="bg-green-900/20 rounded-xl p-4 border border-green-900/30">
+                <p className="text-green-400 font-bold m-0 text-sm">✅ {item.label}</p>
+                <p className="text-slate-400 text-xs mt-1 m-0">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Chat AI SEO */}
-        <div style={cardStyle}>
-          <h2 style={sectionTitle}>Assistant SEO IA</h2>
-          <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginBottom: '1rem' }}>
-            Posez vos questions SEO a l IA specialisee immobilier Benin
-          </p>
+        <div className="bg-[#1e293b] rounded-xl p-6 shadow-lg border border-[#334155]">
+          <h2 className="text-white font-bold text-base mb-2 pb-3 border-b-2 border-[#334155]">Assistant SEO IA</h2>
+          <p className="text-slate-400 text-sm mb-4">Posez vos questions SEO a l IA specialisee immobilier Benin</p>
 
-          {/* Historique */}
-          <div style={{ backgroundColor: '#0f172a', borderRadius: '10px', padding: '1rem', marginBottom: '1rem', minHeight: '150px', maxHeight: '300px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <div className="bg-[#0f172a] rounded-xl p-4 mb-4 min-h-[150px] max-h-[300px] overflow-y-auto flex flex-col gap-3">
             {chatHistory.length === 0 ? (
-              <div style={{ color: '#475569', fontSize: '0.85rem', textAlign: 'center', margin: 'auto' }}>
-                <p>Exemples de questions :</p>
+              <div className="text-slate-500 text-sm text-center m-auto">
+                <p className="mb-2">Exemples de questions :</p>
                 {['Comment ameliorer le SEO local pour Cotonou ?', 'Quels mots-cles pour l immobilier au Benin ?', 'Comment optimiser les fiches annonces ?'].map(q => (
                   <button key={q} onClick={() => setAiQuery(q)}
-                    style={{ display: 'block', width: '100%', textAlign: 'left', background: '#1e293b', color: '#00bcd4', border: 'none', borderRadius: '8px', padding: '0.5rem 0.75rem', margin: '0.25rem 0', cursor: 'pointer', fontSize: '0.8rem' }}>
+                    className="block w-full text-left bg-[#1e293b] text-[#00bcd4] border-none rounded-lg px-3 py-2 my-1 cursor-pointer text-xs hover:bg-[#334155] transition-colors">
                     {q}
                   </button>
                 ))}
               </div>
             ) : (
               chatHistory.map((msg, i) => (
-                <div key={i} style={{
-                  display: 'flex', justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start'
-                }}>
-                  <div style={{
-                    maxWidth: '80%', padding: '0.75rem 1rem', borderRadius: '12px',
-                    backgroundColor: msg.role === 'user' ? '#00bcd4' : '#1e293b',
-                    color: '#f1f5f9', fontSize: '0.85rem', lineHeight: 1.5,
-                  }}>
+                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[80%] px-4 py-3 rounded-xl text-sm leading-relaxed ${
+                    msg.role === 'user' ? 'bg-[#00bcd4] text-white' : 'bg-[#1e293b] text-slate-200'
+                  }`}>
                     {msg.content}
                   </div>
                 </div>
               ))
             )}
             {aiChatLoading && (
-              <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-                <div style={{ backgroundColor: '#1e293b', padding: '0.75rem 1rem', borderRadius: '12px', color: '#94a3b8', fontSize: '0.85rem' }}>
-                  L IA reflechit...
-                </div>
+              <div className="flex justify-start">
+                <div className="bg-[#1e293b] px-4 py-3 rounded-xl text-slate-400 text-sm">L IA reflechit...</div>
               </div>
             )}
           </div>
 
-          {/* Input */}
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <input
-              value={aiQuery}
-              onChange={e => setAiQuery(e.target.value)}
+          <div className="flex gap-2">
+            <input value={aiQuery} onChange={e => setAiQuery(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && !aiChatLoading && askAI()}
               placeholder="Posez votre question SEO..."
-              style={{ ...inputStyle, flex: 1, margin: 0 }}
-            />
+              className="flex-1 px-3 py-2.5 bg-[#0f172a] border border-[#334155] rounded-lg text-white text-sm outline-none focus:border-[#00bcd4] transition-colors placeholder-slate-600" />
             <button onClick={askAI} disabled={aiChatLoading || !aiQuery.trim()}
-              style={{
-                padding: '0.6rem 1.25rem', backgroundColor: '#00bcd4', color: '#fff',
-                border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600',
-                opacity: aiChatLoading || !aiQuery.trim() ? 0.5 : 1,
-              }}>
+              className={`px-5 py-2.5 bg-[#00bcd4] text-white rounded-lg font-semibold text-sm border-none cursor-pointer transition-colors hover:bg-[#0097a7] ${
+                (aiChatLoading || !aiQuery.trim()) ? 'opacity-50 cursor-not-allowed' : ''
+              }`}>
               Envoyer
             </button>
           </div>
         </div>
       </div>
 
-      <button onClick={sauvegarder} style={{
-        marginTop: '1.5rem', padding: '1rem 2rem', backgroundColor: '#00bcd4',
-        color: '#fff', border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: '700', cursor: 'pointer',
-      }}>
+      <button onClick={sauvegarder}
+        className="mt-6 px-8 py-4 bg-[#00bcd4] hover:bg-[#0097a7] text-white border-none rounded-lg text-base font-bold cursor-pointer transition-colors">
         Sauvegarder le SEO
       </button>
     </div>
   )
 }
-
-const cardStyle: React.CSSProperties = { backgroundColor: '#1e293b', borderRadius: '12px', padding: '1.5rem', boxShadow: '0 4px 12px rgba(0,0,0,0.3)' }
-const sectionTitle: React.CSSProperties = { color: '#f1f5f9', fontSize: '1rem', fontWeight: '700', marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #334155' }
-const labelStyle: React.CSSProperties = { display: 'block', color: '#cbd5e1', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.4rem' }
-const inputStyle: React.CSSProperties = { width: '100%', padding: '0.6rem 0.75rem', backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '8px', color: '#e2e8f0', fontSize: '0.875rem', outline: 'none', boxSizing: 'border-box' }
