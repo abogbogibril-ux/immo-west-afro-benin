@@ -23,9 +23,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [checking, setChecking] = useState(true)
   const [sidebarOpen, setSidebarOpen] = useState(true)
 
-  useEffect(() => {
-    checkAdmin()
-  }, [])
+  useEffect(() => { checkAdmin() }, [])
 
   const checkAdmin = async () => {
     const { data: { user } } = await supabase.auth.getUser()
@@ -41,57 +39,46 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   if (checking) return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ color: '#fff', textAlign: 'center' }}>
-        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔐</div>
-        <p>Vérification des droits...</p>
+    <div className="min-h-screen bg-[#0f172a] dark:bg-[#0f172a] flex items-center justify-center">
+      <div className="text-white text-center">
+        <div className="text-5xl mb-4">🔐</div>
+        <p className="text-slate-400">Vérification des droits...</p>
       </div>
     </div>
   )
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#0f172a' }}>
+    <div className="flex min-h-screen bg-[#0f172a] dark:bg-[#0f172a]">
 
       {/* SIDEBAR */}
-      <aside style={{
-        width: sidebarOpen ? '260px' : '70px',
-        backgroundColor: '#0f172a',
-        display: 'flex', flexDirection: 'column',
-        transition: 'width 0.3s ease',
-        flexShrink: 0, position: 'sticky', top: 0, height: '100vh',
-      }}>
+      <aside className={`${sidebarOpen ? 'w-[260px]' : 'w-[70px]'} bg-[#0f172a] dark:bg-[#0f172a] flex flex-col flex-shrink-0 sticky top-0 h-screen transition-all duration-300`}>
+
         {/* LOGO */}
-        <div style={{ padding: '1.5rem 1rem', borderBottom: '1px solid #1e293b', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className="px-4 py-6 border-b border-[#1e293b] flex items-center justify-between">
           {sidebarOpen && (
             <div>
-              <div style={{ color: '#00bcd4', fontWeight: '800', fontSize: '1rem' }}>🏠 Immo West Afro</div>
-              <div style={{ color: '#475569', fontSize: '0.75rem', marginTop: '0.2rem' }}>Panel Administrateur</div>
+              <div className="text-[#00bcd4] font-extrabold text-base">🏠 Immo West Afro</div>
+              <div className="text-slate-500 text-xs mt-0.5">Panel Administrateur</div>
             </div>
           )}
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{
-            backgroundColor: 'transparent', border: 'none', color: '#94a3b8',
-            cursor: 'pointer', fontSize: '1.2rem', padding: '0.25rem',
-          }}>
+          <button onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="bg-transparent border-none text-slate-400 cursor-pointer text-xl p-1 hover:text-white transition-colors">
             {sidebarOpen ? '◀' : '▶'}
           </button>
         </div>
 
         {/* MENU */}
-        <nav style={{ flex: 1, padding: '1rem 0.5rem', overflowY: 'auto' }}>
+        <nav className="flex-1 px-2 py-4 overflow-y-auto">
           {menuItems.map((item) => {
             const isActive = pathname === item.href
             return (
-              <Link key={item.href} href={item.href} style={{
-                display: 'flex', alignItems: 'center', gap: '0.75rem',
-                padding: '0.75rem 0.75rem', borderRadius: '8px', marginBottom: '0.25rem',
-                textDecoration: 'none',
-                backgroundColor: isActive ? '#00bcd4' : 'transparent',
-                color: isActive ? '#fff' : '#94a3b8',
-                fontWeight: isActive ? '600' : '400',
-                fontSize: '0.9rem',
-                transition: 'all 0.2s',
-              }}>
-                <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>{item.icon}</span>
+              <Link key={item.href} href={item.href}
+                className={`flex items-center gap-3 px-3 py-3 rounded-lg mb-1 no-underline text-sm font-medium transition-all duration-200 ${
+                  isActive
+                    ? 'bg-[#00bcd4] text-white font-semibold'
+                    : 'bg-transparent text-slate-400 hover:text-white hover:bg-white/5'
+                }`}>
+                <span className="text-lg flex-shrink-0">{item.icon}</span>
                 {sidebarOpen && <span>{item.label}</span>}
               </Link>
             )
@@ -99,14 +86,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* DÉCONNEXION */}
-        <div style={{ padding: '1rem', borderTop: '1px solid #1e293b' }}>
-          <button onClick={handleLogout} style={{
-            width: '100%', padding: '0.75rem', backgroundColor: 'transparent',
-            border: '1px solid #ef4444', borderRadius: '8px',
-            color: '#ef4444', cursor: 'pointer', fontWeight: '500',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-            fontSize: '0.9rem',
-          }}>
+        <div className="p-4 border-t border-[#1e293b]">
+          <button onClick={handleLogout}
+            className="w-full py-3 bg-transparent border border-red-500 rounded-lg text-red-500 cursor-pointer font-medium flex items-center justify-center gap-2 text-sm hover:bg-red-500/10 transition-colors">
             <span>🚪</span>
             {sidebarOpen && <span>Déconnexion</span>}
           </button>
@@ -114,32 +96,25 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* CONTENU PRINCIPAL */}
-      <main style={{ flex: 1, overflowY: 'auto' }}>
+      <main className="flex-1 overflow-y-auto">
         {/* TOPBAR */}
-        <div style={{
-          backgroundColor: '#fff', padding: '1rem 2rem',
-          borderBottom: '1px solid #e2e8f0',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          position: 'sticky', top: 0, zIndex: 100,
-        }}>
-          <div style={{ color: '#fff', fontWeight: '600', fontSize: '1rem' }}>
+        <div className="bg-[#1e293b] dark:bg-[#1e293b] px-8 py-4 border-b border-[#334155] flex items-center justify-between sticky top-0 z-[100]">
+          <div className="text-white font-semibold text-base">
             {menuItems.find(m => m.href === pathname)?.icon}{' '}
             {menuItems.find(m => m.href === pathname)?.label || 'Admin'}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <Link href="/" target="_blank" style={{ color: '#00bcd4', fontSize: '0.85rem', textDecoration: 'none' }}>
+          <div className="flex items-center gap-4">
+            <Link href="/" target="_blank" className="text-[#00bcd4] text-sm no-underline hover:underline">
               🌐 Voir le site
             </Link>
-            <div style={{
-              width: '36px', height: '36px', backgroundColor: '#00bcd4',
-              borderRadius: '50%', display: 'flex', alignItems: 'center',
-              justifyContent: 'center', color: '#fff', fontWeight: '700', fontSize: '0.9rem',
-            }}>A</div>
+            <div className="w-9 h-9 bg-[#00bcd4] rounded-full flex items-center justify-center text-white font-bold text-sm">
+              A
+            </div>
           </div>
         </div>
 
         {/* PAGE */}
-        <div style={{ padding: '2rem', backgroundColor: '#0f172a', minHeight: 'calc(100vh - 60px)' }}>
+        <div className="p-8 bg-[#0f172a] dark:bg-[#0f172a] min-h-[calc(100vh-60px)]">
           {children}
         </div>
       </main>

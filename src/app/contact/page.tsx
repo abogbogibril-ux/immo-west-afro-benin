@@ -81,8 +81,8 @@ export default function ContactPage() {
                   {
                     icon: '✉️',
                     label: 'Email',
-                    value: 'abogbogibril@gmail.com',
-                    href: 'mailto:abogbogibril@gmail.com',
+                    value: 'calavi_immo@immowestafro.com',
+                    href: 'mailto:calavi_immo@immowestafro.com',
                   },
                   {
                     icon: '🕐',

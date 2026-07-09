@@ -136,7 +136,7 @@ export default function Footer() {
                 📞
               </a>
               <a
-                href="mailto:abogbogibril@gmail.com"
+                href="mailto:calavi_immo@immowestafro.com"
                 aria-label="Email"
                 style={styleSocial}
               >
@@ -222,10 +222,10 @@ export default function Footer() {
                 📞 +229 01 96 13 77 20
               </a>
               <a
-                href="mailto:abogbogibril@gmail.com"
+                href="mailto:calavi_immo@immowestafro.com"
                 style={{ ...styleLien, wordBreak: 'break-all' }}
               >
-                ✉️ abogbogibril@gmail.com
+                ✉️ calavi_immo@immowestafro.com
               </a>
             </div>
           </div>
