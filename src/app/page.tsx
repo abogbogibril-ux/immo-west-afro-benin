@@ -118,7 +118,7 @@ export default async function HomePage() {
         </div>
 
         {/* Statistiques - pied du hero, centre */}
-        <div className="absolute bottom-6 inset-x-0 z-10 flex flex-wrap items-center justify-center gap-6 md:gap-10 px-4">
+        <div className="absolute bottom-20 md:bottom-6 inset-x-0 z-10 flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-10 px-4">
           {[
             { value: totalBiens ?? 0, label: 'Annonces actives' },
             { value: totalAgents ?? 0, label: 'Agents certifiés' },
