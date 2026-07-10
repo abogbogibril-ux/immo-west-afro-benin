@@ -109,7 +109,7 @@ export default async function HomePage() {
               🇧🇯 La référence immobilière au Bénin
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
-              Trouvez votre bien immobilier idéal au Bénin
+              Trouvez votre bien immobilier<br className="hidden md:block" /> idéal au Bénin
             </h1>
             <p className="text-blue-100 text-base md:text-lg max-w-2xl mx-auto mb-8">
               Villas, appartements, terrains et bureaux à vendre ou à louer à Cotonou, Porto-Novo, Abomey-Calavi et partout au Bénin.
