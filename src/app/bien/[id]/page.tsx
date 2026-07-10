@@ -76,7 +76,7 @@ export default async function BienDetailPage({ params }: Props) {
 
   if (error || !bien) notFound()
 
-  supabase.from('biens').update({ vues: (bien.vues ?? 0) + 1 }).eq('id', params.id).then(() => {})
+  supabase.rpc('increment_vues', { bien_id: params.id }).then(() => {})
 
   let isFavorited = false
   if (session?.user) {
