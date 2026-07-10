@@ -96,7 +96,7 @@ export default function AgentDashboardLayout({ children }: { children: React.Rea
     href === '/dashboard/agent' ? pathname === href : pathname.startsWith(href)
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-[#0f172a] flex" data-theme="dark">
 
       {/* ── Overlay mobile ── */}
       {sidebarOpen && (

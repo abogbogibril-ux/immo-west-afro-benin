@@ -143,7 +143,7 @@ export default function ClientDashboardLayout({ children }: { children: React.Re
   const getBadge = (key: string) => badges[key as keyof typeof badges] ?? 0
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-[#0f172a] flex" data-theme="dark">
 
       {/* Overlay mobile */}
       {sidebarOpen && (
