@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -48,28 +48,25 @@ export default function HeroSearch() {
 
   return (
     <>
-      {/* ── Onglet vertical fixe (bord gauche) ── */}
+      {/* ── Bouton horizontal, coin inferieur gauche du hero ── */}
       <button
         onClick={() => setOpen(true)}
         aria-label="Ouvrir la recherche"
         className={`
-          fixed left-0 top-1/2 -translate-y-1/2 z-40
+          absolute left-4 bottom-6 md:left-6 z-20
           bg-green-600 hover:bg-green-700 text-white
-          rounded-r-2xl shadow-lg
-          flex flex-col items-center gap-2
-          py-5 px-2.5
+          rounded-xl shadow-lg
+          flex items-center gap-2
+          py-2.5 px-4
           transition-all duration-300
-          ${open ? '-translate-x-full opacity-0 pointer-events-none' : 'translate-x-0 opacity-100'}
+          ${open ? '-translate-x-[120%] opacity-0 pointer-events-none' : 'translate-x-0 opacity-100'}
         `}
       >
-        <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5}
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
         </svg>
-        <span
-          className="text-xs font-bold tracking-wide"
-          style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
-        >
+        <span className="text-sm font-bold tracking-wide whitespace-nowrap">
           Rechercher
         </span>
       </button>

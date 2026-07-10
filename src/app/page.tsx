@@ -109,27 +109,29 @@ export default async function HomePage() {
               🇧🇯 La référence immobilière au Bénin
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
-              Trouvez votre bien<br/>
-              <span className="text-blue-200">immobilier au Bénin</span>
+              Trouvez votre bien immobilier idéal au Bénin
             </h1>
             <p className="text-blue-100 text-base md:text-lg max-w-2xl mx-auto mb-8">
               Villas, appartements, terrains et bureaux à vendre ou à louer à Cotonou, Porto-Novo, Abomey-Calavi et partout au Bénin.
             </p>
-            <HeroSearch />
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10 mt-10">
-            {[
-              { value: totalBiens ?? 0, label: 'Annonces actives' },
-              { value: totalAgents ?? 0, label: 'Agents certifiés' },
-              { value: 6, label: 'Villes couvertes' },
-            ].map(s => (
-              <div key={s.label} className="text-center">
-                <p className="text-2xl md:text-3xl font-bold text-white">{s.value > 0 ? `${s.value}+` : '—'}</p>
-                <p className="text-blue-200 text-xs md:text-sm font-medium">{s.label}</p>
-              </div>
-            ))}
           </div>
         </div>
+
+        {/* Statistiques - pied du hero, centre */}
+        <div className="absolute bottom-6 inset-x-0 z-10 flex flex-wrap items-center justify-center gap-6 md:gap-10 px-4">
+          {[
+            { value: totalBiens ?? 0, label: 'Annonces actives' },
+            { value: totalAgents ?? 0, label: 'Agents certifiés' },
+            { value: 6, label: 'Villes couvertes' },
+          ].map(s => (
+            <div key={s.label} className="text-center">
+              <p className="text-2xl md:text-3xl font-bold text-white">{s.value > 0 ? `${s.value}+` : '—'}</p>
+              <p className="text-blue-200 text-xs md:text-sm font-medium">{s.label}</p>
+            </div>
+          ))}
+        </div>
+
+        <HeroSearch />
       </section>
 
       {/* TYPES DE BIENS */}
