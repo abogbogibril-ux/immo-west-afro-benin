@@ -106,7 +106,13 @@ export default async function HomePage() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 md:pt-24 md:pb-28">
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-2 bg-white/15 text-white text-xs font-semibold px-4 py-2 rounded-full mb-6 border border-white/20">
-              🇧🇯 La référence immobilière au Bénin
+              <svg className="w-4 h-3 inline-block flex-shrink-0" viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect width="900" height="600" fill="#008751"/>
+                <rect x="337.5" width="562.5" height="600" fill="#008751"/>
+                <rect x="337.5" width="562.5" height="300" fill="#FCD116"/>
+                <rect x="337.5" y="300" width="562.5" height="300" fill="#E8112D"/>
+              </svg>
+              {' '}La référence immobilière au Bénin
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
               Trouvez votre bien immobilier<br className="hidden md:block" /> idéal au Bénin
