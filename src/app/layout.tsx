@@ -4,6 +4,7 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import Footer from '@/components/Footer'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -69,6 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="format-detection" content="telephone=yes" />
       </head>
       <body className={inter.className}>
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''} />
         <ThemeProvider>
         <Navbar />
         <main className="pt-16">
