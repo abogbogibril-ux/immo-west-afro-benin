@@ -5,12 +5,14 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import AIGenerateur from '@/components/AIGenerateur'
+import { useTheme } from '@/hooks/useTheme'
 
 const VILLES = ['Cotonou','Abomey-Calavi','Porto-Novo','Sème-Kpodji','Parakou','Bohicon','Ouidah','Lokossa','Abomey','Djougou','Comè','Azovè','Natitingou']
 const TYPES = ['Maison','Appartement','Villa','Terrain','Bureau','Studio','Chambre']
 const MAX_PHOTOS = 8
 
 export default function PublierPage() {
+  const { theme } = useTheme()
   const router = useRouter()
   const searchParams = useSearchParams()
   const editId = searchParams.get('edit')
@@ -233,7 +235,7 @@ export default function PublierPage() {
   )
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', padding: '2rem' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: theme === 'dark' ? '#0d1117' : '#f8fafc', padding: '2rem' }}>
       <div style={{ maxWidth: '700px', margin: '0 auto' }}>
 
         {/* BANDEAU MODE EDITION */}
@@ -254,14 +256,14 @@ export default function PublierPage() {
           </div>
         )}
 
-        <h1 style={{ color: '#0f172a', fontSize: '1.8rem', fontWeight: '800', marginBottom: '0.5rem' }}>
+        <h1 style={{ color: theme === 'dark' ? '#f0f6fc' : '#0f172a', fontSize: '1.8rem', fontWeight: '800', marginBottom: '0.5rem' }}>
           {isEditMode ? 'Modifier le bien' : 'Publier un bien'}
         </h1>
         <p style={{ color: '#64748b', marginBottom: '2rem' }}>
           {isEditMode ? 'Modifiez les informations et enregistrez.' : 'Remplissez les informations de votre bien immobilier.'}
         </p>
 
-        <div style={{ backgroundColor: '#fff', borderRadius: '16px', padding: '2rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
+        <div style={{ backgroundColor: theme === 'dark' ? '#161b22' : '#fff', borderRadius: '16px', padding: '2rem', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
 
           {/* INFOS PRINCIPALES */}
           <h2 style={sectionTitle}>Informations principales</h2>
@@ -567,7 +569,7 @@ export default function PublierPage() {
 }
 
 const sectionTitle: React.CSSProperties = {
-  color: '#0f172a', fontSize: '1rem', fontWeight: '700',
+  color: theme === 'dark' ? '#f0f6fc' : '#0f172a', fontSize: '1rem', fontWeight: '700',
   marginBottom: '1rem', marginTop: '1.5rem', paddingBottom: '0.5rem',
   borderBottom: '2px solid #e2e8f0',
 }
@@ -582,6 +584,6 @@ const labelStyle: React.CSSProperties = {
 const inputStyle: React.CSSProperties = {
   width: '100%', padding: '0.75rem 1rem',
   backgroundColor: '#f8fafc', border: '1px solid #e2e8f0',
-  borderRadius: '8px', color: '#0f172a', fontSize: '0.95rem',
+  borderRadius: '8px', color: theme === 'dark' ? '#f0f6fc' : '#0f172a', fontSize: '0.95rem',
   outline: 'none', boxSizing: 'border-box',
 }
