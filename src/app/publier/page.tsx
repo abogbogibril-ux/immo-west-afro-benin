@@ -569,7 +569,7 @@ export default function PublierPage() {
 }
 
 const sectionTitle: React.CSSProperties = {
-  color: theme === 'dark' ? '#f0f6fc' : '#0f172a', fontSize: '1rem', fontWeight: '700',
+  color: '#0f172a', fontSize: '1rem', fontWeight: '700',
   marginBottom: '1rem', marginTop: '1.5rem', paddingBottom: '0.5rem',
   borderBottom: '2px solid #e2e8f0',
 }
@@ -584,6 +584,6 @@ const labelStyle: React.CSSProperties = {
 const inputStyle: React.CSSProperties = {
   width: '100%', padding: '0.75rem 1rem',
   backgroundColor: '#f8fafc', border: '1px solid #e2e8f0',
-  borderRadius: '8px', color: theme === 'dark' ? '#f0f6fc' : '#0f172a', fontSize: '0.95rem',
+  borderRadius: '8px', color: '#0f172a', fontSize: '0.95rem',
   outline: 'none', boxSizing: 'border-box',
 }
