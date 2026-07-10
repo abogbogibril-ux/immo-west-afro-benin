@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import NotificationSettings from '@/components/NotificationSettings'
 
 const TABS = ['Profil', 'Notifications', 'Sécurité']
 
@@ -17,6 +18,7 @@ export default function ParametresPage() {
     whatsapp: '', nom_agence: '', biographie: '',
     ville: '', avatar_url: '',
   })
+  const [userId, setUserId] = useState('')
   const [notifForm, setNotifForm] = useState({
     email_messages: true,
     email_vues: true,
@@ -29,6 +31,7 @@ export default function ParametresPage() {
     const load = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/connexion'); return }
+      setUserId(user.id)
       const { data } = await supabase
         .from('profiles').select('*').eq('id', user.id).single()
       if (data) {
@@ -223,6 +226,7 @@ export default function ParametresPage() {
       {/* ── Onglet Notifications ── */}
       {tab === 'Notifications' && (
         <div className="space-y-5">
+          <NotificationSettings userId={userId} />
           <div className="bg-[#1e293b] rounded-2xl border border-[#334155] shadow-sm p-5">
             <h2 className="font-semibold text-white mb-5">Préférences de notifications</h2>
             <div className="space-y-4">
