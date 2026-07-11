@@ -22,8 +22,8 @@ const CATEGORIES = [
 ]
 
 const LIENS_LEGAUX = [
-  { href: '/cgu', label: 'Mentions l\u00E9gales' },
-  { href: '/cgu', label: 'Politique de confidentialit\u00E9' },
+  { href: '/mentions-legales', label: 'Mentions l\u00E9gales' },
+  { href: '/confidentialite', label: 'Politique de confidentialit\u00E9' },
   { href: '/cgu', label: 'Conditions d\u2019utilisation' },
 ]
 
