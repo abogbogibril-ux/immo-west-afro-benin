@@ -92,7 +92,7 @@ export default async function BienDetailPage({ params }: Props) {
   })
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa]">
+    <div className="min-h-screen bg-[var(--background)]">
 
       {/* HERO */}
       <section className="bg-white border-b border-gray-100 shadow-sm">
@@ -159,7 +159,8 @@ export default async function BienDetailPage({ params }: Props) {
 
       {/* CORPS */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-5 mb-12">
-        <div className="space-y-5">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] xl:grid-cols-[1fr_380px] gap-5 lg:gap-6">
+          <div className="space-y-5">
 
           <InfoAnnonceTable
             numero={ref}
@@ -219,6 +220,9 @@ export default async function BienDetailPage({ params }: Props) {
             </div>
           )}
 
+          </div>
+
+          <div className="hidden lg:block" />
         </div>
       </div>
 

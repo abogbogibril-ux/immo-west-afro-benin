@@ -1,4 +1,4 @@
-﻿interface Props {
+interface Props {
   numero: string
   prix: number
   datePublication: string
