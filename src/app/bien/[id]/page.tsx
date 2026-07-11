@@ -12,7 +12,6 @@ import CharacteristicsBlock from './CharacteristicsBlock'
 import LocationBlock from './LocationBlock'
 import AgentSection from './AgentSection'
 import SimilarProperties from './SimilarProperties'
-import BienDisclaimer from './BienDisclaimer'
 import ReportButton from './ReportButton'
 
 interface Props {
@@ -67,7 +66,7 @@ export default async function BienDetailPage({ params }: Props) {
     .select(`
       *,
       localites (id, ville, arrondissement, quartier),
-      profiles (id, nom, prenom, telephone, avatar_url, email, role, whatsapp),
+      profiles (id, nom, prenom, telephone, avatar_url, email, role, whatsapp, nom_agence, ville),
       images_biens (id, url, ordre)
     `)
     .eq('id', params.id)
@@ -260,9 +259,6 @@ export default async function BienDetailPage({ params }: Props) {
               userId={session?.user?.id}
             />
 
-            <BienDisclaimer
-              annonceurNom={bien.profiles ? `${bien.profiles.prenom} ${bien.profiles.nom}` : undefined}
-            />
 
           </div>
 
