@@ -162,7 +162,7 @@ export default async function BienDetailPage({ params }: Props) {
         <div className="space-y-5">
 
           <InfoAnnonceTable
-            ref={ref}
+            numero={ref}
             datePublication={datePublication}
             vues={bien.vues}
             typeBien={typeLabel}
@@ -236,3 +236,4 @@ export default async function BienDetailPage({ params }: Props) {
     </div>
   )
 }
+

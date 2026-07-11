@@ -1,5 +1,5 @@
 ﻿interface Props {
-  ref: string
+  numero: string
   datePublication: string
   vues?: number
   typeBien?: string
@@ -29,14 +29,14 @@ const ETAT_LABELS: Record<string, string> = {
 interface Row { label: string; value: string }
 
 export default function InfoAnnonceTable({
-  ref, datePublication, vues, typeBien, transaction,
+  numero, datePublication, vues, typeBien, transaction,
   nbPieces, nbChambres, nbSallesBain, surface, surfaceTerrain,
   etage, etat, cuisine, parking, jardin, balcon, terrasse,
   securite, meuble, caracteristiques
 }: Props) {
 
   const rows: Row[] = [
-    { label: 'Numéro', value: ref },
+    { label: 'Numéro', value: numero },
     { label: 'Date', value: datePublication },
     { label: 'Vues', value: String(vues ?? 0) },
     typeBien ? { label: 'Type de bien', value: typeBien } : null,
