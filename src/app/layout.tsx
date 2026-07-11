@@ -28,7 +28,6 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   manifest: '/manifest.json',
   icons: {
-    icon: '/logo.png',
     apple: '/logo.png',
   },
   openGraph: {

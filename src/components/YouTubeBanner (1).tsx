@@ -1,4 +1,4 @@
-﻿import Link from 'next/link'
+import Link from 'next/link'
 
 const CHANNEL_URL = 'https://www.youtube.com/channel/UCOVR7DINxSXb7jDHi0hDV-A'
 
