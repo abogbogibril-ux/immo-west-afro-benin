@@ -22,13 +22,13 @@ const TYPE_LABELS: Record<string, string> = {
 const SELECT_FIELDS = `
   id, titre, prix, surface, nb_chambres, transaction, type_bien, agent_id,
   localites (ville, arrondissement, quartier),
-  images_biens (url, is_principale, ordre)
+  images_biens (url, ordre)
 `
 
 export default async function SimilarProperties({ currentId, typeBien, ville, transaction, agentId }: Props) {
 
   // 1. Même type + même transaction
-  const { data: byTypeTransaction, error: err1 } = await supabase
+  const { data: byTypeTransaction } = await supabase
     .from('biens')
     .select(SELECT_FIELDS)
     .neq('id', currentId)
@@ -95,13 +95,7 @@ export default async function SimilarProperties({ currentId, typeBien, ville, tr
   }
 
   const similaires = pool.slice(0, 6)
-  if (similaires.length === 0) {
-    return (
-      <div style={{ padding: 20, background: '#fee', border: '1px solid red', borderRadius: 8 }}>
-        <p><strong>DEBUG</strong> — pool vide. Erreur requête 1: {err1 ? JSON.stringify(err1) : 'aucune'}</p>
-      </div>
-    )
-  }
+  if (similaires.length === 0) return null
 
   return (
     <div>
@@ -124,11 +118,7 @@ export default async function SimilarProperties({ currentId, typeBien, ville, tr
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
         {similaires.map((bien: any) => {
-          const sortedImages = [...(bien.images_biens ?? [])].sort((a: any, b: any) => {
-            if (a.is_principale) return -1
-            if (b.is_principale) return 1
-            return (a.ordre ?? 0) - (b.ordre ?? 0)
-          })
+          const sortedImages = [...(bien.images_biens ?? [])].sort((a: any, b: any) => (a.ordre ?? 0) - (b.ordre ?? 0))
           const photo = sortedImages[0]?.url
 
           return (
