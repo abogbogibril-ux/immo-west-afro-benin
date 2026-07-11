@@ -141,7 +141,7 @@ export default async function BienDetailPage({ params }: Props) {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] xl:grid-cols-[1fr_380px] gap-5 lg:gap-6">
-            <PropertyGallery images={images} titre={bien.titre} bienId={params.id} />
+            <PropertyGallery images={images} titre={bien.titre} bienId={params.id} userId={session?.user?.id} isFavorited={isFavorited} />
             <AgentContactCard
               prix={bien.prix}
               transaction={bien.transaction}
@@ -164,6 +164,7 @@ export default async function BienDetailPage({ params }: Props) {
 
           <InfoAnnonceTable
             numero={ref}
+            prix={bien.prix}
             datePublication={datePublication}
             vues={bien.vues}
             typeBien={typeLabel}
@@ -230,6 +231,7 @@ export default async function BienDetailPage({ params }: Props) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SimilarProperties
             currentId={params.id}
+            agentId={bien.agent_id}
             typeBien={bien.type_bien}
             ville={bien.localites?.ville}
             transaction={bien.transaction}
