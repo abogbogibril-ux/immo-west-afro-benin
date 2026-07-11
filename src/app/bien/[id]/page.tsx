@@ -7,6 +7,7 @@ import PropertyGallery from './PropertyGallery'
 import AgentContactCard from './AgentContactCard'
 import InfoAnnonceTable from './InfoAnnonceTable'
 import SimilarProperties from './SimilarProperties'
+import { Suspense } from 'react'
 
 interface Props {
   params: { id: string }
@@ -229,6 +230,13 @@ export default async function BienDetailPage({ params }: Props) {
 
       <section className="bg-white border-t border-gray-100 py-10 md:py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Suspense fallback={
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+              {[1,2,3].map(i => (
+                <div key={i} className="animate-pulse bg-gray-100 rounded-2xl h-80" />
+              ))}
+            </div>
+          }>
           <SimilarProperties
             currentId={params.id}
             agentId={bien.agent_id}
@@ -236,6 +244,7 @@ export default async function BienDetailPage({ params }: Props) {
             ville={bien.localites?.ville}
             transaction={bien.transaction}
           />
+          </Suspense>
         </div>
       </section>
 
