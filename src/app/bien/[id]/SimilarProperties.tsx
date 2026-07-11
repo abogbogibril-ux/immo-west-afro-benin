@@ -28,7 +28,7 @@ const SELECT_FIELDS = `
 export default async function SimilarProperties({ currentId, typeBien, ville, transaction, agentId }: Props) {
 
   // 1. Même type + même transaction
-  const { data: byTypeTransaction } = await supabase
+  const { data: byTypeTransaction, error: err1 } = await supabase
     .from('biens')
     .select(SELECT_FIELDS)
     .neq('id', currentId)
@@ -95,7 +95,13 @@ export default async function SimilarProperties({ currentId, typeBien, ville, tr
   }
 
   const similaires = pool.slice(0, 6)
-  if (similaires.length === 0) return null
+  if (similaires.length === 0) {
+    return (
+      <div style={{ padding: 20, background: '#fee', border: '1px solid red', borderRadius: 8 }}>
+        <p><strong>DEBUG</strong> — pool vide. Erreur requête 1: {err1 ? JSON.stringify(err1) : 'aucune'}</p>
+      </div>
+    )
+  }
 
   return (
     <div>
