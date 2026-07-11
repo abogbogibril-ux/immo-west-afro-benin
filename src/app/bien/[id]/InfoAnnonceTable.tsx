@@ -91,16 +91,16 @@ export default function InfoAnnonceTable({
       <div className="divide-y divide-gray-50">
         {rows.map((row, i) => (
           <div key={`${row.label}-${i}`}
-            className="flex items-center justify-between px-5 py-3 text-sm">
-            <span className="text-gray-500">{row.label}</span>
-            <span className="font-medium text-gray-800 text-right">{row.value}</span>
+            className="flex items-center gap-4 px-5 py-3 text-sm">
+            <span className="text-gray-500 w-40 flex-shrink-0">{row.label}</span>
+            <span className="font-medium text-gray-800 text-left">{row.value}</span>
           </div>
         ))}
 
         {finalChips.length > 0 && (
           <div className="flex items-start justify-between px-5 py-3 text-sm gap-4">
-            <span className="text-gray-500 flex-shrink-0 pt-1">Spécifications</span>
-            <div className="flex flex-wrap justify-end gap-1.5 flex-1">
+            <span className="text-gray-500 w-40 flex-shrink-0 pt-1">Spécifications</span>
+            <div className="flex flex-wrap justify-start gap-1.5 flex-1">
               {finalChips.map((chip, i) => (
                 <span key={i}
                   className="px-2.5 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full whitespace-nowrap">

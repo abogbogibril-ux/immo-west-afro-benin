@@ -1,6 +1,7 @@
 ﻿import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
 import HeroSearch from '@/components/HeroSearch'
+import YouTubeBanner from '@/components/YouTubeBanner'
 import BienCard from '@/components/BienCard'
 import BesoinCard from '@/components/BesoinCard'
 import type { Metadata } from 'next'
@@ -317,6 +318,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+        {/* YOUTUBE */}
+        <YouTubeBanner />
 
       {/* CTA PUBLIER */}
       <section className="bg-gradient-to-br from-blue-800 to-green-700 py-14 md:py-20">

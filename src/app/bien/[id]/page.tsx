@@ -125,7 +125,7 @@ export default async function BienDetailPage({ params }: Props) {
                 {typeLabel}
               </span>
             </div>
-            <h1 className="text-xl md:text-3xl font-bold text-gray-900 leading-tight">{bien.titre}</h1>
+            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 leading-tight break-words">{bien.titre}</h1>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2.5 text-sm text-gray-500">
               {bien.localites && (
                 <span className="flex items-center gap-1.5">

@@ -129,6 +129,15 @@ export default function Footer() {
                 f
               </a>
               <a
+                href="https://www.youtube.com/channel/UCOVR7DINxSXb7jDHi0hDV-A"
+                aria-label="YouTube"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ ...styleSocial, color: '#FF0000' }}
+              >
+                ▶
+              </a>
+              <a
                 href="tel:+22901961377"
                 aria-label="T&eacute;l&eacute;phone"
                 style={styleSocial}
