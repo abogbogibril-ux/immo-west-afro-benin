@@ -1,1 +1,0 @@
-    { label: 'Prix', value: `${new Intl.NumberFormat('fr-FR').format(prix)} FCFA${transaction === 'location' ? '/mois' : ''}` },
