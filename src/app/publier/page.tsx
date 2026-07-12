@@ -270,8 +270,8 @@ export default function PublierPage() {
           <div style={gridTwo}>
             <div style={{ gridColumn: '1/-1' }}>
               <AIGenerateur form={form} previews={previews} onGenerated={handleAIGenerated} />
-              <label style={labelStyle}>Titre du bien *</label>
-              <input name="titre" type="text" placeholder="Ex: Belle villa 4 chambres à Cotonou"
+              <label style={labelStyle}>Titre du bien * <span style={{ fontWeight: 400, color: '#94a3b8', fontSize: '0.8rem' }}>({form.titre.length}/70)</span></label>
+              <input name="titre" type="text" maxLength={70} placeholder="Ex: Belle villa 4 chambres à Cotonou"
                 value={form.titre} onChange={handleChange} style={inputStyle} />
             </div>
             <div>
