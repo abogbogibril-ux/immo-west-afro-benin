@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
 function EyeIcon({ visible }: { visible: boolean }) {
@@ -48,6 +48,8 @@ export default function InscriptionPage() {
     if (error) console.error('Erreur Google:', error)
   }
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const parrainCode = searchParams.get('ref')
   const [step, setStep] = useState(1)
   const [form, setForm] = useState({
     prenom: '', nom: '', email: '', telephone: '',
@@ -89,6 +91,7 @@ export default function InscriptionPage() {
           telephone: form.telephone,
           role: form.role,
           nom_agence: form.nom_agence,
+          parraine_par: parrainCode,
         },
       },
     })
@@ -113,6 +116,7 @@ export default function InscriptionPage() {
         telephone: form.telephone,
         role: form.role,
         nom_agence: form.nom_agence,
+        parraine_par: parrainCode,
       })
     }
 
