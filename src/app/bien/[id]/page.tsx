@@ -167,7 +167,7 @@ export default async function BienDetailPage({ params }: Props) {
             numero={ref}
             prix={bien.prix}
             datePublication={datePublication}
-            vues={bien.vues}
+            vues={(bien.vues ?? 0) + 1}
             typeBien={typeLabel}
             transaction={bien.transaction}
             nbPieces={bien.nb_pieces}
