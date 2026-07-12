@@ -127,7 +127,7 @@ export default async function BienDetailPage({ params }: Props) {
               </span>
             </div>
             <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-900 leading-tight break-words">{bien.titre}</h1>
-            <p style={{background:"red",color:"white",padding:"8px",fontSize:"14px"}}>DEBUG — bien.vues brut: {String(bien.vues)} | Rendu serveur à: {new Date().toISOString()}</p>
+            <p style={{background:"red",color:"white",padding:"8px",fontSize:"14px"}}>DEBUG — bien.vues brut: {String(bien.vues)} | Rendu serveur à: {new Date().toISOString()} | bien.id: {bien.id} | params.id: {params.id} | URL Supabase: {process.env.NEXT_PUBLIC_SUPABASE_URL}</p>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2.5 text-sm text-gray-500">
               {bien.localites && (
                 <span className="flex items-center gap-1.5">
