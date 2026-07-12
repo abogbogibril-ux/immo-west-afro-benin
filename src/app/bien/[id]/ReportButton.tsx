@@ -75,7 +75,7 @@ export default function ReportButton({ bienId, floating = false }: { bienId: str
       ) : (
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-900/20 text-gray-600 dark:text-gray-400 hover:text-red-500 text-xs font-medium rounded-lg transition-colors min-h-[44px]"
+          className="flex items-center gap-1.5 px-3 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-900/50 text-gray-600 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 text-xs font-medium rounded-lg transition-colors min-h-[44px]"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
