@@ -1,4 +1,4 @@
-/**
+﻿/**
  * sw.js — Service Worker PWA Immo West Afro Bénin
  *
  * Stratégies de cache :
@@ -10,7 +10,7 @@
  * Optimisé pour connexion lente (3G Bénin)
  */
 
-const CACHE_VERSION = "v1.2.0";
+const CACHE_VERSION = "v1.3.0";
 const CACHE_NAMES = {
   shell: `immo-shell-${CACHE_VERSION}`,
   images: `immo-images-${CACHE_VERSION}`,
@@ -85,7 +85,7 @@ self.addEventListener("fetch", (event) => {
 
   // ── App Shell (HTML pages) → Stale While Revalidate ──────
   if (request.mode === "navigate" || request.destination === "document") {
-    event.respondWith(staleWhileRevalidate(request, CACHE_NAMES.pages));
+    event.respondWith(networkFirst(request, CACHE_NAMES.pages, 5000));
     return;
   }
 
