@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import type { Metadata } from 'next'
 import { supabase } from '@/lib/supabase'
 
@@ -72,7 +72,7 @@ export default async function AProposPage() {
               </p>
               <div className="space-y-3">
                 {[
-                  'Annonces vérifiées et mises à jour régulièrement',
+                  'Annonces vérifiées et mises à jour régulièrement par les annonceurs',
                   'Contact direct avec l\'agent via message ou WhatsApp',
                   'Interface optimisée pour les connexions mobiles 3G/4G',
                   'Prix affichés en FCFA, transparents et complets',
