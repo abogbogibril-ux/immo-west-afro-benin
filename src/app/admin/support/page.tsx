@@ -13,7 +13,7 @@
             { label: 'Serveur Vercel', status: '✅ Opérationnel', color: '#dcfce7', textColor: '#16a34a' },
             { label: 'Base de données Supabase', status: '✅ Connectée', color: '#dcfce7', textColor: '#16a34a' },
             { label: 'Stockage fichiers', status: '✅ Disponible', color: '#dcfce7', textColor: '#16a34a' },
-            { label: 'Emails transactionnels', status: '⚠️ À configurer', color: '#fef3c7', textColor: '#d97706' },
+            { label: 'Emails transactionnels', status: 'Configure', color: '#dcfce7', textColor: '#16a34a' },
           ].map(item => (
             <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem', backgroundColor: '#f8fafc', borderRadius: '8px', marginBottom: '0.5rem' }}>
               <span style={{ color: '#374151', fontSize: '0.875rem' }}>{item.label}</span>
