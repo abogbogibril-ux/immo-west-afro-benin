@@ -70,7 +70,6 @@ export default async function BienDetailPage({ params }: Props) {
 
   if (error || !bien) notFound()
 
-  supabase.rpc('increment_vues', { bien_id: params.id }).then(() => {})
 
   let isFavorited = false
   if (session?.user) {
@@ -167,7 +166,7 @@ export default async function BienDetailPage({ params }: Props) {
             numero={ref}
             prix={bien.prix}
             datePublication={datePublication}
-            vues={(bien.vues ?? 0) + 1}
+            vues={bien.vues ?? 0} bienId={params.id}
             typeBien={typeLabel}
             transaction={bien.transaction}
             nbPieces={bien.nb_pieces}
