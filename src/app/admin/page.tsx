@@ -12,11 +12,12 @@ type Stats = {
   besoins: number
   messages: number
   signalements: number
+  vuesTotal: number
 }
 
 export default function AdminPage() {
   const router = useRouter()
-  const [stats, setStats] = useState<Stats>({ agents: 0, proprietaires: 0, biensPublies: 0, biensBrouillons: 0, besoins: 0, messages: 0, signalements: 0 })
+  const [stats, setStats] = useState<Stats>({ agents: 0, proprietaires: 0, biensPublies: 0, biensBrouillons: 0, besoins: 0, messages: 0, signalements: 0, vuesTotal: 0 })
   const [loading, setLoading] = useState(true)
   const [onglet, setOnglet] = useState<'stats' | 'utilisateurs' | 'biens' | 'besoins' | 'signalements' | 'messages'>('stats')
   const [utilisateurs, setUtilisateurs] = useState<any[]>([])
@@ -48,6 +49,7 @@ export default function AdminPage() {
       { count: besoins },
       { count: signalementsCount },
       { count: messages },
+      { data: vuesData },
     ] = await Promise.all([
       supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'agent'),
       supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'proprietaire'),
@@ -56,8 +58,10 @@ export default function AdminPage() {
       supabase.from('besoins').select('*', { count: 'exact', head: true }),
       supabase.from('signalements').select('*', { count: 'exact', head: true }),
       supabase.from('messages').select('*', { count: 'exact', head: true }),
+      supabase.from('biens').select('vues'),
     ])
-    setStats({ agents: agents || 0, proprietaires: proprietaires || 0, biensPublies: biensPublies || 0, biensBrouillons: biensBrouillons || 0, besoins: besoins || 0, signalements: signalementsCount || 0, messages: messages || 0 })
+    const vuesTotal = (vuesData ?? []).reduce((sum: number, b: any) => sum + (b.vues ?? 0), 0)
+    setStats({ agents: agents || 0, proprietaires: proprietaires || 0, biensPublies: biensPublies || 0, biensBrouillons: biensBrouillons || 0, besoins: besoins || 0, signalements: signalementsCount || 0, messages: messages || 0, vuesTotal })
     setLoading(false)
   }
 
@@ -182,6 +186,7 @@ export default function AdminPage() {
               { label: 'Besoins deposes', value: stats.besoins, border: 'border-l-red-400' },
               { label: 'Signalements', value: stats.signalements, border: 'border-l-red-600' },
               { label: 'Messages', value: stats.messages, border: 'border-l-purple-500' },
+                { label: 'Vues totales', value: stats.vuesTotal, border: 'border-l-cyan-500' },
             ].map(s => (
               <div key={s.label} className={`bg-[#1e293b] rounded-xl p-6 border-l-4 ${s.border}`}>
                 <div className="text-white text-3xl font-extrabold">{s.value}</div>
