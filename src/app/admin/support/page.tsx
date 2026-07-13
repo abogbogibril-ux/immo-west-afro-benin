@@ -1,4 +1,4 @@
-export default function SupportAdmin() {
+﻿export default function SupportAdmin() {
   return (
     <div>
       <div style={{ marginBottom: '1.5rem' }}>
@@ -44,11 +44,14 @@ export default function SupportAdmin() {
               { icon: '📚', title: 'Documentation Next.js', url: 'https://nextjs.org/docs' },
               { icon: '🗄️', title: 'Documentation Supabase', url: 'https://supabase.com/docs' },
               { icon: '🚀', title: 'Dashboard Vercel', url: 'https://vercel.com/dashboard' },
-              { icon: '📧', title: 'Support technique', url: 'mailto:contact@immowestafro.com' },
+              { icon: '📧', title: 'Support technique', subtitle: 'calavi_immo@immowestafro.com', url: 'mailto:calavi_immo@immowestafro.com' },
             ].map(link => (
               <a key={link.title} href={link.url} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', backgroundColor: '#f8fafc', borderRadius: '10px', padding: '1rem', border: '1px solid #e2e8f0', display: 'block' }}>
                 <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>{link.icon}</div>
                 <div style={{ color: '#0f172a', fontWeight: '600', fontSize: '0.875rem' }}>{link.title}</div>
+                {(link as any).subtitle && (
+                  <div style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.25rem' }}>{(link as any).subtitle}</div>
+                )}
               </a>
             ))}
           </div>
