@@ -1,4 +1,4 @@
-﻿import { MetadataRoute } from 'next'
+import { MetadataRoute } from 'next'
 import { createClient } from '@supabase/supabase-js'
 
 const BASE = 'https://benin.immowestafro.com'
