@@ -78,6 +78,15 @@ export default async function BienDetailPage({ params }: Props) {
       .from('favoris').select('id')
       .eq('user_id', session.user.id).eq('bien_id', params.id).maybeSingle()
     isFavorited = !!fav
+  let rawFetchVues: any = 'erreur'
+  try {
+    const rawRes = await fetch(process.env.NEXT_PUBLIC_SUPABASE_URL + "/rest/v1/biens?id=eq." + params.id + "&select=vues", {
+      headers: { apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}` },
+      cache: 'no-store',
+    })
+    const rawJson = await rawRes.json()
+    rawFetchVues = rawJson?.[0]?.vues
+  } catch (e) { rawFetchVues = String(e) }
   }
 
   const images = [...(bien.images_biens ?? [])].sort((a: any, b: any) => {
@@ -127,7 +136,7 @@ export default async function BienDetailPage({ params }: Props) {
               </span>
             </div>
             <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-900 leading-tight break-words">{bien.titre}</h1>
-            <p style={{background:"red",color:"white",padding:"8px",fontSize:"14px"}}>DEBUG — bien.vues brut: {String(bien.vues)} | Rendu serveur à: {new Date().toISOString()} | bien.id: {bien.id} | params.id: {params.id} | URL Supabase: {process.env.NEXT_PUBLIC_SUPABASE_URL}</p>
+            <p style={{background:"red",color:"white",padding:"8px",fontSize:"14px"}}>DEBUG — bien.vues brut: {String(bien.vues)} | Rendu serveur à: {new Date().toISOString()} | bien.id: {bien.id} | params.id: {params.id} | URL Supabase: {process.env.NEXT_PUBLIC_SUPABASE_URL} | FETCH BRUT vues: {String(rawFetchVues)}</p>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2.5 text-sm text-gray-500">
               {bien.localites && (
                 <span className="flex items-center gap-1.5">
