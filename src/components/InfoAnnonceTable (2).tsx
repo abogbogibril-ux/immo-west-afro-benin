@@ -1,4 +1,4 @@
-﻿import VuesLive from './VuesLive'
+import VuesLive from './VuesLive'
 import NumeroLive from './NumeroLive'
 
 interface Props {
