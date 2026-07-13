@@ -81,7 +81,7 @@ export default function AdminAnnoncesPage() {
       const matchSearch = !search ||
         b.titre?.toLowerCase().includes(search.toLowerCase()) ||
         b.ville?.toLowerCase().includes(search.toLowerCase()) ||
-        b.id?.slice(0, 8).toUpperCase().includes(search.toUpperCase())
+        `IWA-${String(b.numero_sequence).padStart(5, "0")}`.includes(search.toUpperCase())
       return matchStatut && matchSearch
     })
     .sort((a, b) => {
@@ -162,7 +162,7 @@ export default function AdminAnnoncesPage() {
               {/* Ref + Statut */}
               <div className="flex items-center gap-2 flex-shrink-0">
                 <span className="font-mono text-xs text-gray-400 bg-gray-50 px-2 py-0.5 rounded">
-                  {b.id.slice(0, 8).toUpperCase()}
+                  {`IWA-${String(b.numero_sequence).padStart(5, "0")}`}
                 </span>
                 <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUT_COLORS[b.statut] ?? 'bg-gray-100 text-gray-600'}`}>
                   {b.statut}

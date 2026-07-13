@@ -9,6 +9,7 @@ interface Annonce {
   titre: string
   ville: string
   vues: number
+  numero_sequence: number
   statut: string
   created_at: string
   prix: number
@@ -45,7 +46,7 @@ export default function AgentDashboardPage() {
 
       const { data: biens } = await supabase
         .from('biens')
-        .select('id, titre, ville, vues, statut, created_at, prix')
+        .select('id, titre, ville, vues, statut, created_at, prix, numero_sequence')
         .eq('agent_id', user.id)
         .order('created_at', { ascending: false })
         .limit(50)
@@ -164,7 +165,7 @@ export default function AgentDashboardPage() {
                   <tr key={a.id} className="hover:bg-[#0f172a] transition-colors">
                     <td className="px-5 py-3.5">
                       <span className="font-mono text-xs text-slate-300 bg-[#0f172a] px-1.5 py-0.5 rounded whitespace-nowrap">
-                        {a.id.slice(0, 8).toUpperCase()}
+                        {`IWA-${String(a.numero_sequence).padStart(5, "0")}`}
                       </span>
                     </td>
                     <td className="px-3 py-3.5">

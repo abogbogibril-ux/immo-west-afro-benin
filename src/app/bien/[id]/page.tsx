@@ -86,7 +86,7 @@ export default async function BienDetailPage({ params }: Props) {
   })
 
   const typeLabel = TYPE_LABELS[bien.type_bien] ?? bien.type_bien
-  const ref = params.id.slice(0, 8).toUpperCase()
+  const ref = `IWA-${String(bien.numero_sequence).padStart(5, "0")}`
   const datePublication = new Date(bien.created_at).toLocaleDateString('fr-FR', {
     day: 'numeric', month: 'long', year: 'numeric',
   })

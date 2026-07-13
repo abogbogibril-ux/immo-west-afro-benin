@@ -51,7 +51,7 @@ export default function AnnoncesPage() {
       setUserId(user.id)
       const { data } = await supabase
         .from('biens')
-        .select('id, titre, ville, arrondissement, type_bien, transaction, prix, vues, statut, created_at, surface')
+        .select('id, titre, ville, arrondissement, type_bien, transaction, prix, vues, statut, created_at, surface, numero_sequence')
         .eq('agent_id', user.id)
         .order('created_at', { ascending: false })
       setAnnonces(data ?? [])
@@ -219,7 +219,7 @@ export default function AnnoncesPage() {
                   <tr key={a.id} className="hover:bg-[#0f172a] transition-colors">
                     <td className="px-4 py-3.5">
                       <span className="font-mono text-xs text-slate-400 bg-[#0f172a] px-1.5 py-0.5 rounded">
-                        {a.id.slice(0, 8).toUpperCase()}
+                        {`IWA-${String(a.numero_sequence).padStart(5, "0")}`}
                       </span>
                     </td>
                     <td className="px-4 py-3.5 min-w-[160px]">
