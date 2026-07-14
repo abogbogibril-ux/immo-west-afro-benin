@@ -46,6 +46,18 @@ export default function PublierPage() {
       if (!user) { router.push('/connexion'); return }
       setUserId(user.id)
 
+      // Vérifier si le compte est suspendu
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('suspendu')
+        .eq('id', user.id)
+        .single()
+
+      if (profile?.suspendu) {
+        setMessage("⛔ Votre compte est suspendu. Vous ne pouvez pas publier de biens. Contactez l'administrateur.")
+        setLoading(false)
+        return
+      }
       if (isEditMode && editId) {
         const { data, error } = await supabase
           .from('biens')
