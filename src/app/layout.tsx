@@ -12,14 +12,14 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   metadataBase: new URL('https://benin.immowestafro.com'),
   title: {
-    default: 'Immo West Afro B�nin � Vente et location immobili�re',
-    template: '%s | Immo West Afro B�nin',
+    default: 'Immo West Afro Bénin — Vente et location immobilière',
+    template: '%s | Immo West Afro Bénin',
   },
   description:
-    'Trouvez votre bien immobilier au B�nin. Appartements, villas, terrains et bureaux � vendre ou � louer � Cotonou, Abomey-Calavi, Porto-Novo et partout au B�nin.',
+    'Trouvez votre bien immobilier au Bénin. Appartements, villas, terrains et bureaux à vendre ou à louer à Cotonou, Abomey-Calavi, Porto-Novo et partout au Bénin.',
   keywords: [
-    'immobilier B�nin', 'maison � vendre Cotonou', 'appartement � louer B�nin',
-    'terrain Cotonou', 'villa B�nin', 'agence immobili�re B�nin',
+    'immobilier Bénin', 'maison à vendre Cotonou', 'appartement à louer Bénin',
+    'terrain Cotonou', 'villa Bénin', 'agence immobilière Bénin',
     'Immo West Afro', 'immobilier Abomey-Calavi', 'immobilier Porto-Novo',
   ],
   authors: [{ name: 'Immo West Afro' }],
@@ -34,15 +34,15 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'fr_BJ',
     url: 'https://benin.immowestafro.com',
-    siteName: 'Immo West Afro B�nin',
-    title: 'Immo West Afro B�nin � Vente et location immobili�re',
-    description: 'Trouvez votre bien immobilier au B�nin.',
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Trouvez votre bien immobilier id�al au B�nin' }],
+    siteName: 'Immo West Afro Bénin',
+    title: 'Immo West Afro Bénin — Vente et location immobilière',
+    description: 'Trouvez votre bien immobilier au Bénin.',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Trouvez votre bien immobilier idéal au Bénin' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Immo West Afro B�nin',
-    description: 'Trouvez votre bien immobilier au B�nin.',
+    title: 'Immo West Afro Bénin',
+    description: 'Trouvez votre bien immobilier au Bénin.',
   },
   manifest: '/manifest.webmanifest',
   appleWebApp: {
