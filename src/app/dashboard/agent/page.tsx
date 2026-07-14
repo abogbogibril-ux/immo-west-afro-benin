@@ -94,13 +94,6 @@ export default function AgentDashboardPage() {
           </h1>
           <p className="text-sm text-slate-400 mt-0.5 capitalize">{today}</p>
         </div>
-        <Link href="/publier"
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#00bcd4] text-white text-sm font-semibold rounded-xl hover:bg-[#0097a7] transition-colors self-start min-h-[44px]">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
-          </svg>
-          Nouvelle annonce
-        </Link>
       </div>
 
       {/* KPI Cards — statistiques globales, dont Vues totales */}

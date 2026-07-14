@@ -12,6 +12,7 @@ export default function ApercuBienPage() {
   const [loading, setLoading] = useState(true)
   const [publishing, setPublishing] = useState(false)
   const [erreur, setErreur] = useState('')
+  const [suspendu, setSuspendu] = useState(false)
 
   useEffect(() => {
     const fetchBien = async () => {
@@ -111,8 +112,8 @@ export default function ApercuBienPage() {
             </Link>
             <button
               onClick={publier}
-              disabled={publishing}
-              className="px-6 py-2 bg-green-600 text-white text-sm font-bold rounded-xl hover:bg-green-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+              disabled={publishing || suspendu}
+              className={"px-6 py-2 text-white text-sm font-bold rounded-xl disabled:opacity-60 disabled:cursor-not-allowed transition-colors " + (suspendu ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700')}
             >
               {publishing ? 'Publication...' : "Publier l'annonce"}
             </button>
@@ -260,8 +261,8 @@ export default function ApercuBienPage() {
               <h3 className="font-bold text-gray-900 text-sm">Actions</h3>
               <button
                 onClick={publier}
-                disabled={publishing}
-                className="w-full py-3 bg-green-600 text-white font-bold text-sm rounded-xl hover:bg-green-700 disabled:opacity-60 transition-colors"
+                disabled={publishing || suspendu}
+                className={"w-full py-3 text-white font-bold text-sm rounded-xl disabled:opacity-60 transition-colors " + (suspendu ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700')}
               >
                 {publishing ? 'Publication en cours...' : "Publier l'annonce"}
               </button>
