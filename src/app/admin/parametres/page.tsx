@@ -59,7 +59,7 @@ export default function ParametresAdmin() {
     email_contact: 'calavi_immo@immowestafro.com',
     telephone: '+229 01 96 13 77 20',
     adresse: 'Abomey-Calavi, Togba, Quartier SOME',
-    facebook: '', instagram: '', twitter: '',
+    facebook: '', instagram: '', twitter: '', youtube: '',
     whatsapp: '+229 01 96 13 77 20',
     mentions_legales: MENTIONS_LEGALES,
     politique_confidentialite: POLITIQUE_CONFIDENTIALITE,
@@ -129,6 +129,7 @@ export default function ParametresAdmin() {
             { name: 'facebook', label: 'Facebook', placeholder: 'https://facebook.com/...' },
             { name: 'instagram', label: 'Instagram', placeholder: 'https://instagram.com/...' },
             { name: 'twitter', label: 'Twitter/X', placeholder: 'https://twitter.com/...' },
+            { name: 'youtube', label: 'YouTube', placeholder: 'https://youtube.com/@...' },
             { name: 'whatsapp', label: 'WhatsApp', placeholder: '+229...' },
           ].map(r => (
             <div key={r.name} className="mb-4">
