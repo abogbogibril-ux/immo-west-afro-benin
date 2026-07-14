@@ -46,11 +46,18 @@ export default function UtilisateursAdmin() {
   }
 
   const supprimerUser = async (id: string, nom: string) => {
-    if (!confirm('Supprimer definitivement ' + nom + ' ?')) return
-    await supabase.from('biens').delete().eq('agent_id', id)
-    await supabase.from('profiles').delete().eq('id', id)
-    loadUsers()
-    showToast('Utilisateur supprime')
+    if (!confirm('Supprimer definitivement ' + nom + ' et tous ses biens ?')) return
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) { showToast('Session expilee, reconnectez-vous', 'error'); return }
+    const res = await fetch('/api/admin/delete-user', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+      body: JSON.stringify({ targetId: id }),
+    })
+    const result = await res.json()
+    if (!res.ok) { showToast('Erreur : ' + result.error, 'error'); return }
+    setUsers(prev => prev.filter(u => u.id !== id))
+    showToast('Utilisateur supprime definitivement de auth.users')
   }
 
   const usersFiltres = users.filter(u => {
