@@ -19,6 +19,7 @@ export default function PublierPage() {
   const isEditMode = !!editId
 
   const [loading, setLoading] = useState(false)
+  const [suspendu, setSuspendu] = useState(false)
   const [loadingData, setLoadingData] = useState(isEditMode)
   const [message, setMessage] = useState('')
   const [userId, setUserId] = useState<string | null>(null)
@@ -45,6 +46,7 @@ export default function PublierPage() {
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) { router.push('/connexion'); return }
       setUserId(user.id)
+      setSuspendu(profile?.suspendu ?? false)
 
       // Vérifier si le compte est suspendu
       const { data: profile } = await supabase
@@ -554,13 +556,13 @@ export default function PublierPage() {
                 Annuler
               </Link>
             )}
-            <button onClick={handleSubmit} disabled={loading || !cguAccepted}
+            <button onClick={handleSubmit} disabled={loading || !cguAccepted || suspendu}
               style={{
                 flex: 1, padding: '1rem',
-                backgroundColor: loading || !cguAccepted ? '#e2e8f0' : '#00bcd4',
-                color: !cguAccepted ? '#94a3b8' : '#fff',
+                backgroundColor: loading || !cguAccepted || suspendu ? '#e2e8f0' : '#00bcd4',
+                color: !cguAccepted || suspendu ? '#94a3b8' : '#fff',
                 border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: '700',
-                cursor: loading || !cguAccepted ? 'not-allowed' : 'pointer', transition: 'all 0.2s',
+                cursor: loading || !cguAccepted || suspendu ? 'not-allowed' : 'pointer', transition: 'all 0.2s',
               }}>
               {loading
                 ? 'Enregistrement...'

@@ -84,14 +84,14 @@ export default function AgentDashboardLayout({ children }: { children: React.Rea
       if (!user) { router.push('/connexion'); return }
       const { data } = await supabase
         .from('profiles')
-        .select('nom, prenom, avatar_url, role')
+        .select('nom, prenom, avatar_url, role, suspendu')
         .eq('id', user.id)
         .single()
       if (data?.role !== 'agent' && data?.role !== 'admin') {
         router.push('/')
         return
       }
-      setAgent({ ...data, id: user.id, email: user.email })
+      setAgent({ ...data, id: user.id, email: user.email, suspendu: data?.suspendu ?? false })
 
       // Messages non lus
       const { count } = await supabase
@@ -232,13 +232,14 @@ export default function AgentDashboardLayout({ children }: { children: React.Rea
             {/* Notifications */}
             <NotificationBell />
             {/* Publier */}
+            {!agent?.suspendu &&
             <Link href="/publier"
               className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#00bcd4] text-white text-sm font-semibold rounded-lg hover:bg-[#0097a7] transition-colors">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
               Publier
-            </Link>
+            </Link>}
 
             {/* Avatar */}
             {agent && (
@@ -250,6 +251,17 @@ export default function AgentDashboardLayout({ children }: { children: React.Rea
           </div>
         </header>
 
+        {agent?.suspendu && (
+          <div className="bg-red-600 text-white px-4 py-3 flex items-center gap-3">
+            <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+            </svg>
+            <div className="flex-1">
+              <p className="font-bold text-sm">Compte suspendu</p>
+              <p className="text-red-100 text-xs">Votre compte a ete suspendu par un administrateur. Vous ne pouvez plus publier de biens. Contactez le support.</p>
+            </div>
+          </div>
+        )}
         {/* Zone contenu */}
         <main className="flex-1 overflow-auto">
           {children}
