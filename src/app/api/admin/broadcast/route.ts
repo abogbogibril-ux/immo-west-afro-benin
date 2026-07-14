@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     // Verification de l'identite de l'appelant via son jeton de session
     const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(accessToken);
     if (authError || !user) {
-      return NextResponse.json({ error: "Non authentifie" }, { status: 401 });
+      return NextResponse.json({ error: "Non authentifie", debug: authError?.message || "user null" }, { status: 401 });
     }
 
     // Verification que l'appelant est bien administrateur
