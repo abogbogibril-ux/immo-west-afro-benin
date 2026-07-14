@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 export const dynamic = 'force-dynamic'
 
 import { useEffect, useState } from 'react'
@@ -57,31 +57,44 @@ export default function AdminAnnoncesPage() {
   }
 
   /* ── Changer le statut ───────────────────────────────────── */
-  const changerStatut = async (id: string, nouveauStatut: string, titreAction: string) => {
-    if (!confirm('Confirmer : ' + titreAction + ' cette annonce ?')) return
-    const { error } = await supabase.from('biens').update({ statut: nouveauStatut }).eq('id', id)
-    if (error) { showToast('❌ Échec : ' + error.message, 'error'); return }
-    setBiens(prev => prev.map(b => b.id === id ? { ...b, statut: nouveauStatut } : b))
-    const labels: Record<string, string> = {
-      'publié':   '✅ Annonce publiée',
-      'archivé':  '📦 Annonce archivée',
-      'brouillon':'📝 Annonce repassée en brouillon',
-    }
-    showToast(labels[nouveauStatut] || '✅ Statut mis à jour')
+  const getToken = async () => {
+    const { data: { session } } = await supabase.auth.getSession()
+    return session?.access_token ?? null
   }
 
-  /* ── Supprimer ───────────────────────────────────────────── */
+  const changerStatut = async (id: string, nouveauStatut: string, titreAction: string) => {
+    if (!confirm('Confirmer : ' + titreAction + ' cette annonce ?')) return
+    const token = await getToken()
+    if (!token) { showToast('Session expilee, reconnectez-vous', 'error'); return }
+    const res = await fetch('/api/admin/biens', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ bienId: id, statut: nouveauStatut }),
+    })
+    const result = await res.json()
+    if (!res.ok) { showToast('Erreur : ' + result.error, 'error'); return }
+    setBiens(prev => prev.map(b => b.id === id ? { ...b, statut: nouveauStatut } : b))
+    const labels: Record<string, string> = {
+      'publie':   'Annonce publiee',
+      'archive':  'Annonce archivee',
+      'brouillon':'Annonce repassee en brouillon',
+    }
+    showToast(labels[nouveauStatut] || 'Statut mis a jour')
+  }
+
   const supprimer = async (id: string, titre: string) => {
-    if (!confirm('Supprimer définitivement "' + titre + '" et toutes ses photos ?')) return
-
-    const { error: errImg } = await supabase.from('images_biens').delete().eq('bien_id', id)
-    if (errImg) { showToast('❌ Erreur suppression images : ' + errImg.message, 'error'); return }
-
-    const { error } = await supabase.from('biens').delete().eq('id', id)
-    if (error) { showToast('❌ Erreur suppression : ' + error.message, 'error'); return }
-
+    if (!confirm('Supprimer definitivement ' + titre + ' et toutes ses photos ?')) return
+    const token = await getToken()
+    if (!token) { showToast('Session expilee, reconnectez-vous', 'error'); return }
+    const res = await fetch('/api/admin/biens', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ bienId: id }),
+    })
+    const result = await res.json()
+    if (!res.ok) { showToast('Erreur : ' + result.error, 'error'); return }
     setBiens(prev => prev.filter(b => b.id !== id))
-    showToast('🗑️ Annonce supprimée définitivement')
+    showToast('Annonce supprimee definitivement')
   }
 
   const biensFiltres = biens
