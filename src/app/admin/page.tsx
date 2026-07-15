@@ -97,15 +97,32 @@ export default function AdminPage() {
     loadUtilisateurs(); loadStats()
   }
 
+  const getToken = async () => {
+    const { data: { session } } = await supabase.auth.getSession()
+    return session?.access_token ?? null
+  }
+
   const supprimerBien = async (id: string) => {
     if (!confirm('Supprimer ce bien ?')) return
-    await supabase.from('biens').delete().eq('id', id)
-    loadBiens(); loadStats()
+    const token = await getToken()
+    if (!token) return
+    const res = await fetch('/api/admin/biens', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ bienId: id }),
+    })
+    if (res.ok) { loadBiens(); loadStats() }
   }
 
   const changerStatutBien = async (id: string, nouveauStatut: string) => {
-    await supabase.from('biens').update({ statut: nouveauStatut }).eq('id', id)
-    loadBiens(); loadStats()
+    const token = await getToken()
+    if (!token) return
+    const res = await fetch('/api/admin/biens', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ bienId: id, statut: nouveauStatut }),
+    })
+    if (res.ok) { loadBiens(); loadStats() }
   }
 
   const supprimerBesoin = async (id: string) => {
