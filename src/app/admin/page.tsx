@@ -92,9 +92,15 @@ export default function AdminPage() {
   }
 
   const supprimerUtilisateur = async (id: string) => {
-    if (!confirm('Supprimer cet utilisateur ?')) return
-    await supabase.from('profiles').delete().eq('id', id)
-    loadUtilisateurs(); loadStats()
+    if (!confirm('Supprimer cet utilisateur et tous ses biens ?')) return
+    const token = await getToken()
+    if (!token) return
+    const res = await fetch('/api/admin/delete-user', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ targetId: id }),
+    })
+    if (res.ok) { loadUtilisateurs(); loadStats() }
   }
 
   const getToken = async () => {
