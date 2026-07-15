@@ -46,7 +46,6 @@ export default function PublierPage() {
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) { router.push('/connexion'); return }
       setUserId(user.id)
-      setSuspendu(profile?.suspendu ?? false)
 
       // Vérifier si le compte est suspendu
       const { data: profile } = await supabase
