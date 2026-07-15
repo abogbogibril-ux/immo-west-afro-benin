@@ -30,19 +30,40 @@ export default function UtilisateursAdmin() {
     setTimeout(() => setToast(''), 3000)
   }
 
+  const getToken = async () => {
+    const { data: { session } } = await supabase.auth.getSession()
+    return session?.access_token ?? null
+  }
+
   const changerRole = async (id: string, role: string) => {
     if (!confirm('Changer le role en "' + role + '" ?')) return
-    await supabase.from('profiles').update({ role }).eq('id', id)
-    loadUsers()
-    showToast('Role modifie')
+    const token = await getToken()
+    if (!token) { showToast('Session expilee', 'error'); return }
+    const res = await fetch('/api/admin/users', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ targetId: id, action: 'role', value: role }),
+    })
+    const result = await res.json()
+    if (!res.ok) { showToast('Erreur : ' + result.error, 'error'); return }
+    setUsers(prev => prev.map(u => u.id === id ? { ...u, role } : u))
+    showToast('Role modifie en ' + role)
   }
 
   const toggleSuspendre = async (id: string, suspendu: boolean, nom: string) => {
     const action = suspendu ? 'reactiver' : 'suspendre'
-    if (!confirm('Etes-vous sur de vouloir ' + action + ' le compte de ' + nom + ' ?')) return
-    await supabase.from('profiles').update({ suspendu: !suspendu }).eq('id', id)
-    loadUsers()
-    showToast(suspendu ? 'Compte reactive' : 'Compte suspendu')
+    if (!confirm('Etes-vous sur de vouloir ' + action + ' ' + nom + ' ?')) return
+    const token = await getToken()
+    if (!token) { showToast('Session expilee', 'error'); return }
+    const res = await fetch('/api/admin/users', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ targetId: id, action: 'suspendre', value: !suspendu }),
+    })
+    const result = await res.json()
+    if (!res.ok) { showToast('Erreur : ' + result.error, 'error'); return }
+    setUsers(prev => prev.map(u => u.id === id ? { ...u, suspendu: !suspendu } : u))
+    showToast(suspendu ? 'Compte reactive' : 'Compte suspendu — biens archives')
   }
 
   const supprimerUser = async (id: string, nom: string) => {
