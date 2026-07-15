@@ -187,7 +187,7 @@ export default function AgentDashboardPage() {
                         {a.statut === 'brouillon' && (
                           <button
                             onClick={async () => {
-                              await fetch('/api/admin/biens', { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (await supabase.auth.getSession()).data.session?.access_token }, body: JSON.stringify({ bienId: a.id, statut: 'publié' }) })
+                              await fetch('/api/agent/biens', { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (await supabase.auth.getSession()).data.session?.access_token }, body: JSON.stringify({ bienId: a.id, statut: 'publié' }) })
                               setAnnonces(prev => prev.map(x => x.id === a.id ? { ...x, statut: 'publié' } : x))
                             }}
                             className="px-2 py-1 bg-green-600 text-white text-xs font-bold rounded-lg hover:bg-green-700 transition-colors whitespace-nowrap"
