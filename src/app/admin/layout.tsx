@@ -21,6 +21,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter()
   const pathname = usePathname()
   const [checking, setChecking] = useState(true)
+  const [adminNom, setAdminNom] = useState('A')
   const [sidebarOpen, setSidebarOpen] = useState(true)
 
   useEffect(() => { checkAdmin() }, [])
@@ -28,8 +29,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const checkAdmin = async () => {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { router.push('/connexion'); return }
-    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-    if (profile?.role !== 'admin') { router.push('/'); return }
+    const { data: profile } = await supabase.from('profiles').select('role, nom, prenom, suspendu').eq('id', user.id).single()
+    if (profile?.role !== 'admin' || profile?.suspendu) { router.push('/'); return }
+    setAdminNom((profile?.prenom ?? '') + ' ' + (profile?.nom ?? 'Admin'))
     setChecking(false)
   }
 

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * /api/push/send — Envoi de notifications push
  * Immo West Afro Bénin
  *
@@ -124,7 +124,7 @@ export async function notifyNewMessage(
   };
 
   try {
-    await fetch("/api/push/send", {
+    await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL ? process.env.NEXT_PUBLIC_APP_URL ?? "https://benin.immowestafro.com" : "https://benin.immowestafro.com"}/api/push/send`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId: receiverId, payload, conversationId }),

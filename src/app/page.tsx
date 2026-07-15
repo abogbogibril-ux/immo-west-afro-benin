@@ -22,8 +22,6 @@ function createServerClient() {
   )
 }
 
-const supabase = createServerClient()
-
 async function getBesoinsRecents() {
   const client = createServerClient()
   const { data } = await client
@@ -55,6 +53,8 @@ const TYPES_BIENS = [
 export default async function HomePage() {
 
   const besoinsRecents = await getBesoinsRecents()
+
+  const supabase = createServerClient()
 
   const { data: bienVedettes } = await supabase
     .from('biens')
