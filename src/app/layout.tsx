@@ -26,10 +26,15 @@ export const metadata: Metadata = {
   creator: 'Immo West Afro',
   publisher: 'Immo West Afro',
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
-  manifest: '/manifest.json',
-  icons: {
-    apple: '/logo.png',
+  alternates: {
+    canonical: 'https://benin.immowestafro.com',
   },
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+    shortcut: '/logo.png',
+  },
+  manifest: '/manifest.webmanifest',
   openGraph: {
     type: 'website',
     locale: 'fr_BJ',
@@ -41,19 +46,24 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Immo West Afro Bénin',
+    title: 'Immo West Afro Bénin — Vente et location immobilière',
     description: 'Trouvez votre bien immobilier au Bénin.',
+    images: ['/og-image.jpg'],
   },
-  manifest: '/manifest.webmanifest',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
     title: 'Immo West Afro',
   },
+  formatDetection: {
+    telephone: true,
+    email: true,
+    address: true,
+  },
 }
 
 export const viewport: Viewport = {
-  themeColor: '#16a34a',
+  themeColor: '#0097a7',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
@@ -62,22 +72,15 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" suppressHydrationWarning>
-      <head>
-        <link rel="apple-touch-icon" href="/logo.png" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="format-detection" content="telephone=yes" />
-      </head>
       <body className={inter.className}>
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''} />
         <ServiceWorkerRegister />
         <ThemeProvider>
-        <Navbar />
-        <main className="pt-16">
-          {children}
-        </main>
-        <Footer />
+          <Navbar />
+          <main className="pt-16">
+            {children}
+          </main>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
