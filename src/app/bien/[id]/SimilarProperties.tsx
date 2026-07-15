@@ -79,7 +79,7 @@ export default async function SimilarProperties({ currentId, typeBien, ville, tr
         <div>
           <h2 className="text-xl md:text-2xl font-bold text-gray-900">Biens similaires</h2>
           <p className="text-sm text-gray-500 mt-1">
-            Même {TYPE_LABELS[typeBien] ?? typeBien}, même agent ou même ville
+            Même catégorie, même agent ou même ville
           </p>
         </div>
         <Link href={`/recherche?type=${typeBien}${ville ? `&ville=${ville}` : ''}`}

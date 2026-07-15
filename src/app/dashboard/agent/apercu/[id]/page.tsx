@@ -46,7 +46,7 @@ export default function ApercuBienPage() {
     setPublishing(true)
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) { setErreur('Session expirée, reconnectez-vous.'); setPublishing(false); return }
-    const res = await fetch('/api/admin/biens', {
+    const res = await fetch('/api/agent/biens', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
       body: JSON.stringify({ bienId: id, statut: 'publié' }),
