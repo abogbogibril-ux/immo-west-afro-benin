@@ -60,6 +60,8 @@ export default function InscriptionPage() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
 
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target
     setForm(p => ({
@@ -278,15 +280,25 @@ export default function InscriptionPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Mot de passe *</label>
-                  <input name="password" type="password" required placeholder="••••••••"
+                  <input name="password" type={showPassword ? "text" : "password"} required placeholder="••••••••"
                     value={form.password} onChange={handleChange}
                     className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-green-400/30"/>
+                  <button type="button" onClick={() => setShowPassword(!showPassword)}
+                    className="mt-1.5 flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 transition-colors">
+                    <EyeIcon visible={showPassword} />
+                    <span>{showPassword ? "Masquer" : "Afficher"} le mot de passe</span>
+                  </button>
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Confirmer *</label>
-                  <input name="confirmPassword" type="password" required placeholder="••••••••"
+                  <input name="confirmPassword" type={showConfirm ? "text" : "password"} required placeholder="••••••••"
                     value={form.confirmPassword} onChange={handleChange}
                     className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-green-400/30"/>
+                  <button type="button" onClick={() => setShowConfirm(!showConfirm)}
+                    className="mt-1.5 flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 transition-colors">
+                    <EyeIcon visible={showConfirm} />
+                    <span>{showConfirm ? "Masquer" : "Afficher"} le mot de passe</span>
+                  </button>
                 </div>
               </div>
 
