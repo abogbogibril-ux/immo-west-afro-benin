@@ -29,6 +29,7 @@ function formatPrice(p: number) {
 
 export default function AgentDashboardPage() {
   const [agent, setAgent] = useState<any>(null)
+  const [suspendu, setSuspendu] = useState(false)
   const [annonces, setAnnonces] = useState<Annonce[]>([])
   const [kpis, setKpis] = useState({ total: 0, vues: 0, messages: 0, favoris: 0 })
   const [loading, setLoading] = useState(true)
@@ -43,6 +44,7 @@ export default function AgentDashboardPage() {
       const { data: profile } = await supabase
         .from('profiles').select('*').eq('id', user.id).single()
       setAgent(profile)
+      setSuspendu(profile?.suspendu ?? false)
 
       const { data: biens } = await supabase
         .from('biens')
@@ -136,9 +138,9 @@ export default function AgentDashboardPage() {
           <div className="p-8 text-center text-slate-400">
             <p className="text-4xl mb-2">🏠</p>
             <p className="text-sm">Aucune annonce publiée</p>
-            <Link href="/publier" className="mt-3 inline-block text-sm text-[#00bcd4] font-medium hover:underline">
+            {!suspendu && <Link href="/publier" className="mt-3 inline-block text-sm text-[#00bcd4] font-medium hover:underline">
               Publier votre première annonce →
-            </Link>
+            </Link>}
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -185,7 +187,7 @@ export default function AgentDashboardPage() {
                         {a.statut === 'brouillon' && (
                           <button
                             onClick={async () => {
-                              await supabase.from('biens').update({ statut: 'publié' }).eq('id', a.id)
+                              await fetch('/api/admin/biens', { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (await supabase.auth.getSession()).data.session?.access_token }, body: JSON.stringify({ bienId: a.id, statut: 'publié' }) })
                               setAnnonces(prev => prev.map(x => x.id === a.id ? { ...x, statut: 'publié' } : x))
                             }}
                             className="px-2 py-1 bg-green-600 text-white text-xs font-bold rounded-lg hover:bg-green-700 transition-colors whitespace-nowrap"

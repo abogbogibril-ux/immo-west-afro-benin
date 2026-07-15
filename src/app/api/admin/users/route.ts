@@ -37,7 +37,7 @@ export async function PATCH(req: NextRequest) {
 
     // Si suspension : archiver automatiquement les biens publies
     if (suspendu) {
-      await supabaseAdmin.from("biens").update({ statut: "archive" }).eq("agent_id", targetId).eq("statut", "publie")
+      await supabaseAdmin.from("biens").update({ statut: "archivé" }).eq("agent_id", targetId).eq("statut", "publié")
     }
     return NextResponse.json({ success: true, suspendu })
   }

@@ -42,17 +42,17 @@ export default function ApercuBienPage() {
   }, [id])
 
   const publier = async () => {
+    if (suspendu) return
     setPublishing(true)
-    const { error } = await supabase
-      .from('biens')
-      .update({ statut: 'publié' })
-      .eq('id', id)
-
-    if (error) {
-      setErreur('Erreur lors de la publication : ' + error.message)
-      setPublishing(false)
-      return
-    }
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) { setErreur('Session expirée, reconnectez-vous.'); setPublishing(false); return }
+    const res = await fetch('/api/admin/biens', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+      body: JSON.stringify({ bienId: id, statut: 'publié' }),
+    })
+    const result = await res.json()
+    if (!res.ok) { setErreur('Erreur : ' + result.error); setPublishing(false); return }
     router.push('/dashboard/agent?published=1')
   }
 
