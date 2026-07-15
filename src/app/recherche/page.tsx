@@ -151,14 +151,13 @@ export default function RecherchePage() {
       {/* Budget */}
       <div>
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Budget (FCFA)</p>
-        <div className="flex gap-2 items-center">
+        <div className="flex flex-col gap-2">
           <input type="number" placeholder="Min" value={prixMin}
             onChange={e => setPrixMin(e.target.value)}
-            className="flex-1 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50"/>
-          <span className="text-gray-400 text-sm">—</span>
+            className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50"/>
           <input type="number" placeholder="Max" value={prixMax}
             onChange={e => setPrixMax(e.target.value)}
-            className="flex-1 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50"/>
+            className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400/30 bg-gray-50"/>
         </div>
       </div>
 
