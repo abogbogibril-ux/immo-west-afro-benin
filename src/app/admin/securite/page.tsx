@@ -17,6 +17,9 @@ export default function SecuriteAdmin() {
   const [factorId, setFactorId] = useState('')
   const [verifyCode, setVerifyCode] = useState('')
   const [verifying, setVerifying] = useState(false)
+  const [needsMfaForMdp, setNeedsMfaForMdp] = useState(false)
+  const [mfaCodeMdp, setMfaCodeMdp] = useState('')
+  const [mfaLoadingMdp, setMfaLoadingMdp] = useState(false)
 
   const showToast = (msg: string, type: string) => {
     setToast({ msg, type })
@@ -26,6 +29,32 @@ export default function SecuriteAdmin() {
   const changerMotDePasse = async () => {
     if (mdp.nouveau !== mdp.confirmation) { showToast('Les mots de passe ne correspondent pas.', 'error'); return }
     if (mdp.nouveau.length < 8) { showToast('Le mot de passe doit contenir au moins 8 caracteres.', 'error'); return }
+    const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+    if (aal?.currentLevel === 'aal1' && aal?.nextLevel === 'aal2') {
+      setNeedsMfaForMdp(true)
+      return
+    }
+    setLoading(true)
+    const { error } = await supabase.auth.updateUser({ password: mdp.nouveau })
+    setLoading(false)
+    if (error) showToast('Erreur : ' + error.message, 'error')
+    else { showToast('Mot de passe modifie avec succes !', 'success'); setMdp({ nouveau: '', confirmation: '' }) }
+  }
+
+  const validerMfaMdp = async () => {
+    if (mfaCodeMdp.length !== 6) { showToast('Entrez le code a 6 chiffres.', 'error'); return }
+    setMfaLoadingMdp(true)
+    const facteur = factors.find(f => f.status === 'verified')
+    if (!facteur) { showToast('Aucun facteur 2FA trouve.', 'error'); setMfaLoadingMdp(false); return }
+    const { data: challenge, error: challengeError } = await supabase.auth.mfa.challenge({ factorId: facteur.id })
+    if (challengeError) { showToast('Erreur : ' + challengeError.message, 'error'); setMfaLoadingMdp(false); return }
+    const { error: verifyError } = await supabase.auth.mfa.verify({
+      factorId: facteur.id, challengeId: challenge.id, code: mfaCodeMdp,
+    })
+    if (verifyError) { showToast('Code 2FA incorrect.', 'error'); setMfaLoadingMdp(false); return }
+    setMfaLoadingMdp(false)
+    setNeedsMfaForMdp(false)
+    setMfaCodeMdp('')
     setLoading(true)
     const { error } = await supabase.auth.updateUser({ password: mdp.nouveau })
     setLoading(false)
@@ -128,6 +157,26 @@ export default function SecuriteAdmin() {
             }`}>
             {loading ? 'Modification...' : 'Modifier le mot de passe'}
           </button>
+          {needsMfaForMdp && (
+            <div className="mt-4 p-4 bg-[#0f172a] rounded-lg border border-[#00bcd4]">
+              <p className="text-slate-300 text-sm font-semibold mb-2">Verification 2FA requise</p>
+              <p className="text-slate-400 text-xs mb-3">Entrez le code de votre application authenticator pour confirmer le changement de mot de passe.</p>
+              <input type="text" value={mfaCodeMdp} onChange={e => setMfaCodeMdp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                placeholder="Code a 6 chiffres"
+                maxLength={6}
+                className="w-full px-3 py-2.5 bg-[#1e293b] border border-[#334155] rounded-lg text-white text-sm text-center tracking-widest outline-none focus:border-[#00bcd4] mb-3" />
+              <div className="flex gap-2">
+                <button onClick={validerMfaMdp} disabled={mfaLoadingMdp}
+                  className="flex-1 py-2.5 bg-[#00bcd4] hover:bg-[#0097a7] text-white text-sm font-semibold rounded-lg disabled:opacity-60">
+                  {mfaLoadingMdp ? 'Verification...' : 'Confirmer'}
+                </button>
+                <button onClick={() => { setNeedsMfaForMdp(false); setMfaCodeMdp('') }}
+                  className="px-4 py-2.5 bg-[#334155] hover:bg-[#475569] text-slate-300 text-sm font-semibold rounded-lg">
+                  Annuler
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* ETAT SECURITE + 2FA */}
