@@ -57,8 +57,6 @@ export default function InscriptionPage() {
     password: '', confirmPassword: '', role: '',
     nom_agence: '', cgu: false,
   })
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirm, setShowConfirm] = useState(false)
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
 
@@ -280,27 +278,15 @@ export default function InscriptionPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Mot de passe *</label>
-                  <div className="relative">
-                    <input name="password" type={showPassword ? 'text' : 'password'} required placeholder="••••••••"
-                      value={form.password} onChange={handleChange}
-                      className="w-full px-3.5 py-2.5 pr-10 border border-gray-200 rounded-xl text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-green-400/30"/>
-                    <button type="button" onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                      <EyeIcon visible={showPassword} />
-                    </button>
-                  </div>
+                  <input name="password" type="password" required placeholder="••••••••"
+                    value={form.password} onChange={handleChange}
+                    className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-green-400/30"/>
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Confirmer *</label>
-                  <div className="relative">
-                    <input name="confirmPassword" type={showConfirm ? 'text' : 'password'} required placeholder="••••••••"
-                      value={form.confirmPassword} onChange={handleChange}
-                      className="w-full px-3.5 py-2.5 pr-10 border border-gray-200 rounded-xl text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-green-400/30"/>
-                    <button type="button" onClick={() => setShowConfirm(!showConfirm)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                      <EyeIcon visible={showConfirm} />
-                    </button>
-                  </div>
+                  <input name="confirmPassword" type="password" required placeholder="••••••••"
+                    value={form.confirmPassword} onChange={handleChange}
+                    className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-green-400/30"/>
                 </div>
               </div>
 
@@ -360,4 +346,3 @@ export default function InscriptionPage() {
     </div>
   )
 }
-
