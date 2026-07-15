@@ -249,7 +249,7 @@ export default function AnnoncesPage() {
                       <div className="flex items-center justify-center gap-1">
                         {/* Voir */}
                         <Link href={a.statut === 'archivé' ? `/publier?edit=${a.id}` : a.statut === 'brouillon' ? `/dashboard/agent/apercu/${a.id}` : `/bien/${a.id}`}
-                          className="relative group p-1.5 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-blue-400/10 transition-colors duration-150">
+                          className="relative group p-1.5 rounded-lg text-blue-400 bg-blue-400/10 hover:bg-blue-400/20 transition-colors duration-150">
                           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
                             {a.statut === 'archivé' ? 'Modifier' : a.statut === 'brouillon' ? 'Aperçu' : 'Voir'}
                           </span>
