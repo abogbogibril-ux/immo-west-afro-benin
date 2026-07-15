@@ -11,7 +11,7 @@ interface Props {
 }
 
 function formatPrice(prix: number, transaction: string) {
-  return `${new Intl.NumberFormat('fr-FR').format(prix)} FCFA${transaction === 'location' ? '/mois' : ''}`
+  return `${new Intl.NumberFormat('fr-FR').format(Math.round(prix))} FCFA${transaction === 'location' ? '/mois' : ''}`
 }
 
 const TYPE_LABELS: Record<string, string> = {

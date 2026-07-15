@@ -24,7 +24,7 @@ const STATUT_COLORS: Record<string, string> = {
 }
 
 function formatPrice(p: number) {
-  return new Intl.NumberFormat('fr-FR').format(p) + ' FCFA'
+  return new Intl.NumberFormat('fr-FR').format(Math.round(p)) + ' FCFA'
 }
 
 export default function AgentDashboardPage() {

@@ -274,7 +274,7 @@ export default function AdminAnnoncesPage() {
                   <span>{b.ville || '-'}</span>
                   <span className="capitalize">{b.type_bien} · {b.transaction}</span>
                   <span className="text-green-400 font-medium">
-                    {b.prix ? new Intl.NumberFormat('fr-FR').format(b.prix) + ' FCFA' : '-'}
+                    {b.prix ? new Intl.NumberFormat('fr-FR').format(Math.round(b.prix)) + ' FCFA' : '-'}
                   </span>
                   <span>{b.profiles?.nom_complet || b.profiles?.prenom || 'Agent inconnu'}</span>
                   <span>{new Date(b.created_at).toLocaleDateString('fr-FR')}</span>

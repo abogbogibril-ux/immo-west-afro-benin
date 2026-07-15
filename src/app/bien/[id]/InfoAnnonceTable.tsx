@@ -45,7 +45,7 @@ export default function InfoAnnonceTable({
   securite, meuble, eau, electricite, disponibleImmediat, pointsRepere, caracteristiques
 }: Props) {
 
-  const prixFormate = `${new Intl.NumberFormat('fr-FR').format(prix)} FCFA${transaction === 'location' ? '/mois' : ''}`
+  const prixFormate = `${new Intl.NumberFormat('fr-FR').format(Math.round(prix))} FCFA${transaction === 'location' ? '/mois' : ''}`
 
   const rowsAfterDate: Row[] = [
     { label: 'Prix', value: prixFormate },

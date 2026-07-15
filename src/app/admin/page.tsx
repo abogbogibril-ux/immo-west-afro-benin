@@ -277,7 +277,7 @@ export default function AdminPage() {
                     <tr key={b.id} className="border-t border-[#334155] align-middle hover:bg-[#0f172a] transition-colors">
                       <td className="px-3 py-3 text-slate-100 text-sm max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap">{b.titre}</td>
                       <td className="px-3 py-3 text-slate-300 text-sm whitespace-nowrap">{b.ville || '-'}</td>
-                      <td className="px-3 py-3 text-emerald-400 text-sm whitespace-nowrap font-semibold">{b.prix ? new Intl.NumberFormat('fr-FR').format(b.prix) + ' F' : '-'}</td>
+                      <td className="px-3 py-3 text-emerald-400 text-sm whitespace-nowrap font-semibold">{b.prix ? new Intl.NumberFormat('fr-FR').format(Math.round(b.prix)) + ' F' : '-'}</td>
                       <td className="px-3 py-3">
                         <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold text-white ${
                           b.statut === 'publié' ? 'bg-emerald-600' : b.statut === 'brouillon' ? 'bg-amber-500' : 'bg-slate-500'

@@ -33,7 +33,7 @@ export default function BienCard({ bien, priority = false }: Props) {
   const photo = imgs[0]?.url
   const ville = bien.localites?.ville ?? bien.ville ?? ''
   const quartier = bien.localites?.nom ?? ''
-  const prixFormate = new Intl.NumberFormat('fr-FR').format(bien.prix)
+  const prixFormate = new Intl.NumberFormat('fr-FR').format(Math.round(bien.prix))
   const isNew = bien.created_at
     ? Date.now() - new Date(bien.created_at).getTime() < 7 * 86400000
     : false
