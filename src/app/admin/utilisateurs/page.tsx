@@ -68,6 +68,20 @@ export default function UtilisateursAdmin() {
 
   const supprimerUser = async (id: string, nom: string) => {
     if (!confirm('Supprimer definitivement ' + nom + ' et tous ses biens ?')) return
+  const republierTous = async (id: string, nom: string) => {
+    if (!confirm('Republier tous les biens archives de ' + nom + ' ?')) return
+    const token = await getToken()
+    if (!token) { showToast('Session expilee', 'error'); return }
+    const res = await fetch('/api/admin/users', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ targetId: id, action: 'republier_tous' }),
+    })
+    const result = await res.json()
+    if (!res.ok) { showToast('Erreur : ' + result.error, 'error'); return }
+    showToast('Tous les biens de ' + nom + ' ont ete republies (' + (result.count ?? 0) + ' biens)')
+  }
+
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) { showToast('Session expilee, reconnectez-vous', 'error'); return }
     const res = await fetch('/api/admin/delete-user', {
@@ -190,6 +204,15 @@ export default function UtilisateursAdmin() {
                             </svg>
                           )}
                         </button>
+                        {u.suspendu && (
+                          <button onClick={() => republierTous(u.id, u.nom_complet || u.email)}
+                            title="Republier tous les biens"
+                            className="p-1.5 bg-blue-100 text-blue-600 rounded-lg border-none cursor-pointer flex items-center justify-center hover:bg-blue-200 transition-colors">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                          </button>
+                        )}
                         <button onClick={() => supprimerUser(u.id, u.nom_complet || u.email)}
                           title="Supprimer"
                           className="p-1.5 bg-red-100 text-red-500 rounded-lg border-none cursor-pointer flex items-center justify-center hover:bg-red-200 transition-colors">

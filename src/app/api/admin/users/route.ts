@@ -50,5 +50,15 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ success: true, role: value })
   }
 
+  if (action === "republier_tous") {
+    const { data: biens, error: errCount } = await supabaseAdmin
+      .from("biens").select("id").eq("agent_id", targetId).eq("statut", "archivé")
+    if (errCount) return NextResponse.json({ error: errCount.message }, { status: 500 })
+    const { error } = await supabaseAdmin
+      .from("biens").update({ statut: "publié" }).eq("agent_id", targetId).eq("statut", "archivé")
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ success: true, count: biens?.length ?? 0 })
+  }
+
   return NextResponse.json({ error: "Action inconnue" }, { status: 400 })
 }
