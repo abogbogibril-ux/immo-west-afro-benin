@@ -246,26 +246,29 @@ export default function AnnoncesPage() {
                       {new Date(a.created_at).toLocaleDateString('fr-FR')}
                     </td>
                     <td className="px-4 py-3.5">
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center justify-center gap-1">
                         {/* Voir */}
-                        <Link href={a.statut === 'archiv\u00e9' ? `/publier?edit=${a.id}` : a.statut === 'brouillon' ? `/dashboard/agent/apercu/${a.id}` : `/bien/${a.id}`}
-                          className="relative group p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors" title={a.statut === 'archiv\u00e9' ? 'Modifier et republier' : a.statut === 'brouillon' ? 'Apercu' : 'Voir l annonce'}>
-                          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">{a.statut === 'archiv\u00e9' ? 'Modifier' : a.statut === 'brouillon' ? 'Apercu' : 'Voir'}</span>
+                        <Link href={a.statut === 'archivé' ? `/publier?edit=${a.id}` : a.statut === 'brouillon' ? `/dashboard/agent/apercu/${a.id}` : `/bien/${a.id}`}
+                          className="relative group p-1.5 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-blue-400/10 transition-colors duration-150">
+                          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                            {a.statut === 'archivé' ? 'Modifier' : a.statut === 'brouillon' ? 'Aperçu' : 'Voir'}
+                          </span>
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                           </svg>
                         </Link>
                         {/* Archiver/Republier */}
-                        <button
-                          onClick={() => handleArchive(a.id, a.statut)}
-                          className={`p-1.5 rounded-lg transition-colors ${
+                        <button onClick={() => handleArchive(a.id, a.statut)}
+                          className={`relative group p-1.5 rounded-lg transition-colors duration-150 border-none cursor-pointer ${
                             a.statut === 'publié'
-                              ? 'text-gray-400 hover:text-amber-600 hover:bg-amber-50'
-                              : 'text-gray-400 hover:text-green-600 hover:bg-green-50'
+                              ? 'text-amber-400 bg-amber-400/10 hover:bg-amber-400/20'
+                              : 'text-green-400 bg-green-400/10 hover:bg-green-400/20'
                           }`}
-                          title={a.statut === 'publié' ? 'Archiver' : 'Republier'}
                         >
+                          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                            {a.statut === 'publié' ? 'Archiver' : 'Republier'}
+                          </span>
                           {a.statut === 'publié' ? (
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
@@ -277,12 +280,10 @@ export default function AnnoncesPage() {
                           )}
                         </button>
                         {/* Supprimer */}
-                        <button
-                          onClick={() => handleDelete(a.id)}
-                          disabled={deleting === a.id}
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
-                          title="Supprimer" className="relative group"
+                        <button onClick={() => handleDelete(a.id)} disabled={deleting === a.id}
+                          className="relative group p-1.5 rounded-lg text-red-400 bg-red-400/10 hover:bg-red-400/20 transition-colors duration-150 border-none cursor-pointer disabled:opacity-50"
                         >
+                          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">Supprimer</span>
                           {deleting === a.id ? (
                             <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>

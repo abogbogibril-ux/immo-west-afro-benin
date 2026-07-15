@@ -147,45 +147,39 @@ export default function AdminAnnoncesPage() {
       {b.statut === 'brouillon' && (
         <button onClick={() => changerStatut(b.id, 'publié', 'publier')}
           title="Publier"
-          className="relative group flex items-center gap-1 px-2 py-1.5 rounded-lg bg-green-500/15 text-green-400 hover:bg-green-500/30 transition-colors text-xs font-semibold border-none cursor-pointer">
+          className="relative group relative group p-2 rounded-lg bg-green-500/15 text-green-400 hover:bg-green-500/30 transition-colors duration-150 border-none cursor-pointer">
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
             Publier
           </span>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
-          </svg>
-          Publier
-        </button>
+          </svg>        </button>
       )}
 
       {/* Republier (archivé uniquement) */}
       {b.statut === 'archivé' && (
         <button onClick={() => changerStatut(b.id, 'publié', 'republier')}
           title="Republier"
-          className="relative group flex items-center gap-1 px-2 py-1.5 rounded-lg bg-blue-500/15 text-blue-400 hover:bg-blue-500/30 transition-colors text-xs font-semibold border-none cursor-pointer">
+          className="relative group relative group p-2 rounded-lg bg-blue-500/15 text-blue-400 hover:bg-blue-500/30 transition-colors duration-150 border-none cursor-pointer">
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
             Republier
           </span>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-          </svg>
-          Republier
-        </button>
+          </svg>        </button>
       )}
 
       {/* Archiver (publié ou brouillon) */}
       {(b.statut === 'publié' || b.statut === 'brouillon') && (
         <button onClick={() => changerStatut(b.id, 'archivé', 'archiver')}
           title="Archiver"
-          className="relative group flex items-center gap-1 px-2 py-1.5 rounded-lg bg-amber-500/15 text-amber-400 hover:bg-amber-500/30 transition-colors text-xs font-semibold border-none cursor-pointer">
+          className="relative group relative group p-2 rounded-lg bg-amber-500/15 text-amber-400 hover:bg-amber-500/30 transition-colors duration-150 border-none cursor-pointer">
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
             Archiver
           </span>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
-          </svg>
-          Archiver
-        </button>
+          </svg>        </button>
       )}
 
       {/* Supprimer (toujours visible) */}
