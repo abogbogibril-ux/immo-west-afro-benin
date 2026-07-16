@@ -203,7 +203,7 @@ export default function SecuriteAdmin() {
                 <span className="text-green-800 text-sm">Double authentification (2FA)</span>
                 <span className="bg-green-100 text-green-700 px-2.5 py-0.5 rounded-full text-xs font-semibold">Activée</span>
               </div>
-              <button onClick={desactiver2FA} className="mt-2 text-xs text-red-600 font-semibold underline hover:text-red-800">
+              <button onClick={desactiver2FA} className="mt-2 inline-flex items-center justify-center min-h-[44px] px-3 text-sm text-red-600 font-semibold underline hover:text-red-800">
                 Désactiver la 2FA
               </button>
             </div>
@@ -214,7 +214,7 @@ export default function SecuriteAdmin() {
                 <span className="bg-amber-100 text-amber-700 px-2.5 py-0.5 rounded-full text-xs font-semibold">Non configurée</span>
               </div>
               <p className="text-amber-700 text-xs mt-2">Protégez votre compte avec une application comme Google Authenticator ou Authy.</p>
-              <button onClick={demarrerInscription} className="mt-2 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold rounded-lg">
+              <button onClick={demarrerInscription} className="mt-2 inline-flex items-center justify-center min-h-[44px] px-4 bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold rounded-lg">
                 Activer la 2FA
               </button>
             </div>

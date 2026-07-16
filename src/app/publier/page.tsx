@@ -307,7 +307,7 @@ export default function PublierPage() {
               {form.transaction === 'location'
                 ? <label style={labelStyle}>Prix mensuel (FCFA/mois) *</label>
                 : <label style={labelStyle}>Prix de vente (FCFA) *</label>}
-              <input name="prix" type="number" placeholder="150000"
+              <input name="prix" inputMode="numeric" type="number" placeholder="150000"
                 value={form.prix} onChange={handleChange} style={inputStyle} />
             </div>
             <div style={{ gridColumn: '1/-1' }}>

@@ -191,10 +191,19 @@ export default function RecherchePage() {
       {drawerOpen && (
         <>
           <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setDrawerOpen(false)}/>
-          <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 p-5 max-h-[85vh] overflow-y-auto lg:hidden">
+          <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 p-5 max-h-[85vh] overflow-y-auto lg:hidden"
+            onTouchStart={(e) => { (e.currentTarget as any)._touchY = e.touches[0].clientY }}
+            onTouchEnd={(e) => {
+              const start = (e.currentTarget as any)._touchY
+              const end = e.changedTouches[0].clientY
+              if (end - start > 80) setDrawerOpen(false)
+            }}>
+            <div className="flex justify-center mb-3">
+              <div className="w-10 h-1 bg-gray-300 rounded-full"/>
+            </div>
             <div className="flex items-center justify-between mb-5">
               <h2 className="font-bold text-gray-900">Filtres</h2>
-              <button onClick={() => setDrawerOpen(false)} className="p-1.5 rounded-lg text-gray-400 hover:bg-gray-100">
+              <button onClick={() => setDrawerOpen(false)} className="p-3 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
                 </svg>

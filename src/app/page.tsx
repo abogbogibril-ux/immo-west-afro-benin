@@ -5,14 +5,7 @@ import HeroSearch from '@/components/HeroSearch'
 import YouTubeBanner from '@/components/YouTubeBanner'
 import BienCard from '@/components/BienCard'
 import BesoinCard from '@/components/BesoinCard'
-import type { Metadata } from 'next'
-
 export const dynamic = 'force-dynamic'
-
-export const metadata: Metadata = {
-  title: 'Immo West Afro Benin — Vente et location immobiliere',
-  description: 'Trouvez votre bien immobilier au Benin. Appartements, villas, terrains et bureaux a vendre ou a louer a Cotonou, Abomey-Calavi, Porto-Novo et partout au Benin.',
-}
 
 function createServerClient() {
   return createClient(

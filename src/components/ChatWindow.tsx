@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useRef } from 'react'
 import { useRealtimeMessages } from '@/hooks/useRealtimeMessages'
@@ -117,7 +117,7 @@ export default function ChatWindow({
   )
 
   return (
-    <div className={`flex flex-col bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden ${className}`}>
+    <div className={`flex flex-col bg-white rounded-2xl border border-gray-100 shadow-sm ${className}`}>
 
       {/* ── Header ── */}
       <div className="flex items-center gap-3 px-4 py-3.5 border-b border-gray-100 bg-white">
@@ -164,7 +164,7 @@ export default function ChatWindow({
       )}
 
       {/* ── Messages ── */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[300px] max-h-[500px]">
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[300px] max-h-[500px]" style={{WebkitOverflowScrolling:"touch",overscrollBehavior:"contain"}}>
         {loading ? (
           <div className="flex items-center justify-center h-32 text-gray-400">
             <svg className="w-5 h-5 animate-spin mr-2" fill="none" viewBox="0 0 24 24">
