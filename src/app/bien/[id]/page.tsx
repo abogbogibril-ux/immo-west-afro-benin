@@ -255,4 +255,3 @@ export default async function BienDetailPage({ params }: Props) {
     </div>
   )
 }
-
