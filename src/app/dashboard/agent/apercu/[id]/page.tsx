@@ -12,6 +12,7 @@ export default function ApercuBienPage() {
   const [loading, setLoading] = useState(true)
   const [publishing, setPublishing] = useState(false)
   const [erreur, setErreur] = useState('')
+  const [currentIndex, setCurrentIndex] = useState(0)
   const [suspendu, setSuspendu] = useState(false)
 
   useEffect(() => {
@@ -115,9 +116,46 @@ export default function ApercuBienPage() {
 
             {/* GALERIE */}
             <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-              {imageUrl ? (
-                <img src={imageUrl} alt={bien.titre}
-                  className="w-full h-72 object-cover"/>
+              {images.length > 0 ? (
+                <div>
+                  {/* Photo principale */}
+                  <div className="relative w-full h-72 bg-gray-100">
+                    <img src={images[currentIndex]?.url} alt={`Photo ${currentIndex + 1}`}
+                      className="w-full h-72 object-cover"/>
+                    {/* Fleches navigation */}
+                    {images.length > 1 && (
+                      <>
+                        <button onClick={() => setCurrentIndex(i => (i - 1 + images.length) % images.length)}
+                          className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full w-8 h-8 flex items-center justify-center transition-colors">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
+                          </svg>
+                        </button>
+                        <button onClick={() => setCurrentIndex(i => (i + 1) % images.length)}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full w-8 h-8 flex items-center justify-center transition-colors">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
+                          </svg>
+                        </button>
+                        <span className="absolute bottom-2 right-3 bg-black/50 text-white text-xs px-2 py-0.5 rounded-full">
+                          {currentIndex + 1} / {images.length}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                  {/* Miniatures défilables */}
+                  {images.length > 1 && (
+                    <div className="flex gap-2 p-3 overflow-x-auto">
+                      {images.map((img: any, i: number) => (
+                        <img key={i} src={img.url} alt={`Photo ${i + 1}`}
+                          onClick={() => setCurrentIndex(i)}
+                          className={`w-20 h-16 object-cover rounded-lg flex-shrink-0 cursor-pointer border-2 transition-all ${
+                            currentIndex === i ? "border-green-500 opacity-100" : "border-transparent opacity-60 hover:opacity-90"
+                          }`}/>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ) : (
                 <div className="w-full h-72 bg-gray-100 flex flex-col items-center justify-center text-gray-400">
                   <svg className="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,18 +163,9 @@ export default function ApercuBienPage() {
                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                   </svg>
                   <p className="text-sm font-medium">Aucune photo ajoutee</p>
-                  <Link href={`/publier?edit=${bien.id}`}
-                    className="mt-2 text-xs text-blue-500 hover:underline">
+                  <Link href={`/publier?edit=${bien.id}`} className="mt-2 text-xs text-blue-500 hover:underline">
                     Ajouter des photos →
                   </Link>
-                </div>
-              )}
-              {images.length > 1 && (
-                <div className="flex gap-2 p-3 overflow-x-auto">
-                  {images.slice(1).map((img: any, i: number) => (
-                    <img key={i} src={img.url} alt={`Photo ${i + 2}`}
-                      className="w-20 h-16 object-cover rounded-lg flex-shrink-0 border-2 border-transparent hover:border-green-400"/>
-                  ))}
                 </div>
               )}
             </div>
