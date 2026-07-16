@@ -103,23 +103,8 @@ export default function ApercuBienPage() {
             <span className="text-gray-300">/</span>
             <span className="text-sm text-gray-700 font-medium truncate max-w-xs">{bien.titre}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Link
-              href={`/publier?edit=${bien.id}`}
-              className="px-4 py-2 border-2 border-gray-300 text-gray-700 text-sm font-semibold rounded-xl hover:border-blue-400 hover:text-blue-600 transition-all"
-            >
-              Modifier
-            </Link>
-            <button
-              onClick={publier}
-              disabled={publishing || suspendu}
-              className={"px-6 py-2 text-white text-sm font-bold rounded-xl disabled:opacity-60 disabled:cursor-not-allowed transition-colors " + (suspendu ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700')}
-            >
-              {publishing ? 'Publication...' : "Publier l'annonce"}
-            </button>
-          </div>
-        </div>
       </div>
+        </div>
 
       {/* CONTENU */}
       <div className="max-w-5xl mx-auto px-4 py-8">

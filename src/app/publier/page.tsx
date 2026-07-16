@@ -192,16 +192,18 @@ export default function PublierPage() {
     let bienId: string
 
     if (isEditMode && editId) {
-      // MODE EDITION — UPDATE
-      const { error } = await supabase
-        .from('biens')
-        .update(bienData)
-        .eq('id', editId)
-        .eq('agent_id', userId)
-
-      if (error) {
+      // MODE EDITION — UPDATE via API agent
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) { setLoading(false); setMessage('Session expiree, reconnectez-vous.'); return }
+      const updateRes = await fetch('/api/agent/biens/update', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+        body: JSON.stringify({ bienId: editId, updates: bienData }),
+      })
+      if (!updateRes.ok) {
+        const err = await updateRes.json()
         setLoading(false)
-        setMessage('Erreur : ' + error.message)
+        setMessage('Erreur : ' + (err.error ?? 'Modification impossible'))
         return
       }
       bienId = editId
