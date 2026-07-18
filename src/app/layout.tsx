@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import Footer from '@/components/Footer'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 import ServiceWorkerRegister from '@/components/ServiceWorkerRegister'
+import MobileActionBar from '@/components/MobileActionBar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -77,6 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ServiceWorkerRegister />
         <ThemeProvider>
           <Navbar />
+          <MobileActionBar />
           <main className="pt-16">
             {children}
           </main>
