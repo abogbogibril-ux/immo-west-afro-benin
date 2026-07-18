@@ -280,6 +280,23 @@ export default function Navbar() {
                   </Link>
                 </>
               )}
+        {/* Barre actions mobile — visible uniquement si non connecte */}
+        {!user && (
+          <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-100 shadow-lg px-4 py-3 flex gap-2">
+            <Link href="/connexion"
+              className="flex-1 flex items-center justify-center min-h-[44px] rounded-xl border-2 border-gray-200 text-gray-700 text-sm font-semibold hover:border-gray-300 transition-colors">
+              Se connecter
+            </Link>
+            <Link href="/inscription"
+              className="flex-1 flex items-center justify-center min-h-[44px] rounded-xl bg-green-600 text-white text-sm font-semibold hover:bg-green-700 transition-colors">
+              S inscrire
+            </Link>
+            <Link href="/deposer"
+              className="flex-1 flex items-center justify-center min-h-[44px] rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors">
+              Deposer un besoin
+            </Link>
+          </div>
+        )}
             </nav>
           </div>
         )}
