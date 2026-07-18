@@ -9,15 +9,25 @@ interface Props {
 export default function ShareButton({ titre }: Props) {
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
+  const [pos, setPos] = useState({ top: 0, left: 0 })
+  const btnRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
+    if (!open) return
     const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+      if (btnRef.current && !btnRef.current.contains(e.target as Node)) setOpen(false)
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
-  }, [])
+  }, [open])
+
+  const handleOpen = () => {
+    if (btnRef.current) {
+      const rect = btnRef.current.getBoundingClientRect()
+      setPos({ top: rect.bottom + 8, left: rect.left })
+    }
+    setOpen(o => !o)
+  }
 
   const url = typeof window !== 'undefined' ? window.location.href : ''
 
@@ -43,20 +53,17 @@ export default function ShareButton({ titre }: Props) {
 
   const shareNatif = async () => {
     if (navigator.share) {
-      try {
-        await navigator.share({ title: titre, text: 'Decouvrez cette annonce sur Immo West Afro : ' + titre, url })
-      } catch { }
+      try { await navigator.share({ title: titre, text: 'Decouvrez cette annonce sur Immo West Afro : ' + titre, url }) }
+      catch { }
     }
     setOpen(false)
   }
 
   return (
-    <div className="relative" ref={ref}>
-      <button
-        onClick={() => setOpen(o => !o)}
+    <>
+      <button ref={btnRef} onClick={handleOpen}
         title="Partager cette annonce"
-        className="flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] rounded-xl border-2 font-medium text-sm transition-all duration-200 bg-white border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-700 hover:shadow-sm active:scale-95"
-      >
+        className="flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] rounded-xl border-2 font-medium text-sm transition-all duration-200 bg-white border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-700 hover:shadow-sm active:scale-95">
         <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
             d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
@@ -65,7 +72,8 @@ export default function ShareButton({ titre }: Props) {
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 mt-2 w-52 bg-white rounded-xl shadow-xl border border-gray-100 z-50 overflow-hidden">
+        <div style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 9999 }}
+          className="w-52 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
           <button onClick={shareWhatsApp}
             className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors text-left">
             <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
@@ -106,6 +114,6 @@ export default function ShareButton({ titre }: Props) {
           )}
         </div>
       )}
-    </div>
+    </>
   )
 }
