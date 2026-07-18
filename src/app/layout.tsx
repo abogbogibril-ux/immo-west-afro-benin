@@ -78,8 +78,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ServiceWorkerRegister />
         <ThemeProvider>
           <Navbar />
-          <MobileActionBar />
           <main className="pt-16">
+          <MobileActionBar />
             {children}
           </main>
           <Footer />
