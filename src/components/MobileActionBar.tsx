@@ -2,10 +2,12 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
 export default function MobileActionBar() {
   const [user, setUser] = useState<any>(null)
+  const pathname = usePathname()
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
@@ -19,7 +21,8 @@ export default function MobileActionBar() {
     return () => subscription.unsubscribe()
   }, [])
 
-  if (!ready || user) return null
+  const pagesExclues = ['/inscription', '/connexion', '/deposer', '/mot-de-passe-oublie', '/reset-password']
+  if (!ready || user || pagesExclues.includes(pathname)) return null
 
   return (
     <div className="lg:hidden bg-white border-b border-gray-100 shadow-sm px-4 py-2 flex gap-2">
