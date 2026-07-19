@@ -108,17 +108,21 @@ export default function InscriptionPage() {
     }
 
     if (data.user) {
-      await supabase.from('profiles').upsert({
-        id: data.user.id,
-        email: form.email,
-        nom: form.nom,
-        prenom: form.prenom,
-        nom_complet: (form.prenom + ' ' + form.nom).trim(),
-        telephone: form.telephone,
-        role: form.role,
-        nom_agence: form.nom_agence,
-        parraine_par: parrainCode,
-      })
+      try {
+        await supabase.from('profiles').upsert({
+          id: data.user.id,
+          email: form.email,
+          nom: form.nom,
+          prenom: form.prenom,
+          nom_complet: (form.prenom + ' ' + form.nom).trim(),
+          telephone: form.telephone,
+          role: form.role,
+          nom_agence: form.nom_agence,
+          parraine_par: parrainCode,
+        })
+      } catch {
+        // Le profil sera cree par le trigger Supabase a la confirmation email
+      }
     }
 
     setStatus('success')
