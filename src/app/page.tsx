@@ -5,7 +5,7 @@ import HeroSearch from '@/components/HeroSearch'
 import YouTubeBanner from '@/components/YouTubeBanner'
 import BienCard from '@/components/BienCard'
 import BesoinCard from '@/components/BesoinCard'
-export const dynamic = 'force-dynamic'
+export const revalidate = 30
 
 function createServerClient() {
   return createClient(
@@ -45,48 +45,28 @@ const TYPES_BIENS = [
 
 export default async function HomePage() {
 
-  const besoinsRecents = await getBesoinsRecents()
 
   const supabase = createServerClient()
 
-  const { data: bienVedettes } = await supabase
-    .from('biens')
-    .select(`
-      id, titre, prix, transaction, type_bien, surface, nb_chambres, created_at,
-      localites (ville, arrondissement, quartier),
-      images_biens (url, ordre)
-    `)
-    .eq('statut', 'publié')
-    .order('created_at', { ascending: false })
-    .limit(6)
-
-  const { data: biensLocation } = await supabase
-    .from('biens')
-    .select(`
-      id, titre, prix, transaction, type_bien, surface, nb_chambres, created_at,
-      localites (ville, arrondissement, quartier),
-      images_biens (url, ordre)
-    `)
-    .eq('statut', 'publié')
-    .eq('transaction', 'location')
-    .order('created_at', { ascending: false })
-    .limit(3)
-
-  const [{ count: totalBiens }, { count: totalAgents }] = await Promise.all([
-    supabase.from('biens').select('id', { count: 'exact', head: true }).eq('statut', 'publié'),
-    supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('role', 'agent'),
-  ])
-
-  const villesAvecCount = await Promise.all(
-    VILLES_POPULAIRES.map(async v => {
-      const { count } = await supabase
-        .from('biens')
-        .select('id', { count: 'exact', head: true })
-        .eq('statut', 'publié')
-        .ilike('ville', `%${v.nom}%`)
+  const [
+    besoinsRecents,
+    { data: bienVedettes },
+    { data: biensLocation },
+    [{ count: totalBiens }, { count: totalAgents }],
+    villesAvecCount,
+  ] = await Promise.all([
+    getBesoinsRecents(),
+    supabase.from('biens').select('id, titre, prix, transaction, type_bien, surface, nb_chambres, created_at, localites (ville, arrondissement, quartier), images_biens (url, ordre)').eq('statut', 'publié').order('created_at', { ascending: false }).limit(6),
+    supabase.from('biens').select('id, titre, prix, transaction, type_bien, surface, nb_chambres, created_at, localites (ville, arrondissement, quartier), images_biens (url, ordre)').eq('statut', 'publié').eq('transaction', 'location').order('created_at', { ascending: false }).limit(3),
+    Promise.all([
+      supabase.from('biens').select('id', { count: 'exact', head: true }).eq('statut', 'publié'),
+      supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('role', 'agent'),
+    ]),
+    Promise.all(VILLES_POPULAIRES.map(async v => {
+      const { count } = await supabase.from('biens').select('id', { count: 'exact', head: true }).eq('statut', 'publié').ilike('ville', '%' + v.nom + '%')
       return { ...v, count: count ?? 0 }
-    })
-  )
+    })),
+  ])
 
   return (
     <div className="min-h-screen">
