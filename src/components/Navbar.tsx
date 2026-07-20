@@ -5,56 +5,34 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { useTheme } from '@/hooks/useTheme'
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function Navbar() {
   const pathname = usePathname()
   const router = useRouter()
-  const [user, setUser] = useState<any>(null)
-  const [role, setRole] = useState<string | null>(null)
+  const { user, role } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const { theme, toggleTheme } = useTheme()
 
   const isDashboard = pathname.startsWith('/dashboard') || pathname.startsWith('/admin')
 
+
   useEffect(() => {
     if (isDashboard) return
-
-    supabase.auth.getUser().then(async ({ data: { user } }) => {
-      setUser(user)
-      if (user) {
-        const { data } = await supabase
-          .from('profiles').select('role').eq('id', user.id).single()
-        setRole(data?.role ?? null)
-      }
-    })
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_, session) => {
-      setUser(session?.user ?? null)
-      if (session?.user) {
-        const { data } = await supabase
-          .from('profiles').select('role').eq('id', session.user.id).single()
-        setRole(data?.role ?? null)
-      } else {
-        setRole(null)
-      }
-    })
-
     const handleScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handleScroll)
-
-    return () => {
-      subscription.unsubscribe()
-      window.removeEventListener('scroll', handleScroll)
-    }
+    return () => { window.removeEventListener('scroll', handleScroll) }
   }, [isDashboard])
+
 
   if (isDashboard) return null
 
   const handleSignOut = async () => {
+  const handleSignOut = async () => {
     await supabase.auth.signOut()
-    setUser(null)
-    setRole(null)
+    router.push('/')
+  }
     router.push('/')
   }
 

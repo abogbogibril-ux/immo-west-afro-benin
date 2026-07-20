@@ -7,6 +7,7 @@ import Footer from '@/components/Footer'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 import ServiceWorkerRegister from '@/components/ServiceWorkerRegister'
 import MobileActionBar from '@/components/MobileActionBar'
+import { AuthProvider } from '@/contexts/AuthContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -77,12 +78,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''} />
         <ServiceWorkerRegister />
         <ThemeProvider>
+          <AuthProvider>
           <Navbar />
           <main className="pt-16">
           <MobileActionBar />
             {children}
           </main>
           <Footer />
+                  </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

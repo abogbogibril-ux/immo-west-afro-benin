@@ -57,7 +57,7 @@ export default function AuthConfirmPage() {
       // Timeout de securite — si rien ne se passe apres 8 secondes
       setTimeout(() => {
         router.push('/connexion?message=email-confirme')
-      }, 8000)
+      }, 15000)
 
       return () => subscription.unsubscribe()
     }

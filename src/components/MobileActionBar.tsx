@@ -1,25 +1,11 @@
 ﻿'use client'
-
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function MobileActionBar() {
-  const [user, setUser] = useState<any>(null)
+  const { user, ready } = useAuth()
   const pathname = usePathname()
-  const [ready, setReady] = useState(false)
-
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user)
-      setReady(true)
-    })
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
-      setUser(session?.user ?? null)
-    })
-    return () => subscription.unsubscribe()
-  }, [])
 
   const pagesExclues = ['/inscription', '/connexion', '/deposer', '/mot-de-passe-oublie', '/reset-password']
   if (!ready || user || pagesExclues.includes(pathname)) return null
