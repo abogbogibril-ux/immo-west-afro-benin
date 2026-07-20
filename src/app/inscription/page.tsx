@@ -52,6 +52,8 @@ export default function InscriptionPage() {
   const searchParams = useSearchParams()
   const parrainCode = searchParams.get('ref')
   const [step, setStep] = useState(1)
+  const [honeypot, setHoneypot] = useState('')
+  const [formStartTime] = useState(Date.now())
   const [form, setForm] = useState({
     prenom: '', nom: '', email: '', telephone: '',
     password: '', confirmPassword: '', role: '',
@@ -214,6 +216,9 @@ export default function InscriptionPage() {
           {step === 2 && (
             <form onSubmit={handleSubmit} className="space-y-4">
 
+              {/* Honeypot anti-bot — invisible pour les humains */}
+              <input type="text" name="website" value={honeypot} onChange={e => setHoneypot(e.target.value)}
+                style={{ display: 'none' }} tabIndex={-1} autoComplete="off" aria-hidden="true"/>
               {/* Retour */}
               <button type="button" onClick={() => setStep(1)}
                 className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 mb-2">
