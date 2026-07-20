@@ -11,6 +11,47 @@ const VILLES = ['Cotonou','Abomey-Calavi','Porto-Novo','Sème-Kpodji','Parakou',
 const TYPES = ['Maison','Appartement','Villa','Terrain','Bureau','Studio','Chambre']
 const MAX_PHOTOS = 8
 
+function CustomSelect({ name, value, onChange, options, placeholder }: {
+  name: string; value: string; onChange: (val: string) => void
+  options: { val: string; label: string }[]; placeholder?: string
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const handler = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false) }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+  const selected = options.find(o => o.val === value)
+  return (
+    <div ref={ref} style={{ position: 'relative' }}>
+      <button type="button" onClick={() => setOpen(o => !o)}
+        style={{ width: '100%', textAlign: 'left', padding: '10px 14px', background: '#1e293b',
+          border: '1px solid #334155', borderRadius: '8px', color: selected ? '#fff' : '#64748b',
+          fontSize: '14px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span>{selected ? selected.label : (placeholder ?? 'Selectionner...')}</span>
+        <span style={{ fontSize: '10px', color: '#64748b' }}>{open ? '▲' : '▼'}</span>
+      </button>
+      {open && (
+        <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: '#1e293b',
+          border: '1px solid #334155', borderRadius: '8px', zIndex: 999, marginTop: '4px',
+          maxHeight: '220px', overflowY: 'auto', boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }}>
+          {options.map(o => (
+            <button key={o.val} type="button"
+              onClick={() => { onChange(o.val); setOpen(false) }}
+              style={{ width: '100%', textAlign: 'left', padding: '12px 14px', background: o.val === value ? '#334155' : 'transparent',
+                color: o.val === value ? '#00bcd4' : '#cbd5e1', fontSize: '14px', cursor: 'pointer',
+                border: 'none', display: 'block', minHeight: '44px' }}>
+              {o.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+
 export default function PublierPage() {
   const { theme } = useTheme()
   const router = useRouter()
