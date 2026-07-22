@@ -184,7 +184,7 @@ export default function AdminPage() {
           </button>
         </div>
         {ONGLETS.map(o => (
-          <button key={o.key} onClick={() => setOnglet(o.key as any)}
+          <button key={o.key} onClick={() => { setOnglet(o.key as any); setSidebarOpen(false) }}
             className={`px-4 py-3 rounded-lg border-none font-medium cursor-pointer text-left flex items-center justify-between transition-all text-sm ${
               onglet === o.key ? 'bg-[#00bcd4] text-white' : 'bg-transparent text-slate-400 hover:text-white hover:bg-white/5'
             }`}>
