@@ -251,9 +251,9 @@ export default function AdminAnnoncesPage() {
       ) : biensFiltres.length === 0 ? (
         <div className="text-center py-12 text-slate-400">Aucune annonce trouvée</div>
       ) : (
-        <div className="space-y-2">
+        <div className="overflow-x-auto">
           {biensFiltres.map(b => (
-            <div key={b.id} className="bg-[#1e293b] rounded-xl border border-[#334155] shadow-sm p-3 md:p-4 flex items-center gap-3 flex-wrap">
+            <div key={b.id} className="bg-[#1e293b] rounded-xl border border-[#334155] shadow-sm p-3 flex items-center gap-3 min-w-[700px]">
 
               {/* Ref + Statut */}
               <div className="flex items-center gap-2 flex-shrink-0">

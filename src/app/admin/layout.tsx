@@ -98,8 +98,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   active ? 'bg-[#00bcd4]/20 text-[#00bcd4]' : 'text-slate-400 hover:bg-[#334155] hover:text-white'
                 }`}>
                 <span className="text-lg flex-shrink-0">{item.icon}</span>
-                {(!desktopCollapsed) && <span className="lg:inline">{item.label}</span>}
-                <span className="lg:hidden">{item.label}</span>
+                {(!desktopCollapsed) && <span>{item.label}</span>}
+
               </Link>
             )
           })}
@@ -110,8 +110,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <button onClick={handleSignOut}
             className="w-full flex items-center gap-3 px-3 py-3 min-h-[44px] bg-transparent border border-red-500 rounded-lg text-red-500 cursor-pointer text-sm font-medium hover:bg-red-500/10 transition-colors">
             <span className="text-lg flex-shrink-0">🚪</span>
-            {(!desktopCollapsed) && <span className="lg:inline">Deconnexion</span>}
-            <span className="lg:hidden">Deconnexion</span>
+            {(!desktopCollapsed) && <span>Deconnexion</span>}
+
           </button>
         </div>
       </aside>
