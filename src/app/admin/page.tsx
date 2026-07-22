@@ -25,6 +25,7 @@ export default function AdminPage() {
   const [besoins, setBesoins] = useState<any[]>([])
   const [signalements, setSignalements] = useState<any[]>([])
   const [filtreStatut, setFiltreStatut] = useState<string>('tous')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => { checkAdmin() }, [])
 
@@ -169,10 +170,19 @@ export default function AdminPage() {
 
   return (
     <div className="flex min-h-screen bg-[#0f172a]">
+      {sidebarOpen && <div className="fixed inset-0 bg-black/60 z-40 lg:hidden" onClick={() => setSidebarOpen(false)}/>}
 
       {/* SIDEBAR */}
-      <aside className="w-[240px] bg-[#1e293b] px-4 py-8 flex flex-col gap-2 flex-shrink-0">
-        <div className="text-[#00bcd4] font-extrabold text-lg mb-8 text-center">Admin Panel</div>
+      <aside className={`fixed top-0 left-0 h-full z-50 w-[240px] bg-[#1e293b] px-4 py-8 flex flex-col gap-2 flex-shrink-0 transition-transform duration-300 lg:static lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <div className="flex items-center justify-between mb-8">
+          <div className="text-[#00bcd4] font-extrabold text-lg">Admin Panel</div>
+          <button onClick={() => setSidebarOpen(false)}
+            className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:bg-[#334155] border-none bg-transparent cursor-pointer">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
         {ONGLETS.map(o => (
           <button key={o.key} onClick={() => setOnglet(o.key as any)}
             className={`px-4 py-3 rounded-lg border-none font-medium cursor-pointer text-left flex items-center justify-between transition-all text-sm ${
@@ -195,7 +205,17 @@ export default function AdminPage() {
       </aside>
 
       {/* CONTENU */}
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto">
+        <div className="lg:hidden flex items-center gap-3 px-4 py-3 bg-[#1e293b] border-b border-[#334155] sticky top-0 z-30">
+          <button onClick={() => setSidebarOpen(true)}
+            className="p-2 rounded-lg text-slate-400 hover:bg-[#334155] border-none bg-transparent cursor-pointer">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+          <span className="text-white font-semibold text-sm">Admin Panel</span>
+        </div>
+        <div className="p-4 lg:p-8">
         <h1 className="text-white text-2xl font-bold mb-8">{TITRES[onglet]}</h1>
 
         {/* STATS */}
@@ -426,6 +446,7 @@ export default function AdminPage() {
             <p className="text-slate-400">Total des messages echanges : {stats.messages}</p>
           </div>
         )}
+        </div>
       </main>
     </div>
   )
