@@ -332,17 +332,17 @@ export default function PublierPage() {
             </div>
             <div>
               <label style={labelStyle}>Transaction *</label>
-              <select name="transaction" onChange={handleChange} style={inputStyle} value={form.transaction}>
-                <option value="vente">Vente</option>
-                <option value="location">Location</option>
-              </select>
+              <CustomSelect name="transaction" value={form.transaction}
+                onChange={val => setForm(p => ({ ...p, transaction: val }))}
+                options={[{ val: "vente", label: "Vente" }, { val: "location", label: "Location" }]} />
+
             </div>
             <div>
               <label style={labelStyle}>Type de bien *</label>
-              <select name="type_bien" onChange={handleChange} style={inputStyle} value={form.type_bien}>
-                <option value="">Sélectionner...</option>
-                {TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-              </select>
+              <CustomSelect name="type_bien" value={form.type_bien}
+                onChange={val => setForm(p => ({ ...p, type_bien: val }))}
+                placeholder="Selectionner un type"
+                options={TYPES.map(t => ({ val: t, label: t }))} />
             </div>
             <div>
               {form.transaction === 'location'
@@ -479,10 +479,11 @@ export default function PublierPage() {
           <div style={gridTwo}>
             <div>
               <label style={labelStyle}>Ville *</label>
-              <select name="ville" onChange={handleChange} style={inputStyle} value={form.ville}>
-                <option value="">Sélectionner...</option>
-                {VILLES.map(v => <option key={v} value={v}>{v}</option>)}
-              </select>
+              <CustomSelect name="ville" value={form.ville}
+                onChange={val => setForm(p => ({ ...p, ville: val }))}
+                placeholder="Selectionner une ville"
+                options={VILLES.map(v => ({ val: v, label: v }))} />
+
             </div>
             <div>
               <label style={labelStyle}>Arrondissement</label>
