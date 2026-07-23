@@ -20,6 +20,21 @@ export default function AuthConfirmPage() {
           .from('profiles').select('role').eq('id', userId).single()
         finalRole = profile?.role ?? null
       }
+      // Envoyer les emails de bienvenue pour les nouveaux agents
+      if (finalRole === 'agent') {
+        try {
+          const { data: profile } = await supabase
+            .from('profiles').select('email, prenom').eq('id', userId).single()
+          if (profile?.email) {
+            await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/send-welcome-email`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': Bearer  },
+              body: JSON.stringify({ email: profile.email, prenom: profile.prenom ?? '' }),
+            })
+          }
+        } catch { /* email non bloquant */ }
+      }
+
       if (finalRole === 'admin') router.push('/admin')
       else if (finalRole === 'agent') router.push('/dashboard/agent')
       else router.push('/dashboard/client')
